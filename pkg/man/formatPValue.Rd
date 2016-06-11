@@ -1,0 +1,29 @@
+\name{formatPValue}
+\alias{formatPValue}
+\title{ Format p-values }
+\description{ Format p-values }
+\usage{ formatPValue(x, digits=3, ...) }
+\arguments{
+  \item{x}{ p-value }
+  \item{digits}{ number of decimal-digits }
+  \item{\dots}{ arguments passed to further functions }
+}
+\details{ utility function for formating }
+\value{ formatted string }
+\references{ none }
+\author{ Roland Rapold }
+\note{ under continuous developement }
+\seealso{ other utility-functions in this R-package }
+\examples{
+    formatPValue(0.23478,     digits=3)
+    formatPValue(0.023478,    digits=3)
+    formatPValue(0.0023478,   digits=3)
+    formatPValue(0.00023478,  digits=3)
+    formatPValue(0.000023478, digits=3)
+    formatPValue(0.000023478, digits=4)
+    formatPValue(0.000023478, digits=5)
+    formatPValue(0.000023478, digits=6)
+
+    x <- c(seq(0.0001, 0.6, 0.01), NA, seq(0.6001, 1.0, 0.01))
+    formatPValue(x, digits=3)
+}
