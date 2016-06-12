@@ -30,12 +30,14 @@
 \source{ }
 \references{ }
 \examples{
-    library(lattice)
+if(require(lattice))
+{
     data(colThemes)
     names(colThemes)
 
     trellis.par.set(colThemes$defaultTheme);          show.settings()
     trellis.par.set(colThemes$helRot4Theme);          show.settings()
     trellis.par.set(colThemes$helRot5Theme);          show.settings()
+}
 }
 \keyword{lattice, graphics}
