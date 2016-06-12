@@ -25,7 +25,8 @@
 \seealso{ other utility-functions in this R-package }
 \examples{
     # prepare data from 'car' package                       ........................................
-    require(car)
+if(require(car))
+{
     data(Mroz)
     str(Mroz)
 
@@ -87,10 +88,13 @@
     head(descr.table[[1]])
 
     # verify statistics                                     ........................................
-    require(doBy)
-    summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median))
-    table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc"))
-    table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc"))
+    if(require(doBy))
+    {
+        summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median))
+        table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc"))
+        table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc"))
+    }
     #
+}
 }
 
