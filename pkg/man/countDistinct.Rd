@@ -21,12 +21,15 @@ print("Example for vector                   ------------------------------------
 countDistinct(na.omit(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)))
 #
 print("-------------------------------------------------------------------------------------------")
-print("Example for data.frame               ------------------------------------------------------")
-data(crabs, package="MASS")
-head(crabs)
-str(crabs)
-countDistinct(crabs[, c("sp")])
-countDistinct(crabs[, c("sex")])
-countDistinct(crabs[, c("FL")])
+if(require("MASS"))
+{
+    print("Example for data.frame               ------------------------------------------------------")
+    data(crabs, package="MASS")
+    head(crabs)
+    str(crabs)
+    countDistinct(crabs[, c("sp")])
+    countDistinct(crabs[, c("sex")])
+    countDistinct(crabs[, c("FL")])
+}
 #
 }
