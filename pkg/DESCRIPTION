@@ -1,7 +1,7 @@
 Package: rrMisc
 Title: Little Helpers
-Version: 0.12
-Date: 2016-06-05
+Version: 0.13
+Date: 2016-06-13
 Author: Roland Rapold
 Maintainer: Roland Rapold <roland.rapold@helsana.ch>
 Description: Little helpers for the daily work with R.
