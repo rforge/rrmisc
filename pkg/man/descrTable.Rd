@@ -24,8 +24,7 @@
 \note{ under continuous developement }
 \seealso{ other utility-functions in this R-package }
 \examples{
-    # prepare data from 'car' package                       ........................................
-\dontrun {
+\dontrun{
 require("car")
 data(Mroz)
 str(Mroz)
@@ -94,7 +93,5 @@ if(require(doBy))
     table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc"))
     table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc"))
 }
-#
-}
-}
+} }
 
