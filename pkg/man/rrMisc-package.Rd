@@ -8,8 +8,8 @@
 \tabular{ll}{
     Package: \tab rrMisc\cr
     Type: \tab Package\cr
-    Version: \tab 0.12\cr
-    Date: \tab 2016-06-05\cr
+    Version: \tab 0.13\cr
+    Date: \tab 2016-06-12\cr
     License: \tab --
 }
 Some rather small helpers like the 'grep' funktions to facilitate handling of objects.
