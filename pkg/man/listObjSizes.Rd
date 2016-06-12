@@ -14,19 +14,19 @@
 \note{ under continuous developement }
 \seealso{ other utility-functions in this R-package }
 \examples{
-if(require("MASS"))
-{
-    print("---------------------------------------------------------------------------------------------")
-    print("Beispiel-Daten laden                 --------------------------------------------------------")
-    data(crabs, package="MASS")
-    head(crabs)
-    #
-    print("---------------------------------------------------------------------------------------------")
-    print("Beispiel f?r 'listObjContrasts'      --------------------------------------------------------")
-    listObjContrasts(crabs)
-}
+\dontrun{
+require("MASS")
+print("---------------------------------------------------------------------------------------------")
+print("Beispiel-Daten laden                 --------------------------------------------------------")
+data(crabs, package="MASS")
+head(crabs)
+#
+print("---------------------------------------------------------------------------------------------")
+print("Beispiel f?r 'listObjContrasts'      --------------------------------------------------------")
+listObjContrasts(crabs)
 #
 print("---------------------------------------------------------------------------------------------")
 print("Beispiel f?r 'listObjSizes'          --------------------------------------------------------")
 listObjSizes()
+}
 }

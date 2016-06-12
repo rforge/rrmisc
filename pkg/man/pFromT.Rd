@@ -84,5 +84,4 @@ pFromF(f_value = 1.96, df1 = 10, df2 = 5, two.sided = FALSE)
 }
 % Add one or more standard keywords, see file 'KEYWORDS' in the
 % R documentation directory.
-\keyword{ ~kwd1 }
-\keyword{ ~kwd2 }% __ONLY ONE__ keyword per line
+\keyword{ p-value }% __ONLY ONE__ keyword per line

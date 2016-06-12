@@ -30,8 +30,8 @@
 \source{ }
 \references{ }
 \examples{
-if(require(lattice))
-{
+\dontrun{
+    require(lattice)
     data(colThemes)
     names(colThemes)
 

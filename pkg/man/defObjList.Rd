@@ -17,7 +17,7 @@ bestimmten, vorherigen Stand der vorhandenen Objekte (nach Objektname) zur?ckgeg
 \seealso{ Weitere Funktionen in diesem R-Paket. }
 \examples{
 \dontrun{
-    defObjList(name="A")
-    setObjList(name="A")
-    }
+defObjList(name="A")
+setObjList(name="A")
+}
 }
