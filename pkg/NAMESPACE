@@ -1,1 +1,9 @@
 exportPattern("^[[:alpha:]]+")
+
+import(Hmisc)
+
+importFrom("stats", "IQR", "chisq.test", "complete.cases",
+           "kruskal.test", "median", "na.omit", "pf", "pnorm", "pt",
+           "relevel", "sd", "t.test", "wilcox.test")
+importFrom("utils", "object.size")
+

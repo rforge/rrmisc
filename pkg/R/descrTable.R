@@ -1,7 +1,7 @@
 #
 # ==================================================================================================
 #
-# --------------- createDefMeasures              Vorlage fuer def.measures erstellen              ..# {{{
+# --------------- createDefMeasures              Vorlage fuer def.measures erstellen              .. # {{{
 # RR 20151110               --------------------------------------------------------------------- --
 createDefMeasures <- function (def.measures, d.data, version=2, var.list)
 {
@@ -256,10 +256,10 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     # 0. Vorbereitungen                                                                           .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
-    # Ausgabewert wenn kein Wert für P-Wert ........................................................
+    # Ausgabewert wenn kein Wert fuer P-Wert .......................................................
     p.na <- "- "
     #
-    # Indikatorvariablen für Tests .................................................................
+    # Indikatorvariablen fuer Tests ................................................................
     i.chisq         <- 0
     i.wilcoxon      <- 0
     i.kruskal       <- 0
@@ -318,13 +318,13 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     # Kontrolle -- bei Faktoren darf kein 'level' einen leeren String aufweisen ................. ..
     if(var.is.factor)
     {
-        if(require(DescTools, quietly=TRUE))
+        if(requireNamespace("DescTools", quietly=TRUE))
         {
-            levels(sub.data.1) <- StrTrim(levels(sub.data.1))
-            levels(sub.data.2) <- StrTrim(levels(sub.data.2))
-            levels(sub.data.3) <- StrTrim(levels(sub.data.3))
-            if(dim.data>3) levels(sub.data.4) <- StrTrim(levels(sub.data.4))
-            if(dim.data>4) levels(sub.data.5) <- StrTrim(levels(sub.data.5))
+            levels(sub.data.1) <- DescTools::StrTrim(levels(sub.data.1))
+            levels(sub.data.2) <- DescTools::StrTrim(levels(sub.data.2))
+            levels(sub.data.3) <- DescTools::StrTrim(levels(sub.data.3))
+            if(dim.data>3) levels(sub.data.4) <- DescTools::StrTrim(levels(sub.data.4))
+            if(dim.data>4) levels(sub.data.5) <- DescTools::StrTrim(levels(sub.data.5))
         }
         m <- which(levels(sub.data.1)=="")
         if(length(m)>0)
@@ -347,7 +347,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         rm(m)
     }
     #
-    # Kontrolle -- bei Faktoren dürfen Levels keine Zahlen sein ................................. ..
+    # Kontrolle -- bei Faktoren duerfen Levels keine Zahlen sein ................................ ..
     if(var.is.factor &&
        sum(levels(sub.data.1)%in%c(0:10000))==length(levels(sub.data.1)) &&
        var.measure.name!="i")
@@ -611,27 +611,28 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     #
     if(measures[1]=="wtd_mean")
     {
-        require(Hmisc)
+      # require(Hmisc)
+        requireNamespace("Hmisc")
         measure.1 <- c(NA,
-                       wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
-                       wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
-                       wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE))
+                       Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
+                       Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
+                       Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE))
         if(dim.data>3)
         {
             measure.1 <- c(NA,
-                          wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
-                          wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
-                          wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE),
-                          wtd.mean(x=sub.data.4, weights=weights.4, na.rm=TRUE))
+                          Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
+                          Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
+                          Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE),
+                          Hmisc::wtd.mean(x=sub.data.4, weights=weights.4, na.rm=TRUE))
         }
         if(dim.data>4)
         {
             measure.1 <- c(NA,
-                          wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
-                          wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
-                          wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE),
-                          wtd.mean(x=sub.data.4, weights=weights.4, na.rm=TRUE),
-                          wtd.mean(x=sub.data.5, weights=weights.5, na.rm=TRUE))
+                          Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
+                          Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
+                          Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE),
+                          Hmisc::wtd.mean(x=sub.data.4, weights=weights.4, na.rm=TRUE),
+                          Hmisc::wtd.mean(x=sub.data.5, weights=weights.5, na.rm=TRUE))
         }
 
         label.1   <- ifelse(lang=="de", "gew. Mittelw.", "weighted mean")
@@ -683,27 +684,27 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     #
     if(measures[1]=="wtd_median")
     {
-        require(Hmisc)
+        requireNamespace("Hmisc")
         measure.1 <- c(NA,
-                       wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
-                       wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
-                       wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE))
+                       Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
+                       Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
+                       Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE))
         if(dim.data>3)
         {
             measure.1 <- c(NA,
-                          wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
-                          wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
-                          wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE),
-                          wtd.quantile(x=sub.data.4, weights=weights.4, probs=0.5, na.rm=TRUE))
+                          Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
+                          Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
+                          Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE),
+                          Hmisc::wtd.quantile(x=sub.data.4, weights=weights.4, probs=0.5, na.rm=TRUE))
         }
         if(dim.data>4)
         {
             measure.1 <- c(NA,
-                          wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
-                          wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
-                          wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE),
-                          wtd.quantile(x=sub.data.4, weights=weights.4, probs=0.5, na.rm=TRUE),
-                          wtd.quantile(x=sub.data.5, weights=weights.5, probs=0.5, na.rm=TRUE))
+                          Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
+                          Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
+                          Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE),
+                          Hmisc::wtd.quantile(x=sub.data.4, weights=weights.4, probs=0.5, na.rm=TRUE),
+                          Hmisc::wtd.quantile(x=sub.data.5, weights=weights.5, probs=0.5, na.rm=TRUE))
         }
 
         label.1   <- ifelse(lang=="de", "gew. Median", "weighted median")
@@ -988,27 +989,27 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         if(measures[2]=="wtd_mean" & i.weights==1)  # nur wenn erste Kennzahl auch gewichtet
         {
-            require(Hmisc)
+            requireNamespace("Hmisc")
             measure.2 <- c(NA,
-                           wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
-                           wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
-                           wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE))
+                           Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
+                           Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
+                           Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE))
             if(dim.data>3)
             {
                 measure.2 <- c(NA,
-                               wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
-                               wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
-                               wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE),
-                               wtd.mean(x=sub.data.4, weights=weights.4, na.rm=TRUE))
+                               Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
+                               Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
+                               Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE),
+                               Hmisc::wtd.mean(x=sub.data.4, weights=weights.4, na.rm=TRUE))
             }
             if(dim.data>4)
             {
                 measure.2 <- c(NA,
-                               wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
-                               wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
-                               wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE),
-                               wtd.mean(x=sub.data.4, weights=weights.4, na.rm=TRUE),
-                               wtd.mean(x=sub.data.5, weights=weights.5, na.rm=TRUE))
+                               Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
+                               Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
+                               Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE),
+                               Hmisc::wtd.mean(x=sub.data.4, weights=weights.4, na.rm=TRUE),
+                               Hmisc::wtd.mean(x=sub.data.5, weights=weights.5, na.rm=TRUE))
             }
 
             label.2   <- ifelse(lang=="de", "gew. Mittelw.", "weighted mean")
@@ -1059,27 +1060,27 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         if(measures[2]=="wtd_median" & i.weights==1)    # nur wenn erste Kennzahl auch gewichtet
         {
-            require(Hmisc)
+            requireNamespace("Hmisc")
             measure.1 <- c(NA,
-                           wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
-                           wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
-                           wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE))
+                           Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
+                           Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
+                           Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE))
             if(dim.data>3)
             {
                 measure.1 <- c(NA,
-                               wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
-                               wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
-                               wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE),
-                               wtd.quantile(x=sub.data.4, weights=weights.4, probs=0.5, na.rm=TRUE))
+                               Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
+                               Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
+                               Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE),
+                               Hmisc::wtd.quantile(x=sub.data.4, weights=weights.4, probs=0.5, na.rm=TRUE))
             }
             if(dim.data>4)
             {
                 measure.1 <- c(NA,
-                               wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
-                               wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
-                               wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE),
-                               wtd.quantile(x=sub.data.4, weights=weights.4, probs=0.5, na.rm=TRUE),
-                               wtd.quantile(x=sub.data.5, weights=weights.5, probs=0.5, na.rm=TRUE))
+                               Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
+                               Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
+                               Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE),
+                               Hmisc::wtd.quantile(x=sub.data.4, weights=weights.4, probs=0.5, na.rm=TRUE),
+                               Hmisc::wtd.quantile(x=sub.data.5, weights=weights.5, probs=0.5, na.rm=TRUE))
             }
 
             label.2   <- ifelse(lang=="de", "gew. Median", "weighted median")
@@ -1179,7 +1180,6 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
 
     if(n.groups>1)
     {
-        if(i.weights==1) require("weights")
         #
         # Zu testende Variablen zuordnen                                                          .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
@@ -1235,6 +1235,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(i.weights==1) {
+            requireNamespace("Hmisc")
             if(test.gr[1]==1) test_wt_1 <- weights.1
             if(test.gr[1]==2) test_wt_1 <- weights.2
             if(test.gr[1]==3) test_wt_1 <- weights.3
@@ -1840,7 +1841,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
     #
-    #    Ausgabe des Resultates                                                                   ..# {{{
+    #    Ausgabe des Resultates                                                                   .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     if(verbose>0) print(return.df)
@@ -1900,7 +1901,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
 ## }}}
 # ==================================================================================================
 #
-# --------------- descrTable                     Kennzahlen deskriptiv -- allgemeine Funktion     ..# {{{
+# --------------- descrTable                     Kennzahlen deskriptiv -- allgemeine Funktion     .. # {{{
 # RR 20150325     ------------------------------------------------------------------------------- --
 #
 # Kennzahlen fuer Subgruppen

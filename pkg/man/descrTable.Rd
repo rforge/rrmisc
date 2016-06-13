@@ -33,14 +33,14 @@ str(Mroz)
 Mroz <- merge(data.frame(i=as.factor(1)), Mroz)
 
 # reference list for variable labels                    ........................................
-var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "age", "wc", "lwg", "inc")
-                    , var_label=c("population"
-                                    , "employed"
-                                    , "# children to 5", "# children 6-18"
-                                    , "age"
-                                    , "wife college"
-                                    , "log expected wage"
-                                    , "family income excl. wife"))
+var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "age", "wc", "lwg", "inc"),
+                       var_label=c("population",
+                                   "employed",
+                                   "# children to 5", "# children 6-18",
+                                   "age",
+                                   "wife college",
+                                   "log expected wage",
+                                   "family income excl. wife"))
 
 # create definition-table without variable for groups   ........................................
 Mroz_hc      <- Mroz[ , -which(colnames(Mroz)=="hc")]
@@ -87,9 +87,9 @@ descr.table
 head(descr.table[[1]])
 
 # verify statistics                                     ........................................
-if(require(doBy))
+if(require("doBy"))
 {
-    summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median))
+    doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median))
     table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc"))
     table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc"))
 }

@@ -6,14 +6,6 @@
 pFromT <- function(t_value=1.96, df=10, two.sided=FALSE)
 {
     #
-    # Beispiel: 8% bei t-Verteilung mit 10 Freiheitsgraden
-    if (0==1) {
-        pFromT(t_value=1.96, df=10)
-        pFromT(t_value=1.96, df=100)
-        pFromT(t_value=1.96, df=1000)
-        pFromT(t_value=1.96, df=1000, two.sided=TRUE)
-    }
-    #
     # P-Wert aus t-Wert:
     #
     ifelse(two.sided, factor <- 2, factor <- 1)
@@ -30,12 +22,6 @@ pFromT <- function(t_value=1.96, df=10, two.sided=FALSE)
 # RR 20150109     ---------------------------------------------------
 pFromZ <- function(z_value=1.96, two.sided=FALSE)
 {
-    #
-    # Beispiel: 8% bei T-Verteilung mit 10 Freiheitsgraden
-    if (0==1) {
-        pFromZ(z_value=1.96)
-        pFromZ(z_value=1.96, two.sided=TRUE)
-    }
     #
     # P-Wert aus z-Wert:
     #
@@ -54,17 +40,7 @@ pFromZ <- function(z_value=1.96, two.sided=FALSE)
 pFromF <- function(f_value=1.96, df1=10, df2=10, two.sided=FALSE)
 {
     #
-    # Beispiel: 8% bei T-Verteilung mit 10 Freiheitsgraden
-    if (0==1) {
-        pFromF(f_value=35.68, df1=2, df2=5)
-        pFromF(f_value=35.68, df1=2, df2=5, two.sided=TRUE)
-        pFromF(f_value=1.96, df1=10, df2=10)
-        pFromF(f_value=1.96, df1=10, df2=100)
-        pFromF(f_value=1.96, df1=10, df2=1000)
-        pFromF(f_value=1.96, df1=10, df2=1000, two.sided=TRUE)
-    }
-    #
-    # P-Wert aus t-Wert:
+    # P-Wert aus F-Wert:
     #
     ifelse(two.sided, factor <- 2, factor <- 1)
     f_value <- abs(f_value)

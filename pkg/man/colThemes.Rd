@@ -12,32 +12,34 @@
 \alias{helsanaTheme}
 \alias{helsanaTheme3}
 \alias{helEconTheme}
+\alias{createColorScheme }
 \docType{data}
 \title{ lattice - color themes }
 \description{ colot themes to use with 'lattice'. }
 \usage{
-    library(lattice)
+    library("lattice")
     data(colThemes)
-    trellis.par.set(colThemes$defaultTheme);          show.settings()
-    trellis.par.set(colThemes$helRot4Theme);          show.settings()
+    lattice::trellis.par.set(colThemes$defaultTheme);          lattice::show.settings()
+    lattice::trellis.par.set(colThemes$helRot4Theme);          lattice::show.settings()
 }
 \arguments{
   \item{theme}{ one of several predefined lattice color themes }
   \item{\dots}{ arguments passed to further functions }
 }
 \format{ lattict themes }
-\details{ }
-\source{ }
-\references{ }
+%% \details{ }
+%% \source{ }
+%% \references{ }
 \examples{
 \dontrun{
-    require(lattice)
+    require("lattice")
     data(colThemes)
     names(colThemes)
 
-    trellis.par.set(colThemes$defaultTheme);          show.settings()
-    trellis.par.set(colThemes$helRot4Theme);          show.settings()
-    trellis.par.set(colThemes$helRot5Theme);          show.settings()
+    lattice::trellis.par.set(colThemes$defaultTheme);          lattice::show.settings()
+    lattice::trellis.par.set(colThemes$helRot4Theme);          lattice::show.settings()
+    lattice::trellis.par.set(colThemes$helRot5Theme);          lattice::show.settings()
 }
 }
-\keyword{lattice, graphics}
+\keyword{lattice}
+\keyword{graphics}

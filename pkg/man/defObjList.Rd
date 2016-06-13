@@ -1,23 +1,26 @@
 \name{defObjList}
 \alias{defObjList}
 \alias{setObjList}
-\title{Liste von R-Objekten verwalten.}
-\description{Liste von R-Objekten verwalten. Es k?nnen Listen mit Namen definiert werden.}
-\usage{ defObjList(name="A"), setObjList(name="A") }
+\title{Manage list of R-Objects}
+\description{Manage list of R-Objects -- lists can be named as will}
+\usage{
+    defObjList(name="A")
+    setObjList(name="A")
+}
 \arguments{
-  \item{name}{ Listennamen }
+  \item{name}{ list name }
   \item{\dots}{ arguments passed to further functions }
 }
-\details{ Diese Funktionen verwalten Objektlisten, so dass im Verlauf einer Analyse auf einen
-bestimmten, vorherigen Stand der vorhandenen Objekte (nach Objektname) zur?ckgegangen werden kann. }
-\value{ Neue Objekte nach Definition des Standes werden gel?scht. }
-\references{ Keine }
+\details{ With this function one can manage list of object so that one can jump to a former number
+    of objects. }
+\value{ Newer objects than the ones in the list are removed }
+\references{ none }
 \author{ Roland Rapold }
-\note{ Funktionen sind st?ndig in Entwicklung. }
-\seealso{ Weitere Funktionen in diesem R-Paket. }
+\note{ function under continuous developement }
+\seealso{ other functiond in this package }
 \examples{
 \dontrun{
-defObjList(name="A")
-setObjList(name="A")
+    defObjList(name="A")
+    setObjList(name="A")
 }
 }

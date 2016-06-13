@@ -192,6 +192,13 @@ grepMultipleEntries <- function(d.frame, var, ...) {
     mult <- duplicated(d.frame[, var])
     mult <- unique(d.frame[mult, var])
     #
+    a <- NULL
+    b <- NULL
+    c <- NULL
+    d <- NULL
+    e <- NULL
+    f <- NULL
+    #
     # select all records                            ................................................
     if(class(mult)=="data.frame"){                  # multiple attribures
         result <- merge(d.frame, mult)

@@ -11,7 +11,7 @@ Calculate p-values from t-, z- or F-statistics.
 \usage{
 pFromZ(z_value = 1.96, two.sided = FALSE)
 pFromT(t_value = 1.96, df = 10, two.sided = FALSE)
-pFromF(f_value = 1.96, df1 = 10, df2 = 5, two.sided = FALSE)
+pFromF(f_value = 1.96, df1 = 10, df2 = 10, two.sided = FALSE)
 }
 %- maybe also 'usage' for other objects documented here.
 \arguments{
@@ -30,9 +30,9 @@ pFromF(f_value = 1.96, df1 = 10, df2 = 5, two.sided = FALSE)
 %%     ~~Describe \code{two.sided} here~~
 }
 }
-\details{
-%%  ~~ If necessary, more details than the description above ~~
-}
+%% \details{
+%% %%  ~~ If necessary, more details than the description above ~~
+%% }
 \value{
     corresponding p-Value from the t-, z- or F-statistics
 %%  ~Describe the value returned
@@ -41,41 +41,41 @@ pFromF(f_value = 1.96, df1 = 10, df2 = 5, two.sided = FALSE)
 %%  \item{comp2 }{Description of 'comp2'}
 %% ...
 }
-\references{
-%% ~put references to the literature/web site here ~
-}
+%% \references{
+%% %% ~put references to the literature/web site here ~
+%% }
 \author{
     Roland Rapold
 %%  ~~who you are~~
 }
-\note{
-%%  ~~further notes~~
-}
+%% \note{
+%% %%  ~~further notes~~
+%% }
 
 %% ~Make other sections like Warning with \section{Warning }{....} ~
 
-\seealso{
-%% ~~objects to See Also as \code{\link{help}}, ~~~
-}
+%% \seealso{
+%% %% ~~objects to See Also as \code{\link{help}}, ~~~
+%% }
 \examples{
 ##---- Should be DIRECTLY executable !! ----
 ##-- ==>  Define data, use random,
 
-        pFromT(t_value = 1.96, df = 10)
-        pFromT(t_value = 1.96, df = 100)
-        pFromT(t_value = 1.96, df = 1000)
-        pFromT(t_value = 1.96, df = 1000, two.sided = TRUE)
+        pFromT(t_value=1.96, df=10)
+        pFromT(t_value=1.96, df=100)
+        pFromT(t_value=1.96, df=1000)
+        pFromT(t_value=1.96, df=1000, two.sided = TRUE)
 
         pFromZ(z_value=1.96)
         pFromZ(z_value=1.96, two.sided=TRUE)
 
-        pFromF(f_value=35.68, df1=2, df2=5)
-        pFromF(f_value=35.68, df1=2, df2=5, two.sided=TRUE)
-        pFromF(f_value=1.96, df1=10, df2=10)
-        pFromF(f_value=1.96, df1=10, df2=100)
-        pFromF(f_value=1.96, df1=10, df2=1000)
-        pFromF(f_value=1.96, df1=10, df2=1000, two.sided=TRUE)
-        pFromF(f_value=1.96, df1=10, df2=1000, two.sided=TRUE)
+        pFromF(f_value=35.68, df1=2,  df2=5)
+        pFromF(f_value=35.68, df1=2,  df2=5, two.sided=TRUE)
+        pFromF(f_value= 1.96, df1=10, df2=10)
+        pFromF(f_value= 1.96, df1=10, df2=100)
+        pFromF(f_value= 1.96, df1=10, df2=1000)
+        pFromF(f_value= 1.96, df1=10, df2=1000, two.sided=TRUE)
+        pFromF(f_value= 1.96, df1=10, df2=1000, two.sided=TRUE)
 
         x <- c(seq(0.0001, 0.6, 0.01), NA, seq(0.6001, 1.0, 0.01))
         p_value <- pFromT(t_value=x, df=100)

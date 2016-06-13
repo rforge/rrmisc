@@ -4,7 +4,7 @@
 # --------------- defObjList                        take snapshot of current object names         --
 # RR 20130920     ------------------------------------------------------------------------------- --
 #
-defObjList <- function (name = "A", ...) {
+defObjList <- function (name="A") {
     #
     # method                                        ............................................. ..
     # -
@@ -28,13 +28,16 @@ defObjList <- function (name = "A", ...) {
 # --------------- setObjList                        delete all but the objects in the snapshot list-
 # RR 20130920     ------------------------------------------------------------------------------- --
 #
-setObjList <- function (name = "A", ...) {
+setObjList <- function (name="A") {
     #
     # method                                        ............................................. ..
     # -
     #
     # input                                         ............................................. ..
     # - snapshot list name 'objList_' ...
+    objList_x <- NULL
+    objList_z <- NULL
+    objDel    <- NULL
     #
     # output                                        ............................................. ..
     # -
@@ -44,7 +47,7 @@ setObjList <- function (name = "A", ...) {
     #
     objList_x <- get(objList_n)
     objList_z <<- ls(all.names = TRUE, envir = .GlobalEnv)
-    objDel <<- objList_z[!objList_z %in% objList_x]
+    objDel   <<- objList_z[!objList_z %in% objList_x]
     if (length(which(objDel == objList_n)) > 0) {
         objDel <<- objDel[-which(objDel == objList_n)]
     }

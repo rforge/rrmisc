@@ -31,5 +31,4 @@ countDistinct(crabs[, c("sp")])
 countDistinct(crabs[, c("sex")])
 countDistinct(crabs[, c("FL")])
 }
-#
 }

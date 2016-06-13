@@ -8,15 +8,14 @@
 \tabular{ll}{
     Package: \tab rrMisc\cr
     Type: \tab Package\cr
-    Version: \tab 0.13\cr
-    Date: \tab 2016-06-12\cr
-    License: \tab --
+    Version: \tab 0.14\cr
+    Date: \tab 2016-06-13\cr
+    License: \tab GPL-2
 }
 Some rather small helpers like the 'grep' funktions to facilitate handling of objects.
 }
-\author{ Author and Maintainer: roland.rapold@helsana.ch }
-\references{ }
+\author{ Author and Maintainer: roland.rapold@alumni.ethz.ch }
+%% \references{ }
 \keyword{ package }
 \seealso{ other functions in this R-packge }
-\examples{
-}
+%% \examples{ }
