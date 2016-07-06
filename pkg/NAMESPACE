@@ -1,9 +1,23 @@
-exportPattern("^[[:alpha:]]+")
+# exportPattern("^[[:alpha:]]+")
 
-import(Hmisc)
+export("countDistinct",
+       "createDefMeasures", "descrTable",
+       "defObjList", "setObjList",
+       "formatPValue", "pFromF", "pFromT", "pFromZ",
+       "grepColEntries", "grepColNA", "grepColNames", "grepMultipleEntries",
+       "grepNotCompleteEntries", "grepObjNames", "grepRowNames",
+       "listObjSizes", "listObjContrasts",
+       "percentLabel")
+#      "colThemes", "d.sport")
 
+# import(utils)
+# import(Hmisc)
+#
+# Functions used in newly defined functions in rrMisc
 importFrom("stats", "IQR", "chisq.test", "complete.cases",
            "kruskal.test", "median", "na.omit", "pf", "pnorm", "pt",
            "relevel", "sd", "t.test", "wilcox.test")
-importFrom("utils", "object.size")
+importFrom("utils", "object.size", "data")
+importFrom("lattice", "trellis.par.set", "show.settings")
+importFrom("latticeExtra", "theEconomist.theme")
 

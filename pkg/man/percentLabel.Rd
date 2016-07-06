@@ -16,12 +16,12 @@
 \note{ under continuous developement }
 \seealso{ see other functions in this R-package }
 \examples{
-print("---------------------------------------------------------------------------------------------")
-print("list from 0 to 1 in 5 - steps ---------------------------------------------------------------")
+print("--")
+print("list from 0 to 1 in 5 - steps")
 percentLabel(perc.dist=5, min.perc=0)
 #
-print("---------------------------------------------------------------------------------------------")
-print("example for usage in plot()     -------------------------------------------------------------")
+print("--")
+print("example for usage in plot()")
 p.lab <- percentLabel(perc.dist=20, min.perc=-100, max.perc=200)
 x.sam <- rnorm(40, 0.4, 0.4)
 y.sam <- rnorm(40, 0.4, 0.4)

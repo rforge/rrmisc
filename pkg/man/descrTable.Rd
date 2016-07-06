@@ -1,21 +1,44 @@
 \name{descrTable}
 \alias{descrTable}
 \alias{createDefMeasures}
-\alias{descrMeasures}
 \title{ Create descritive table }
-\description{ Create descriptive table with up to five subgroups/total and comparison between
-    groups. }
-\usage{ formatPValue(x, digits=3, ...) }
+\description{ Create descriptive table with up to five subgroups/total and comparison between groups. }
+\usage{descrTable(descr.table=NULL
+, def.measures
+, sub.d1
+, sub.d2
+, sub.d3
+, sub.d4=NULL
+, sub.d5=NULL
+, weights.1=NULL
+, weights.2=NULL
+, weights.3=NULL
+, weights.4=NULL
+, weights.5=NULL
+, label.compact=FALSE
+, label.width=48
+, test.gr=NULL
+, lang="de"
+, verbose=0)
+}
 \arguments{
-  \item{descr.table}{ description scheme with measures, e.g. from createDefMeasures() }
-  \item{sub.d1 to sub.d5}{ vectors of data in columns 1 to 5 }
-  \item{test.gr}{columns to compare}
-  \item{verbose}{verbose level between 0 and 2}
-  \item{weights.1 to weights.5}{ vectors of weights of data columns 1 to 5}
-  \item{lalbel.compact}{compact result columns label and measure or make two columns}
+  \item{descr.table}{ Result-Table (pre-formated) }
+  \item{def.measures}{ description scheme with measures, e.g. from createDefMeasures() }
+  \item{sub.d1}{ vectors of data in column 1 }
+  \item{sub.d2}{ vectors of data in column 2 }
+  \item{sub.d3}{ vectors of data in column 3 }
+  \item{sub.d4}{ vectors of data in column 4 }
+  \item{sub.d5}{ vectors of data in column 5 }
+  \item{weights.1}{ vectors of weights of data column 1}
+  \item{weights.2}{ vectors of weights of data column 2}
+  \item{weights.3}{ vectors of weights of data column 3}
+  \item{weights.4}{ vectors of weights of data column 4}
+  \item{weights.5}{ vectors of weights of data column 5}
+  \item{label.compact}{compact result columns label and measure or make two columns}
   \item{label.width}{width of first column if label.compact==TRUE}
+  \item{test.gr}{columns to compare}
   \item{lang}{language for certain key words, 'de' or 'en'}
-  \item{\dots}{ arguments passed to further functions }
+  \item{verbose}{verbose level between 0 and 2}
 }
 \details{ utility function for formating }
 \value{ list with 1. descriptive table, 2. tests used, 3. attributes with NA's }
@@ -24,8 +47,7 @@
 \note{ under continuous developement }
 \seealso{ other utility-functions in this R-package }
 \examples{
-\dontrun{
-require("car")
+if(require("car")) {
 data(Mroz)
 str(Mroz)
 
@@ -74,24 +96,24 @@ Mroz[Mroz$hc=="yes", "age"][n4] <- NA
 # Mroz <- Mroz[1:10, ]
 
 # create description-table                              ........................................
-descr.table <- descrTable(def.measures = def.measures
-                        , sub.d1 = subset(Mroz, hc=="no")
-                        , sub.d2 = subset(Mroz, hc=="yes")
-                        , sub.d3 = Mroz
-                        , test.gr = c(1, 2)
-                        , lang="en")
-colnames(descr.table[[1]]) <- c("attribute", "measure"
-                        , "husband college 'no'", "husband college 'yes'"
-                        , "overall", "p-value")
-descr.table
-head(descr.table[[1]])
-
-# verify statistics                                     ........................................
-if(require("doBy"))
-{
-    doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median))
-    table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc"))
-    table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc"))
-}
+# descr.table <- descrTable(def.measures = def.measures
+#                         , sub.d1 = subset(Mroz, hc=="no")
+#                         , sub.d2 = subset(Mroz, hc=="yes")
+#                         , sub.d3 = Mroz
+#                         , test.gr = c(1, 2)
+#                         , lang="en")
+# colnames(descr.table[[1]]) <- c("attribute", "measure"
+#                         , "husband college 'no'", "husband college 'yes'"
+#                         , "overall", "p-value")
+# descr.table
+# head(descr.table[[1]])
+# 
+# # verify statistics                                     ........................................
+# if(require("doBy"))
+# {
+#     doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median))
+#     table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc"))
+#     table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc"))
+# }
 } }
 

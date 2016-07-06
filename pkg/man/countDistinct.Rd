@@ -12,23 +12,23 @@
 \author{ Roland Rapold }
 \note{ under continuous developement }
 \examples{
-print("-------------------------------------------------------------------------------------------")
-print("Example for vector                   ------------------------------------------------------")
+print("--")
+print("Example for vector")
                       c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)
                length(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6))
         countDistinct(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6))
        length(na.omit(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)))
 countDistinct(na.omit(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)))
 #
-print("-------------------------------------------------------------------------------------------")
-\dontrun{
-require("MASS")
-print("Example for data.frame               ------------------------------------------------------")
-data(crabs, package="MASS")
-head(crabs)
-str(crabs)
-countDistinct(crabs[, c("sp")])
-countDistinct(crabs[, c("sex")])
-countDistinct(crabs[, c("FL")])
+print("--")
+if(require("MASS"))
+{
+    print("Example for data.frame")
+    data(crabs, package="MASS")
+    head(crabs)
+    str(crabs)
+    countDistinct(crabs[, c("sp")])
+    countDistinct(crabs[, c("sex")])
+    countDistinct(crabs[, c("FL")])
 }
 }

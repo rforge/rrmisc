@@ -8,9 +8,9 @@
 \tabular{ll}{
     Package: \tab rrMisc\cr
     Type: \tab Package\cr
-    Version: \tab 0.14\cr
-    Date: \tab 2016-06-13\cr
-    License: \tab GPL-2
+    Version: \tab 0.15\cr
+    Date: \tab 2016-07-06\cr
+    License: \tab GPL (>=2)
 }
 Some rather small helpers like the 'grep' funktions to facilitate handling of objects.
 }
