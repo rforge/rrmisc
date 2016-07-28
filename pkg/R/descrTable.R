@@ -3,14 +3,14 @@
 #
 # --------------- createDefMeasures              Vorlage fuer def.measures erstellen              .. # {{{
 # RR 20151110               --------------------------------------------------------------------- --
-createDefMeasures <- function (def.measures, d.data, version=2, var.list)
+createDefMeasures <- function (d.data, version=2, var.list)
 {
     #
-    # def.measures = Input-Parameter Tabelle fuer 'descrMeasures' resp. 'descrTable'
     # d.data       = Input-Daten fuer 'descrMeasures' resp. 'descrTable', z.B. dort verwendete sub.d1
     # var.list     = Liste mit Variablennamen und Variablenbezeichnungen
     #                var.list$var_name      ->  def.measures$measure_name
     #                var.list$var_label     ->  def.measures$measure_label
+    # def.measures = Resultat: Input-Parameter Tabelle fuer 'descrMeasures' resp. 'descrTable'
     #
     # pasteClass local function ....................................................................
     pasteClass <- function(x)
@@ -30,8 +30,8 @@ createDefMeasures <- function (def.measures, d.data, version=2, var.list)
     }
     #
     # create generic definition-table if none is provided ..........................................
-    if (missing(def.measures) || is.null(def.measures))
-    {
+  # if (missing(def.measures) || is.null(def.measures))
+  # {
         def.measures <- data.frame(measure_label="a", measure_name="a"
                                  , measure_1="a"
                                  , measure_2="a"
@@ -119,10 +119,10 @@ createDefMeasures <- function (def.measures, d.data, version=2, var.list)
                 i.row <- i.row + 1
             }
         }
-    }
-    else {
-        return(def.measures)
-    }
+  # }
+  # else {
+  #     return(def.measures)
+  # }
     #
     # substitute variable labels from reference list    ............................................
     if (!missing(var.list) && !is.null(var.list))
@@ -184,7 +184,7 @@ createDefMeasures <- function (def.measures, d.data, version=2, var.list)
 # Spezialfall: Variable 'i' --> wird als Indikator 'Recordeinheit' aufgefasst und als
 #                               'Kollektivgroesse' ausgegeben!
 #
-descrMeasures  <- function(descr.table                  # Resultattabelle vorvormatiert
+descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorformatiert
                            , var.measure.label          # Variablenbezeichnung
                            , var.measure.name           # Variablenname / Attribut
                            , measures                   # Funktion fuer Kennzahlen
@@ -217,7 +217,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         print(paste("test.gr=", test.gr))
     }
     # ------------------------------------------------------------------------------------------- --
-    # withWarnings() local function ................................................................# {{{
+    # withWarnings() local function ................................................................ # {{{
     withWarnings <- function(expr) {
         myWarnings <- NULL
         wHandler <- function(w) {
@@ -229,7 +229,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     }
     ## }}}
     # ------------------------------------------------------------------------------------------- --
-    # 0. ueberpruefung Eingabe Kennzahlen                                                           .. # {{{
+    # 0. ueberpruefung Eingabe Kennzahlen                                                         .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     #    Erste Kennzahl
@@ -274,23 +274,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     #                               # wird bei der Wahl von wtd_mean oder wtd_median auf 1 gesetzt
     #
     # Anzahl Datenspalten ermitteln ................................................................
-    dim.data <- 3
+    dim.data <- 1
+    if(!is.null(sub.d2)) dim.data <- 2
+    if(!is.null(sub.d3)) dim.data <- 3
     if(!is.null(sub.d4)) dim.data <- 4
     if(!is.null(sub.d5)) dim.data <- 5
     if(verbose==2) print(paste("dim.data: -- :", dim.data))
     #
     # Datenvektoren erstellen ......................................................................
-    sub.data.1 <- sub.d1[, var.measure.name]
-    sub.data.2 <- sub.d2[, var.measure.name]
-    sub.data.3 <- sub.d3[, var.measure.name]
+                   sub.data.1 <- sub.d1[, var.measure.name]
+    if(dim.data>1) sub.data.2 <- sub.d2[, var.measure.name]
+    if(dim.data>2) sub.data.3 <- sub.d3[, var.measure.name]
     if(dim.data>3) sub.data.4 <- sub.d4[, var.measure.name]
     if(dim.data>4) sub.data.5 <- sub.d5[, var.measure.name]
     rm(sub.d1, sub.d2, sub.d3, sub.d4, sub.d5)
     #
     # Ueberpruefung auf NAs ........................................................................
-    res.na <- c(sum(is.na(sub.data.1))
-                , sum(is.na(sub.data.2))
-                , sum(is.na(sub.data.3)))
+                   res.na <- c(        sum(is.na(sub.data.1)))
+    if(dim.data>1) res.na <- c(res.na, sum(is.na(sub.data.2)))
+    if(dim.data>2) res.na <- c(res.na, sum(is.na(sub.data.3)))
     if(dim.data>3) res.na <- c(res.na, sum(is.na(sub.data.4)))
     if(dim.data>4) res.na <- c(res.na, sum(is.na(sub.data.5)))
     #
@@ -307,9 +309,9 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         }
         if(measure.ref.level!=levels(sub.data.1)[1])
         {
-            sub.data.1 <- relevel(sub.data.1, measure.ref.level)
-            sub.data.2 <- relevel(sub.data.2, measure.ref.level)
-            sub.data.3 <- relevel(sub.data.3, measure.ref.level)
+                           sub.data.1 <- relevel(sub.data.1, measure.ref.level)
+            if(dim.data>1) sub.data.2 <- relevel(sub.data.2, measure.ref.level)
+            if(dim.data>2) sub.data.3 <- relevel(sub.data.3, measure.ref.level)
             if(dim.data>3) sub.data.4 <- relevel(sub.data.4, measure.ref.level)
             if(dim.data>4) sub.data.5 <- relevel(sub.data.5, measure.ref.level)
         }
@@ -320,9 +322,9 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     {
         if(requireNamespace("DescTools", quietly=TRUE))
         {
-            levels(sub.data.1) <- DescTools::StrTrim(levels(sub.data.1))
-            levels(sub.data.2) <- DescTools::StrTrim(levels(sub.data.2))
-            levels(sub.data.3) <- DescTools::StrTrim(levels(sub.data.3))
+                           levels(sub.data.1) <- DescTools::StrTrim(levels(sub.data.1))
+            if(dim.data>1) levels(sub.data.2) <- DescTools::StrTrim(levels(sub.data.2))
+            if(dim.data>2) levels(sub.data.3) <- DescTools::StrTrim(levels(sub.data.3))
             if(dim.data>3) levels(sub.data.4) <- DescTools::StrTrim(levels(sub.data.4))
             if(dim.data>4) levels(sub.data.5) <- DescTools::StrTrim(levels(sub.data.5))
         }
@@ -331,15 +333,15 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         {
             if(lang=="de")
             {
-                levels(sub.data.1)[m] <- "_leer_"
-                levels(sub.data.2)[m] <- "_leer_"
-                levels(sub.data.3)[m] <- "_leer_"
+                               levels(sub.data.1)[m] <- "_leer_"
+                if(dim.data>1) levels(sub.data.2)[m] <- "_leer_"
+                if(dim.data>2) levels(sub.data.3)[m] <- "_leer_"
                 if(dim.data>3) levels(sub.data.4)[m] <- "_leer_"
                 if(dim.data>4) levels(sub.data.5)[m] <- "_leer_"
             } else {
-                levels(sub.data.1)[m] <- "_empty_"
-                levels(sub.data.2)[m] <- "_empty_"
-                levels(sub.data.3)[m] <- "_empty_"
+                               levels(sub.data.1)[m] <- "_empty_"
+                if(dim.data>1) levels(sub.data.2)[m] <- "_empty_"
+                if(dim.data>2) levels(sub.data.3)[m] <- "_empty_"
                 if(dim.data>3) levels(sub.data.4)[m] <- "_empty_"
                 if(dim.data>4) levels(sub.data.5)[m] <- "_empty_"
             }
@@ -352,9 +354,9 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
        sum(levels(sub.data.1)%in%c(0:10000))==length(levels(sub.data.1)) &&
        var.measure.name!="i")
     {
-        levels(sub.data.1) <- paste(levels(sub.data.1), "_", sep="")
-        levels(sub.data.2) <- paste(levels(sub.data.2), "_", sep="")
-        levels(sub.data.3) <- paste(levels(sub.data.3), "_", sep="")
+                       levels(sub.data.1) <- paste(levels(sub.data.1), "_", sep="")
+        if(dim.data>1) levels(sub.data.2) <- paste(levels(sub.data.2), "_", sep="")
+        if(dim.data>2) levels(sub.data.3) <- paste(levels(sub.data.3), "_", sep="")
         if(dim.data>3) levels(sub.data.4) <- paste(levels(sub.data.4), "_", sep="")
         if(dim.data>4) levels(sub.data.5) <- paste(levels(sub.data.5), "_", sep="")
     }
@@ -392,11 +394,26 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
       # sub.data.2 <- rep(2, 100)
       # sub.data.3 <- rep(3, 100)
 
-        measure.1 <- data.frame(table(sub.data.1),
-                                table(sub.data.2),
-                                table(sub.data.3))
-        measure.1 <- measure.1[, c(1, 2, 4, 6)]
-        if(dim.data>3)
+        if(dim.data==1)
+        {
+            measure.1 <- data.frame(table(sub.data.1))
+            measure.1 <- measure.1[, c(1, 2)]
+        }
+
+        if(dim.data==2)
+        {
+            measure.1 <- data.frame(table(sub.data.1),
+                                    table(sub.data.2))
+            measure.1 <- measure.1[, c(1, 2, 4)]
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- data.frame(table(sub.data.1),
+                                    table(sub.data.2),
+                                    table(sub.data.3))
+            measure.1 <- measure.1[, c(1, 2, 4, 6)]
+        }
+        if(dim.data==4)
         {
             measure.1 <- data.frame(table(sub.data.1),
                                     table(sub.data.2),
@@ -404,7 +421,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                     table(sub.data.4))
             measure.1 <- measure.1[, c(1, 2, 4, 6, 8)]
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- data.frame(table(sub.data.1),
                                     table(sub.data.2),
@@ -430,11 +447,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     #
     if(measures[1]=="count_distinct")
     {
-        measure.1 <- c(NA
-                       , countDistinct(sub.data.1)
-                       , countDistinct(sub.data.2)
-                       , countDistinct(sub.data.3))
-        if(dim.data>3)
+        if(dim.data==1)
+        {
+            measure.1 <- c(NA, countDistinct(sub.data.1))
+        }
+
+        if(dim.data==2)
+        {
+            measure.1 <- c(NA
+                        , countDistinct(sub.data.1)
+                        , countDistinct(sub.data.2))
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- c(NA
+                        , countDistinct(sub.data.1)
+                        , countDistinct(sub.data.2)
+                        , countDistinct(sub.data.3))
+        }
+        if(dim.data==4)
         {
             measure.1 <- c(NA
                         , countDistinct(sub.data.1)
@@ -442,7 +473,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                         , countDistinct(sub.data.3)
                         , countDistinct(sub.data.4))
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- c(NA
                         , countDistinct(sub.data.1)
@@ -470,11 +501,26 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
       # sub.data.1 <- rep(1, 100)
       # sub.data.2 <- rep(2, 100)
       # sub.data.3 <- rep(3, 100)
-        measure.1 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100,
-                                table(sub.data.2) / length(na.omit(sub.data.2)) * 100,
-                                table(sub.data.3) / length(na.omit(sub.data.3)) * 100)
-        measure.1 <- measure.1[, c(1, 2, 4, 6)]
-        if(dim.data>3)
+        if(dim.data==1)
+        {
+            measure.1 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100)
+            measure.1 <- measure.1[, c(1, 2)]
+        }
+
+        if(dim.data==2)
+        {
+            measure.1 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100,
+                                    table(sub.data.2) / length(na.omit(sub.data.2)) * 100)
+            measure.1 <- measure.1[, c(1, 2, 4)]
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100,
+                                    table(sub.data.2) / length(na.omit(sub.data.2)) * 100,
+                                    table(sub.data.3) / length(na.omit(sub.data.3)) * 100)
+            measure.1 <- measure.1[, c(1, 2, 4, 6)]
+        }
+        if(dim.data==4)
         {
             measure.1 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100,
                                     table(sub.data.2) / length(na.omit(sub.data.2)) * 100,
@@ -482,7 +528,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                     table(sub.data.4) / length(na.omit(sub.data.4)) * 100)
             measure.1 <- measure.1[, c(1, 2, 4, 6, 8)]
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100,
                                     table(sub.data.2) / length(na.omit(sub.data.2)) * 100,
@@ -493,7 +539,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         }
 
         measure.1[, 1] <- paste("'", levels(sub.data.1), "'", sep="")
-        label.1 <- ifelse(lang=="de", "Anteil", "part")
+        label.1 <- ifelse(lang=="de", "%", "%")
 
         if(verbose==2) print(paste("portion - measure.1: -- :", measure.1))
         if(verbose==2) print(paste("portion - label.1: -- :", label.1))
@@ -506,11 +552,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     #
     if(measures[1]=="min")
     {
-        measure.1 <- c(NA
-                       , min(sub.data.1, na.rm=TRUE)
-                       , min(sub.data.2, na.rm=TRUE)
-                       , min(sub.data.3, na.rm=TRUE))
-        if(dim.data>3)
+        if(dim.data==1)
+        {
+            measure.1 <- c(NA
+                        , min(sub.data.1, na.rm=TRUE))
+        }
+        if(dim.data==2)
+        {
+            measure.1 <- c(NA
+                        , min(sub.data.1, na.rm=TRUE)
+                        , min(sub.data.2, na.rm=TRUE))
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- c(NA
+                        , min(sub.data.1, na.rm=TRUE)
+                        , min(sub.data.2, na.rm=TRUE)
+                        , min(sub.data.3, na.rm=TRUE))
+        }
+        if(dim.data==4)
         {
             measure.1 <- c(NA
                         , min(sub.data.1, na.rm=TRUE)
@@ -518,7 +578,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                         , min(sub.data.3, na.rm=TRUE)
                         , min(sub.data.4, na.rm=TRUE))
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- c(NA
                         , min(sub.data.1, na.rm=TRUE)
@@ -541,11 +601,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     #
     if(measures[1]=="max")
     {
-        measure.1 <- c(NA
-                       , max(sub.data.1, na.rm=TRUE)
-                       , max(sub.data.2, na.rm=TRUE)
-                       , max(sub.data.3, na.rm=TRUE))
-        if(dim.data>3)
+        if(dim.data==1)
+        {
+            measure.1 <- c(NA
+                        , max(sub.data.1, na.rm=TRUE))
+        }
+        if(dim.data==2)
+        {
+            measure.1 <- c(NA
+                        , max(sub.data.1, na.rm=TRUE)
+                        , max(sub.data.2, na.rm=TRUE))
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- c(NA
+                        , max(sub.data.1, na.rm=TRUE)
+                        , max(sub.data.2, na.rm=TRUE)
+                        , max(sub.data.3, na.rm=TRUE))
+        }
+        if(dim.data==4)
         {
             measure.1 <- c(NA
                         , max(sub.data.1, na.rm=TRUE)
@@ -553,7 +627,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                         , max(sub.data.3, na.rm=TRUE)
                         , max(sub.data.4, na.rm=TRUE))
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- c(NA
                         , max(sub.data.1, na.rm=TRUE)
@@ -576,11 +650,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     #
     if(measures[1]=="mean")
     {
-        measure.1 <- c(NA
-                       , mean(sub.data.1, na.rm=TRUE)
-                       , mean(sub.data.2, na.rm=TRUE)
-                       , mean(sub.data.3, na.rm=TRUE))
-        if(dim.data>3)
+        if(dim.data==1)
+        {
+            measure.1 <- c(NA
+                        , mean(sub.data.1, na.rm=TRUE))
+        }
+        if(dim.data==2)
+        {
+            measure.1 <- c(NA
+                        , mean(sub.data.1, na.rm=TRUE)
+                        , mean(sub.data.2, na.rm=TRUE))
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- c(NA
+                        , mean(sub.data.1, na.rm=TRUE)
+                        , mean(sub.data.2, na.rm=TRUE)
+                        , mean(sub.data.3, na.rm=TRUE))
+        }
+        if(dim.data==4)
         {
             measure.1 <- c(NA
                         , mean(sub.data.1, na.rm=TRUE)
@@ -588,7 +676,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                         , mean(sub.data.3, na.rm=TRUE)
                         , mean(sub.data.4, na.rm=TRUE))
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- c(NA
                         , mean(sub.data.1, na.rm=TRUE)
@@ -613,11 +701,26 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     {
       # require(Hmisc)
         requireNamespace("Hmisc")
-        measure.1 <- c(NA,
-                       Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
-                       Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
-                       Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE))
-        if(dim.data>3)
+
+        if(dim.data==1)
+        {
+            measure.1 <- c(NA,
+                           Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE))
+        }
+        if(dim.data==2)
+        {
+            measure.1 <- c(NA,
+                           Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
+                           Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE))
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- c(NA,
+                           Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
+                           Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
+                           Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE))
+        }
+        if(dim.data==4)
         {
             measure.1 <- c(NA,
                           Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
@@ -625,7 +728,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                           Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE),
                           Hmisc::wtd.mean(x=sub.data.4, weights=weights.4, na.rm=TRUE))
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- c(NA,
                           Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
@@ -649,11 +752,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     #
     if(measures[1]=="median")
     {
-        measure.1 <- c(NA
-                       , median(sub.data.1, na.rm=TRUE)
-                       , median(sub.data.2, na.rm=TRUE)
-                       , median(sub.data.3, na.rm=TRUE))
-        if(dim.data>3)
+        if(dim.data==1)
+        {
+            measure.1 <- c(NA
+                        , median(sub.data.1, na.rm=TRUE))
+        }
+        if(dim.data==2)
+        {
+            measure.1 <- c(NA
+                        , median(sub.data.1, na.rm=TRUE)
+                        , median(sub.data.2, na.rm=TRUE))
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- c(NA
+                        , median(sub.data.1, na.rm=TRUE)
+                        , median(sub.data.2, na.rm=TRUE)
+                        , median(sub.data.3, na.rm=TRUE))
+        }
+        if(dim.data==4)
         {
             measure.1 <- c(NA
                         , median(sub.data.1, na.rm=TRUE)
@@ -661,7 +778,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                         , median(sub.data.3, na.rm=TRUE)
                         , median(sub.data.4, na.rm=TRUE))
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- c(NA
                         , median(sub.data.1, na.rm=TRUE)
@@ -685,11 +802,26 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     if(measures[1]=="wtd_median")
     {
         requireNamespace("Hmisc")
-        measure.1 <- c(NA,
-                       Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
-                       Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
-                       Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE))
-        if(dim.data>3)
+
+        if(dim.data==1)
+        {
+            measure.1 <- c(NA,
+                           Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE))
+        }
+        if(dim.data==2)
+        {
+            measure.1 <- c(NA,
+                           Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
+                           Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE))
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- c(NA,
+                           Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
+                           Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
+                           Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE))
+        }
+        if(dim.data==4)
         {
             measure.1 <- c(NA,
                           Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
@@ -697,7 +829,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                           Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE),
                           Hmisc::wtd.quantile(x=sub.data.4, weights=weights.4, probs=0.5, na.rm=TRUE))
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- c(NA,
                           Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
@@ -721,11 +853,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     #
     if(measures[1]=="sd")
     {
-        measure.1 <- c(NA
-                       , sd(sub.data.1, na.rm=TRUE)
-                       , sd(sub.data.2, na.rm=TRUE)
-                       , sd(sub.data.3, na.rm=TRUE))
-        if(dim.data>3)
+        if(dim.data==1)
+        {
+            measure.1 <- c(NA
+                        , sd(sub.data.1, na.rm=TRUE))
+        }
+        if(dim.data==2)
+        {
+            measure.1 <- c(NA
+                        , sd(sub.data.1, na.rm=TRUE)
+                        , sd(sub.data.2, na.rm=TRUE))
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- c(NA
+                        , sd(sub.data.1, na.rm=TRUE)
+                        , sd(sub.data.2, na.rm=TRUE)
+                        , sd(sub.data.3, na.rm=TRUE))
+        }
+        if(dim.data==4)
         {
             measure.1 <- c(NA
                         , sd(sub.data.1, na.rm=TRUE)
@@ -733,7 +879,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                         , sd(sub.data.3, na.rm=TRUE)
                         , sd(sub.data.4, na.rm=TRUE))
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- c(NA
                         , sd(sub.data.1, na.rm=TRUE)
@@ -743,7 +889,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                         , sd(sub.data.5, na.rm=TRUE))
         }
 
-        label.1   <- ifelse(lang=="de", "Standardabw.", "stand.dev.")
+        label.1   <- ifelse(lang=="de", "Standardabw.", "sd.")
 
         if(verbose==2) print(paste("sd - measure.1: -- :", measure.1))
         if(verbose==2) print(paste("sd - label.1: -- :", label.1))
@@ -756,11 +902,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     #
     if(measures[1]=="IQR")
     {
-        measure.1 <- c(NA
-                       , IQR(sub.data.1, na.rm=TRUE)
-                       , IQR(sub.data.2, na.rm=TRUE)
-                       , IQR(sub.data.3, na.rm=TRUE))
-        if(dim.data>3)
+        if(dim.data==1)
+        {
+            measure.1 <- c(NA
+                        , IQR(sub.data.1, na.rm=TRUE))
+        }
+        if(dim.data==2)
+        {
+            measure.1 <- c(NA
+                        , IQR(sub.data.1, na.rm=TRUE)
+                        , IQR(sub.data.2, na.rm=TRUE))
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- c(NA
+                        , IQR(sub.data.1, na.rm=TRUE)
+                        , IQR(sub.data.2, na.rm=TRUE)
+                        , IQR(sub.data.3, na.rm=TRUE))
+        }
+        if(dim.data==4)
         {
             measure.1 <- c(NA
                         , IQR(sub.data.1, na.rm=TRUE)
@@ -768,7 +928,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                         , IQR(sub.data.3, na.rm=TRUE)
                         , IQR(sub.data.4, na.rm=TRUE))
         }
-        if(dim.data>4)
+        if(dim.data==5)
         {
             measure.1 <- c(NA
                         , IQR(sub.data.1, na.rm=TRUE)
@@ -803,23 +963,41 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         if(measures[1]=="count" & measures[2]=="portion" & var.measure.name=="i")
         {
-            measure.2 <- c(NA
-                        , length(na.omit(sub.data.1))
-                        , length(na.omit(sub.data.2))
-                        , length(na.omit(sub.data.3)))
-            tot       <- sum(measure.2[2:4]) / 2
-            measure.2[2:4] <- measure.2[2:4] * 100 / tot
-            if(dim.data>3)
+            if(dim.data==1)
+            {
+                measure.2 <- c(NA
+                            , length(na.omit(sub.data.1)))
+                tot        <- sum(measure.2[2:2]) / 2
+                measure.2[2:2] <- measure.2[2:2] * 100 / tot
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- c(NA
+                            , length(na.omit(sub.data.1))
+                            , length(na.omit(sub.data.2)))
+                tot        <- sum(measure.2[2:3]) / 2
+                measure.2[2:3] <- measure.2[2:3] * 100 / tot
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- c(NA
+                            , length(na.omit(sub.data.1))
+                            , length(na.omit(sub.data.2))
+                            , length(na.omit(sub.data.3)))
+                tot        <- sum(measure.2[2:4]) / 2
+                measure.2[2:4] <- measure.2[2:4] * 100 / tot
+            }
+            if(dim.data==4)
             {
                 measure.2 <- c(NA
                             , length(na.omit(sub.data.1))
                             , length(na.omit(sub.data.2))
                             , length(na.omit(sub.data.3))
                             , length(na.omit(sub.data.4)))
-                tot       <- sum(measure.2[2:5]) / 2
+                tot        <- sum(measure.2[2:5]) / 2
                 measure.2[2:5] <- measure.2[2:5] * 100 / tot
             }
-            if(dim.data>4)
+            if(dim.data==5)
             {
                 measure.2 <- c(NA
                             , length(na.omit(sub.data.1))
@@ -827,12 +1005,12 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                             , length(na.omit(sub.data.3))
                             , length(na.omit(sub.data.4))
                             , length(na.omit(sub.data.5)))
-                tot       <- sum(measure.2[2:6]) / 2
+                tot        <- sum(measure.2[2:6]) / 2
                 measure.2[2:6] <- measure.2[2:6] * 100 / tot
             }
 
             measure.2 <- t(data.frame(measure.2))
-            label.2   <- ifelse(lang=="de", "Anteil", "part")
+            label.2   <- ifelse(lang=="de", "%", "%")
 
             if(verbose==2) print(paste("portion - measure.2: -- :", measure.2))
             if(verbose==2) print(paste("portion - label.2: -- :", label.2))
@@ -845,12 +1023,28 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         if(measures[1]=="count" & measures[2]=="portion" & var.measure.name!="i")
         {
-            measure.2 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100,
-                                    table(sub.data.2) / length(na.omit(sub.data.2)) * 100,
-                                    table(sub.data.3) / length(na.omit(sub.data.3)) * 100)
-            if(verbose==2) print(paste("portion - measure.2: -- :", measure.2))
-            measure.2 <- measure.2[, c(1, 2, 4, 6)]
-            if(dim.data>3)
+            if(dim.data==1)
+            {
+                measure.2 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100)
+                if(verbose==2) print(paste("portion - measure.2: -- :", measure.2))
+                measure.2 <- measure.2[, c(1, 2)]
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100,
+                                        table(sub.data.2) / length(na.omit(sub.data.2)) * 100)
+                if(verbose==2) print(paste("portion - measure.2: -- :", measure.2))
+                measure.2 <- measure.2[, c(1, 2, 4)]
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100,
+                                        table(sub.data.2) / length(na.omit(sub.data.2)) * 100,
+                                        table(sub.data.3) / length(na.omit(sub.data.3)) * 100)
+                if(verbose==2) print(paste("portion - measure.2: -- :", measure.2))
+                measure.2 <- measure.2[, c(1, 2, 4, 6)]
+            }
+            if(dim.data==4)
             {
                 measure.2 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100,
                                         table(sub.data.2) / length(na.omit(sub.data.2)) * 100,
@@ -859,7 +1053,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                 if(verbose==2) print(paste("portion - measure.2: -- :", measure.2))
                 measure.2 <- measure.2[, c(1, 2, 4, 6, 8)]
             }
-            if(dim.data>4)
+            if(dim.data==5)
             {
                 measure.2 <- data.frame(table(sub.data.1) / length(na.omit(sub.data.1)) * 100,
                                         table(sub.data.2) / length(na.omit(sub.data.2)) * 100,
@@ -871,7 +1065,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
             }
 
             measure.2[, 1] <- paste("'", levels(sub.data.1), "'", sep="")
-            label.2        <- ifelse(lang=="de", "Anteil", "part")
+            label.2        <- ifelse(lang=="de", "%", "%")
 
             if(verbose==2) print(paste("portion - measure.2: -- :", measure.2))
             if(verbose==2) print(paste("portion - label.2: -- :", label.2))
@@ -884,11 +1078,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         if(measures[2]=="mean")
         {
-            measure.2 <- c(NA
-                           , mean(sub.data.1, na.rm=TRUE)
-                           , mean(sub.data.2, na.rm=TRUE)
-                           , mean(sub.data.3, na.rm=TRUE))
-            if(dim.data>3)
+            if(dim.data==1)
+            {
+                measure.2 <- c(NA
+                               , mean(sub.data.1, na.rm=TRUE))
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- c(NA
+                               , mean(sub.data.1, na.rm=TRUE)
+                               , mean(sub.data.2, na.rm=TRUE))
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- c(NA
+                               , mean(sub.data.1, na.rm=TRUE)
+                               , mean(sub.data.2, na.rm=TRUE)
+                               , mean(sub.data.3, na.rm=TRUE))
+            }
+            if(dim.data==4)
             {
                 measure.2 <- c(NA
                                , mean(sub.data.1, na.rm=TRUE)
@@ -896,7 +1104,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                , mean(sub.data.3, na.rm=TRUE)
                                , mean(sub.data.4, na.rm=TRUE))
             }
-            if(dim.data>4)
+            if(dim.data==5)
             {
                 measure.2 <- c(NA
                                , mean(sub.data.1, na.rm=TRUE)
@@ -919,11 +1127,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         if(measures[2]=="min")
         {
-            measure.2 <- c(NA
-                           , min(sub.data.1, na.rm=TRUE)
-                           , min(sub.data.2, na.rm=TRUE)
-                           , min(sub.data.3, na.rm=TRUE))
-            if(dim.data>3)
+            if(dim.data==1)
+            {
+                measure.2 <- c(NA
+                               , min(sub.data.1, na.rm=TRUE))
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- c(NA
+                               , min(sub.data.1, na.rm=TRUE)
+                               , min(sub.data.2, na.rm=TRUE))
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- c(NA
+                               , min(sub.data.1, na.rm=TRUE)
+                               , min(sub.data.2, na.rm=TRUE)
+                               , min(sub.data.3, na.rm=TRUE))
+            }
+            if(dim.data==4)
             {
                 measure.2 <- c(NA
                                , min(sub.data.1, na.rm=TRUE)
@@ -931,7 +1153,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                , min(sub.data.3, na.rm=TRUE)
                                , min(sub.data.4, na.rm=TRUE))
             }
-            if(dim.data>4)
+            if(dim.data==5)
             {
                 measure.2 <- c(NA
                                , min(sub.data.1, na.rm=TRUE)
@@ -954,11 +1176,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         if(measures[2]=="max")
         {
-            measure.2 <- c(NA
-                           , max(sub.data.1, na.rm=TRUE)
-                           , max(sub.data.2, na.rm=TRUE)
-                           , max(sub.data.3, na.rm=TRUE))
-            if(dim.data>3)
+            if(dim.data==1)
+            {
+                measure.2 <- c(NA
+                               , max(sub.data.1, na.rm=TRUE))
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- c(NA
+                               , max(sub.data.1, na.rm=TRUE)
+                               , max(sub.data.2, na.rm=TRUE))
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- c(NA
+                               , max(sub.data.1, na.rm=TRUE)
+                               , max(sub.data.2, na.rm=TRUE)
+                               , max(sub.data.3, na.rm=TRUE))
+            }
+            if(dim.data==4)
             {
                 measure.2 <- c(NA
                                , max(sub.data.1, na.rm=TRUE)
@@ -966,7 +1202,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                , max(sub.data.3, na.rm=TRUE)
                                , max(sub.data.4, na.rm=TRUE))
             }
-            if(dim.data>4)
+            if(dim.data==5)
             {
                 measure.2 <- c(NA
                                , max(sub.data.1, na.rm=TRUE)
@@ -990,11 +1226,26 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         if(measures[2]=="wtd_mean" & i.weights==1)  # nur wenn erste Kennzahl auch gewichtet
         {
             requireNamespace("Hmisc")
-            measure.2 <- c(NA,
-                           Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
-                           Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
-                           Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE))
-            if(dim.data>3)
+
+            if(dim.data==1)
+            {
+                measure.2 <- c(NA,
+                               Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE))
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- c(NA,
+                               Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
+                               Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE))
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- c(NA,
+                               Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
+                               Hmisc::wtd.mean(x=sub.data.2, weights=weights.2, na.rm=TRUE),
+                               Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE))
+            }
+            if(dim.data==4)
             {
                 measure.2 <- c(NA,
                                Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
@@ -1002,7 +1253,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                Hmisc::wtd.mean(x=sub.data.3, weights=weights.3, na.rm=TRUE),
                                Hmisc::wtd.mean(x=sub.data.4, weights=weights.4, na.rm=TRUE))
             }
-            if(dim.data>4)
+            if(dim.data==5)
             {
                 measure.2 <- c(NA,
                                Hmisc::wtd.mean(x=sub.data.1, weights=weights.1, na.rm=TRUE),
@@ -1025,11 +1276,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         if(measures[2]=="median")
         {
-            measure.2 <- c(NA
-                           , median(sub.data.1, na.rm=TRUE)
-                           , median(sub.data.2, na.rm=TRUE)
-                           , median(sub.data.3, na.rm=TRUE))
-            if(dim.data>3)
+            if(dim.data==1)
+            {
+                measure.2 <- c(NA
+                               , median(sub.data.1, na.rm=TRUE))
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- c(NA
+                               , median(sub.data.1, na.rm=TRUE)
+                               , median(sub.data.2, na.rm=TRUE))
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- c(NA
+                               , median(sub.data.1, na.rm=TRUE)
+                               , median(sub.data.2, na.rm=TRUE)
+                               , median(sub.data.3, na.rm=TRUE))
+            }
+            if(dim.data==4)
             {
                 measure.2 <- c(NA
                                , median(sub.data.1, na.rm=TRUE)
@@ -1037,7 +1302,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                , median(sub.data.3, na.rm=TRUE)
                                , median(sub.data.4, na.rm=TRUE))
             }
-            if(dim.data>4)
+            if(dim.data==5)
             {
                 measure.2 <- c(NA
                                , median(sub.data.1, na.rm=TRUE)
@@ -1061,11 +1326,26 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         if(measures[2]=="wtd_median" & i.weights==1)    # nur wenn erste Kennzahl auch gewichtet
         {
             requireNamespace("Hmisc")
-            measure.1 <- c(NA,
-                           Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
-                           Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
-                           Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE))
-            if(dim.data>3)
+
+            if(dim.data==1)
+            {
+                measure.1 <- c(NA,
+                               Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE))
+            }
+            if(dim.data==2)
+            {
+                measure.1 <- c(NA,
+                               Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
+                               Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE))
+            }
+            if(dim.data==3)
+            {
+                measure.1 <- c(NA,
+                               Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
+                               Hmisc::wtd.quantile(x=sub.data.2, weights=weights.2, probs=0.5, na.rm=TRUE),
+                               Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE))
+            }
+            if(dim.data==4)
             {
                 measure.1 <- c(NA,
                                Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
@@ -1073,7 +1353,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                Hmisc::wtd.quantile(x=sub.data.3, weights=weights.3, probs=0.5, na.rm=TRUE),
                                Hmisc::wtd.quantile(x=sub.data.4, weights=weights.4, probs=0.5, na.rm=TRUE))
             }
-            if(dim.data>4)
+            if(dim.data==5)
             {
                 measure.1 <- c(NA,
                                Hmisc::wtd.quantile(x=sub.data.1, weights=weights.1, probs=0.5, na.rm=TRUE),
@@ -1096,11 +1376,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         if(measures[2]=="sd")
         {
-            measure.2 <- c(NA
-                           , sd(sub.data.1, na.rm=TRUE)
-                           , sd(sub.data.2, na.rm=TRUE)
-                           , sd(sub.data.3, na.rm=TRUE))
-            if(dim.data>3)
+            if(dim.data==1)
+            {
+                measure.2 <- c(NA
+                               , sd(sub.data.1, na.rm=TRUE))
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- c(NA
+                               , sd(sub.data.1, na.rm=TRUE)
+                               , sd(sub.data.2, na.rm=TRUE))
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- c(NA
+                               , sd(sub.data.1, na.rm=TRUE)
+                               , sd(sub.data.2, na.rm=TRUE)
+                               , sd(sub.data.3, na.rm=TRUE))
+            }
+            if(dim.data==4)
             {
                 measure.2 <- c(NA
                                , sd(sub.data.1, na.rm=TRUE)
@@ -1108,7 +1402,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                , sd(sub.data.3, na.rm=TRUE)
                                , sd(sub.data.4, na.rm=TRUE))
             }
-            if(dim.data>4)
+            if(dim.data==5)
             {
                 measure.2 <- c(NA
                                , sd(sub.data.1, na.rm=TRUE)
@@ -1118,7 +1412,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                , sd(sub.data.5, na.rm=TRUE))
             }
 
-            label.2   <- ifelse(lang=="de", "Standardabw.", "stand.dev.")
+            label.2   <- ifelse(lang=="de", "Standardabw.", "sd.")
 
             if(verbose==2) print(paste("sd - measure.2: -- :", measure.2))
             if(verbose==2) print(paste("sd - label.2: -- :", label.2))
@@ -1131,11 +1425,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         if(measures[2]=="IQR")
         {
-            measure.2 <- c(NA
-                           , IQR(sub.data.1, na.rm=TRUE)
-                           , IQR(sub.data.2, na.rm=TRUE)
-                           , IQR(sub.data.3, na.rm=TRUE))
-            if(dim.data>3)
+            if(dim.data==1)
+            {
+                measure.2 <- c(NA
+                               , IQR(sub.data.1, na.rm=TRUE))
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- c(NA
+                               , IQR(sub.data.1, na.rm=TRUE)
+                               , IQR(sub.data.2, na.rm=TRUE))
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- c(NA
+                               , IQR(sub.data.1, na.rm=TRUE)
+                               , IQR(sub.data.2, na.rm=TRUE)
+                               , IQR(sub.data.3, na.rm=TRUE))
+            }
+            if(dim.data==4)
             {
                 measure.2 <- c(NA
                                , IQR(sub.data.1, na.rm=TRUE)
@@ -1143,7 +1451,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                , IQR(sub.data.3, na.rm=TRUE)
                                , IQR(sub.data.4, na.rm=TRUE))
             }
-            if(dim.data>4)
+            if(dim.data==5)
             {
                 measure.2 <- c(NA
                                , IQR(sub.data.1, na.rm=TRUE)
@@ -1194,7 +1502,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         if(test.gr[2]==3) test.gr.2 <- sub.data.3
         if(test.gr[2]==4) test.gr.2 <- sub.data.4
         if(test.gr[2]==5) test.gr.2 <- sub.data.5
-        if(n.groups>2)
+        if(n.groups==3)
         {
             if(test.gr[3]==1) test.gr.3 <- sub.data.1
             if(test.gr[3]==2) test.gr.3 <- sub.data.2
@@ -1202,7 +1510,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
             if(test.gr[3]==4) test.gr.3 <- sub.data.4
             if(test.gr[3]==5) test.gr.3 <- sub.data.5
         }
-        if(n.groups>3)
+        if(n.groups==4)
         {
             if(test.gr[4]==1) test.gr.4 <- sub.data.1
             if(test.gr[4]==2) test.gr.4 <- sub.data.2
@@ -1210,7 +1518,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
             if(test.gr[4]==4) test.gr.4 <- sub.data.4
             if(test.gr[4]==5) test.gr.4 <- sub.data.5
         }
-        if(n.groups>4)
+        if(n.groups==5)
         {
             if(test.gr[5]==1) test.gr.5 <- sub.data.1
             if(test.gr[5]==2) test.gr.5 <- sub.data.2
@@ -1224,14 +1532,14 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         if(verbose==2) print(summary(test.gr.2))
         if(n.groups>2) if(verbose==2) print(paste("summary(test.gr.3): -- :"))
         if(n.groups>2) if(verbose==2) print(summary(test.gr.3))
-        if(n.groups>3) if(verbose==2) print(paste("summary(test.gr.4): -- :"))
-        if(n.groups>3) if(verbose==2) print(summary(test.gr.4))
-        if(n.groups>4) if(verbose==2) print(paste("summary(test.gr.5): -- :"))
-        if(n.groups>4) if(verbose==2) print(summary(test.gr.5))
+        if(n.groups==4) if(verbose==2) print(paste("summary(test.gr.4): -- :"))
+        if(n.groups==4) if(verbose==2) print(summary(test.gr.4))
+        if(n.groups==5) if(verbose==2) print(paste("summary(test.gr.5): -- :"))
+        if(n.groups==5) if(verbose==2) print(summary(test.gr.5))
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Gewichte zuordnen (falls noetig)                                                         .. # {{{
+        # Gewichte zuordnen (falls noetig)                                                        .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(i.weights==1) {
@@ -1246,7 +1554,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
             if(test.gr[2]==3) test_wt_2 <- weights.3
             if(test.gr[2]==4) test_wt_2 <- weights.4
             if(test.gr[2]==5) test_wt_2 <- weights.5
-            if(n.groups>2)
+            if(n.groups==3)
             {
                 if(test.gr[3]==1) test_wt_3 <- weights.1
                 if(test.gr[3]==2) test_wt_3 <- weights.2
@@ -1254,7 +1562,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                 if(test.gr[3]==4) test_wt_3 <- weights.4
                 if(test.gr[3]==5) test_wt_3 <- weights.5
             }
-            if(n.groups>3)
+            if(n.groups==4)
             {
                 if(test.gr[4]==1) test_wt_4 <- weights.1
                 if(test.gr[4]==2) test_wt_4 <- weights.2
@@ -1262,7 +1570,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                 if(test.gr[4]==4) test_wt_4 <- weights.4
                 if(test.gr[4]==5) test_wt_4 <- weights.5
             }
-            if(n.groups>4)
+            if(n.groups==5)
             {
                 if(test.gr[5]==1) test_wt_5 <- weights.1
                 if(test.gr[5]==2) test_wt_5 <- weights.2
@@ -1274,7 +1582,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Test fuer Faktorvariablen      = 'Chi-Quadrat-Test'                                      .. # {{{
+        # Test fuer Faktorvariablen      = 'Chi-Quadrat-Test'                                     .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(var.is.factor && var.measure.name!="i")
@@ -1394,7 +1702,7 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Test fuer numerische Variablen = 'Wilcoxon-Rangsummen-Test' und 'Kruskal-Wallis-Test'    .. # {{{
+        # Test fuer numerische Variablen = 'Wilcoxon-Rangsummen-Test' und 'Kruskal-Wallis-Test'   .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(!var.is.factor && var.measure.name!="i")
@@ -1643,20 +1951,31 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                 )
                 label2 <- var.measure
             }
+
             return.df <- data.frame(label1=label1, label2=label2,
                                     dat1=paste(sprintf(sprintfFormat1, round(measure.1[, 2], prec.digit.1)),
                                                " (",
                                                sprintf(sprintfFormat2, round(measure.2[, 2], prec.digit.2)),
-                                               ")", sep=""),
-                                    dat2=paste(sprintf(sprintfFormat1, round(measure.1[, 3], prec.digit.1)),
-                                               " (",
-                                               sprintf(sprintfFormat2, round(measure.2[, 3], prec.digit.2)),
-                                               ")", sep=""),
-                                    dat3=paste(sprintf(sprintfFormat1, round(measure.1[, 4], prec.digit.1)),
-                                               " (",
-                                               sprintf(sprintfFormat2, round(measure.2[, 4], prec.digit.2)),
-                                               ")", sep="")
-                                    )
+                                               ")", sep=""))
+
+            if(dim.data>1)
+            {
+                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[, 3], prec.digit.1)),
+                                                    " (",
+                                                    sprintf(sprintfFormat2, round(measure.2[, 3], prec.digit.2)),
+                                                    ")", sep="")
+                )
+                colnames(return.df)[4] <- "dat2"
+            }
+            if(dim.data>2)
+            {
+                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[, 4], prec.digit.1)),
+                                                    " (",
+                                                    sprintf(sprintfFormat2, round(measure.2[, 4], prec.digit.2)),
+                                                    ")", sep="")
+                )
+                colnames(return.df)[5] <- "dat3"
+            }
             if(dim.data>3)
             {
                 return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[, 5], prec.digit.1)),
@@ -1705,16 +2024,25 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                     dat1=paste(sprintf(sprintfFormat1, round(measure.1[2], prec.digit.1)),
                                                " (",
                                                sprintf(sprintfFormat2, round(measure.2[2], prec.digit.2)),
-                                               ")", sep=""),
-                                    dat2=paste(sprintf(sprintfFormat1, round(measure.1[3], prec.digit.1)),
-                                               " (",
-                                               sprintf(sprintfFormat2, round(measure.2[3], prec.digit.2)),
-                                               ")", sep=""),
-                                    dat3=paste(sprintf(sprintfFormat1, round(measure.1[4], prec.digit.1)),
-                                               " (",
-                                               sprintf(sprintfFormat2, round(measure.2[4], prec.digit.2)),
-                                               ")", sep="")
-                                    )
+                                               ")", sep=""))
+            if(dim.data>1)
+            {
+                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[3], prec.digit.1)),
+                                                    " (",
+                                                    sprintf(sprintfFormat2, round(measure.2[3], prec.digit.2)),
+                                                    ")", sep="")
+                )
+                colnames(return.df)[4] <- "dat2"
+            }
+            if(dim.data>2)
+            {
+                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[4], prec.digit.1)),
+                                                    " (",
+                                                    sprintf(sprintfFormat2, round(measure.2[4], prec.digit.2)),
+                                                    ")", sep="")
+                )
+                colnames(return.df)[5] <- "dat3"
+            }
             if(dim.data>3)
             {
                 return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[5], prec.digit.1)),
@@ -1763,11 +2091,18 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                 )
                 label2 <- var.measure
             }
-            return.df <- data.frame(label1=label1, label2=label2,
-                                    dat1=sprintf(sprintfFormat1, round(measure.1[, 2], prec.digit.1)),
-                                    dat2=sprintf(sprintfFormat1, round(measure.1[, 3], prec.digit.1)),
-                                    dat3=sprintf(sprintfFormat1, round(measure.1[, 4], prec.digit.1))
-                                    )
+                 return.df <- data.frame(label1=label1, label2=label2,
+                                         dat1=sprintf(sprintfFormat1, round(measure.1[, 2], prec.digit.1)))
+            if(dim.data>1)
+            {
+                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[, 3], prec.digit.1)))
+                colnames(return.df)[4] <- "dat2"
+            }
+            if(dim.data>2)
+            {
+                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[, 4], prec.digit.1)))
+                colnames(return.df)[5] <- "dat3"
+            }
             if(dim.data>3)
             {
                 return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[, 5], prec.digit.1)))
@@ -1804,17 +2139,24 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
                                 )
                 label2 <- var.measure
             }
-            return.df <- data.frame(label1=label1, label2=label2,
-                                    dat1=sprintf(sprintfFormat1, round(measure.1[2], prec.digit.1)),
-                                    dat2=sprintf(sprintfFormat1, round(measure.1[3], prec.digit.1)),
-                                    dat3=sprintf(sprintfFormat1, round(measure.1[4], prec.digit.1))
-                                    )
+                 return.df <- data.frame(label1=label1, label2=label2,
+                                         dat1=sprintf(sprintfFormat1, round(measure.1[2], prec.digit.1)))
+            if(dim.data>1)
+            {
+                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[3], prec.digit.1)))
+                colnames(return.df)[4] <- "dat2"
+            }
+            if(dim.data>2)
+            {
+                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[4], prec.digit.1)))
+                colnames(return.df)[5] <- "dat3"
+            }
             if(dim.data>3)
             {
                 return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[5], prec.digit.1)))
                 colnames(return.df)[6] <- "dat4"
             }
-            if(dim.data>4) 
+            if(dim.data>4)
             {
                 return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[6], prec.digit.1)))
                 colnames(return.df)[7] <- "dat5"
@@ -1827,8 +2169,10 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
     }
     #
     # Ev. NAs angeben ..............................................................................
-    if(sum(res.na>0)) {
+    if(sum(res.na>0))
+    {
         res.na.df <- data.frame(t(c(var.measure.label, ifelse(lang=="de", "N 'NA'", "n 'NA'"), res.na, "")))
+        if(verbose==2) print(paste("res.na: -- :", res.na))
         if(verbose==2) print(paste("res.na.df: -- :", res.na.df))
         if(verbose==2) print(paste("return.df: -- :", return.df))
         colnames(res.na.df) <- colnames(return.df)
@@ -1928,11 +2272,11 @@ descrMeasures  <- function(descr.table                  # Resultattabelle vorvor
 # Spezialfall: Variable 'i' --> wird als Indikator 'Recordeinheit' aufgefasst und als
 #                               'Kollektivgroesse' ausgegeben!
 #
-descrTable  <- function(descr.table=NULL            # Resultattabelle (vorvormatiert)
-                        , def.measures              # Tabelle mit Kennzahlendefinitionen
+# descrTable  <- function(descr.table=NULL            # Resultattabelle (vorformatiert)
+descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefinitionen
                         , sub.d1                    # Daten Spalte 1
-                        , sub.d2                    # Daten Spalte 2
-                        , sub.d3                    # Daten Spalte 3
+                        , sub.d2=NULL               # Daten Spalte 2
+                        , sub.d3=NULL               # Daten Spalte 3
                         , sub.d4=NULL               # Daten Spalte 4
                         , sub.d5=NULL               # Daten Spalte 5
                         , weights.1=NULL            # Gewichte (Daten Spalte 1)
@@ -1962,6 +2306,7 @@ descrTable  <- function(descr.table=NULL            # Resultattabelle (vorvormat
     i.test <- c(0, 0, 0, 0)
     for(i in 1:nrow(def.measures))
     {
+        if(!exists("descr.table")) descr.table <- NULL
         descr.measures <- descrMeasures(descr.table=descr.table
                                         , var.measure.label=def.measures$measure_label[i]
                                         , var.measure.name=def.measures$measure_name[i]

@@ -3,8 +3,7 @@
 \alias{createDefMeasures}
 \title{ Create descritive table }
 \description{ Create descriptive table with up to five subgroups/total and comparison between groups. }
-\usage{descrTable(descr.table=NULL
-, def.measures
+\usage{descrTable(def.measures
 , sub.d1
 , sub.d2
 , sub.d3
@@ -22,7 +21,6 @@
 , verbose=0)
 }
 \arguments{
-  \item{descr.table}{ Result-Table (pre-formated) }
   \item{def.measures}{ description scheme with measures, e.g. from createDefMeasures() }
   \item{sub.d1}{ vectors of data in column 1 }
   \item{sub.d2}{ vectors of data in column 2 }
@@ -48,72 +46,102 @@
 \seealso{ other utility-functions in this R-package }
 \examples{
 if(require("car")) {
+print("load sample data 'Mroz' from package 'car' .......................................")
 data(Mroz)
 str(Mroz)
 
-# insert attribute 'i' for population size              ........................................
+print("insert attribute 'i' for population size ........................................")
 Mroz <- merge(data.frame(i=as.factor(1)), Mroz)
+str(Mroz)
 
-# reference list for variable labels                    ........................................
-var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "age", "wc", "lwg", "inc"),
+print("reference list for variable labels ........................................")
+var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
                        var_label=c("population",
                                    "employed",
                                    "# children to 5", "# children 6-18",
-                                   "age",
                                    "wife college",
                                    "log expected wage",
                                    "family income excl. wife"))
 
-# create definition-table without variable for groups   ........................................
+print("create definition-table without variable for groups")
 Mroz_hc      <- Mroz[ , -which(colnames(Mroz)=="hc")]
-#   - variation 1: default, no adjustments
-def.measures <- createDefMeasures(d.data=Mroz_hc)
-#   - variation 2: apply variable labels
-def.measures <- createDefMeasures(d.data=Mroz_hc, var.list=var.list)
-def.measures[2, 6] <- -2
-def.measures[9, 6] <- -1
 
-# modify data                                           ........................................
-#   - variation 1: default, no adjustments
+print("variation 1: default, no adjustments")
+def.measures.1 <- createDefMeasures(d.data=Mroz_hc)
+def.measures.1
+print("variation 2: apply variable labels")
+def.measures.2 <- createDefMeasures(d.data=Mroz_hc, var.list=var.list)
+def.measures.2[2, 6] <- -2
+def.measures.2[9, 6] <- -1
+def.measures.2
 
-#   - variation 2: insert some missing values for 'lfp'
-#                   3 at Mroz$lfp where hc='no'
-n1 <- sample(1:length(Mroz[Mroz$hc=="no", "lfp"]), 3)
-Mroz[Mroz$hc=="no", "lfp"][n1] <- NA
-#                   2 at Mroz$lfp where hc='yes'
-n2 <- sample(1:length(Mroz[Mroz$hc=="yes", "lfp"]), 2)
-Mroz[Mroz$hc=="yes", "lfp"][n2] <- NA
-
-#   - variation 3: insert some missing values for 'age'
-#                   1 at Mroz$lfp where hc='no'
-n3 <- sample(1:length(Mroz[Mroz$hc=="no", "age"]), 1)
-Mroz[Mroz$hc=="no", "age"][n3] <- NA
-#                   5 at Mroz$lfp where hc='no'
-n4 <- sample(1:length(Mroz[Mroz$hc=="yes", "age"]), 5)
-Mroz[Mroz$hc=="yes", "age"][n4] <- NA
-
-# small sample size to provoke warnings in tests
-# Mroz <- Mroz[1:10, ]
-
-# create description-table                              ........................................
-# descr.table <- descrTable(def.measures = def.measures
-#                         , sub.d1 = subset(Mroz, hc=="no")
-#                         , sub.d2 = subset(Mroz, hc=="yes")
-#                         , sub.d3 = Mroz
-#                         , test.gr = c(1, 2)
-#                         , lang="en")
-# colnames(descr.table[[1]]) <- c("attribute", "measure"
-#                         , "husband college 'no'", "husband college 'yes'"
-#                         , "overall", "p-value")
-# descr.table
-# head(descr.table[[1]])
+# print("run different scenarios with modified data ........................................")
+# print(" - variation 1: default, no adjustments")
+# descrTable(def.measures = def.measures.1,
+#            sub.d1 = subset(Mroz, hc=="no"),
+#            sub.d2 = subset(Mroz, hc=="yes"),
+#            sub.d3 = Mroz,
+#            test.gr = c(1, 2))
+# descrTable(def.measures = def.measures.2,
+#            sub.d1 = subset(Mroz, hc=="no"),
+#            sub.d2 = subset(Mroz, hc=="yes"),
+#            sub.d3 = Mroz,
+#            test.gr = c(1, 2),
+#            lang="en")
 # 
-# # verify statistics                                     ........................................
 # if(require("doBy"))
 # {
-#     doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median))
-#     table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc"))
-#     table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc"))
+#     print(" - variation 1: verify statistics")
+#     descrTable(def.measures = NULL,
+#             sub.d1 = subset(Mroz, hc=="no"),
+#             sub.d2 = subset(Mroz, hc=="yes"),
+#             sub.d3 = Mroz,
+#             test.gr = c(1, 2),
+#             lang="en")
+#     print(doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median)))
+#     print(table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc")))
+#     print(table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc")))
 # }
+# 
+# print(" - variation 2: insert some missing values for 'lfp'")
+# #                   3 at Mroz$lfp where hc='no'
+# n1 <- sample(1:length(Mroz[Mroz$hc=="no", "lfp"]), 3)
+# Mroz[Mroz$hc=="no", "lfp"][n1] <- NA
+# #                   2 at Mroz$lfp where hc='yes'
+# n2 <- sample(1:length(Mroz[Mroz$hc=="yes", "lfp"]), 2)
+# Mroz[Mroz$hc=="yes", "lfp"][n2] <- NA
+# 
+# descrTable(def.measures = def.measures.2,
+#            sub.d1 = subset(Mroz, hc=="no"),
+#            sub.d2 = subset(Mroz, hc=="yes"),
+#            sub.d3 = Mroz,
+#            test.gr = c(1, 2),
+#            lang="en")
+# 
+# print(" - variation 3: insert some missing values for 'age'")
+# #                   1 at Mroz$lfp where hc='no'
+# n3 <- sample(1:length(Mroz[Mroz$hc=="no", "age"]), 1)
+# Mroz[Mroz$hc=="no", "age"][n3] <- NA
+# #                   5 at Mroz$lfp where hc='no'
+# n4 <- sample(1:length(Mroz[Mroz$hc=="yes", "age"]), 5)
+# Mroz[Mroz$hc=="yes", "age"][n4] <- NA
+# 
+# descrTable(def.measures = def.measures.2,
+#            sub.d1 = subset(Mroz, hc=="no"),
+#            sub.d2 = subset(Mroz, hc=="yes"),
+#            sub.d3 = Mroz,
+#            test.gr = c(1, 2),
+#            lang="en")
+# 
+# print(" - variation 4: provoke warnings for small sample size")
+# Mroz_ <- Mroz[1:15, ]
+# 
+# descrTable(def.measures = def.measures.2,
+#            sub.d1 = subset(Mroz_, hc=="no"),
+#            sub.d2 = subset(Mroz_, hc=="yes"),
+#            sub.d3 = Mroz_,
+#            test.gr = c(1, 2),
+#            lang="en")
+
 } }
 
