@@ -4,21 +4,22 @@
 \title{ Create descritive table }
 \description{ Create descriptive table with up to five subgroups/total and comparison between groups. }
 \usage{descrTable(def.measures
-, sub.d1
-, sub.d2
-, sub.d3
-, sub.d4=NULL
-, sub.d5=NULL
-, weights.1=NULL
-, weights.2=NULL
-, weights.3=NULL
-, weights.4=NULL
-, weights.5=NULL
-, label.compact=FALSE
-, label.width=48
-, test.gr=NULL
-, lang="de"
-, verbose=0)
+     , sub.d1
+     , sub.d2
+     , sub.d3
+     , sub.d4=NULL
+     , sub.d5=NULL
+     , weights.1=NULL
+     , weights.2=NULL
+     , weights.3=NULL
+     , weights.4=NULL
+     , weights.5=NULL
+     , label.compact=FALSE
+     , label.width=48
+     , test.gr=NULL
+     , lang="de"
+     , group.size.total=0
+     , verbose=0)
 }
 \arguments{
   \item{def.measures}{ description scheme with measures, e.g. from createDefMeasures() }
@@ -36,6 +37,7 @@
   \item{label.width}{width of first column if label.compact==TRUE}
   \item{test.gr}{columns to compare}
   \item{lang}{language for certain key words, 'de' or 'en'}
+  \item{group.size.total}{ column for group size total (if 'portion' is requested) }
   \item{verbose}{verbose level between 0 and 2}
 }
 \details{ utility function for formating }
@@ -68,12 +70,12 @@ Mroz_hc      <- Mroz[ , -which(colnames(Mroz)=="hc")]
 
 print("variation 1: default, no adjustments")
 def.measures.1 <- createDefMeasures(d.data=Mroz_hc)
-def.measures.1
+print(def.measures.1)
 print("variation 2: apply variable labels")
 def.measures.2 <- createDefMeasures(d.data=Mroz_hc, var.list=var.list)
 def.measures.2[2, 6] <- -2
 def.measures.2[9, 6] <- -1
-def.measures.2
+print(def.measures.2)
 
 # print("run different scenarios with modified data ........................................")
 # print(" - variation 1: default, no adjustments")
@@ -81,6 +83,7 @@ def.measures.2
 #            sub.d1 = subset(Mroz, hc=="no"),
 #            sub.d2 = subset(Mroz, hc=="yes"),
 #            sub.d3 = Mroz,
+#            group.size.total=2,
 #            test.gr = c(1, 2))
 # descrTable(def.measures = def.measures.2,
 #            sub.d1 = subset(Mroz, hc=="no"),
@@ -88,6 +91,7 @@ def.measures.2
 #            sub.d3 = Mroz,
 #            test.gr = c(1, 2),
 #            lang="en")
+# gc()
 # 
 # if(require("doBy"))
 # {

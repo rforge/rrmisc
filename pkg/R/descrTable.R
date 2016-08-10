@@ -204,6 +204,8 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
                            , label.width                # Breite der ersten Spalte (nur bei label.compact==TRUE)
                            , test.gr                    # Welche Datenspalten sollten verglichen (getestet) werden?
                            , lang                       # Sprache, 'de' oder 'en'
+                           , group.size.total           # Spalte mit Total der Kollektivgrösse
+                                                        # 0 (default) = letzte Spalte
                            , verbose)                   # 0 bis 2: Ausgabe Zwischenresultate
 {
     # ------------------------------------------------------------------------------------------- --
@@ -963,51 +965,77 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
         #
         if(measures[1]=="count" & measures[2]=="portion" & var.measure.name=="i")
         {
-            if(dim.data==1)
+            # sub.data.1 <- rep(1, 7)
+            # sub.data.2 <- rep(1, 9)
+            # sub.data.3 <- rep(1, 27)
+            # sub.data.4 <- rep(1, 11)
+            # dim.data   <- 4
+            # group.size.total <- 3
+            #
+            # Als Standard-Spalte für Total wird die letzte Spalte verwendet
+            if(group.size.total==0) group.size.total <- dim.data
+            #
+            # Anteile relativ zur angegebenen Spalte berechnen
+            dim.range <- c(1:dim.data)
+            if(group.size.total%in%dim.range)
             {
-                measure.2 <- c(NA
-                            , length(na.omit(sub.data.1)))
-                tot        <- sum(measure.2[2:2]) / 2
-                measure.2[2:2] <- measure.2[2:2] * 100 / tot
+                dim.range.part <- dim.range[-which(dim.range==group.size.total)]
+                n.vector <- 1
+                for(i in dim.range)
+                {
+                    n.vector[i] <- length(na.omit(get(paste0("sub.data.", i))))
+                }
+                n.vector <- n.vector / sum(n.vector[dim.range.part])
+                measure.2 <- c(NA, n.vector*100)
+            } else {
+                measure.2 <- c(NA, rep(0, dim.data))
             }
-            if(dim.data==2)
-            {
-                measure.2 <- c(NA
-                            , length(na.omit(sub.data.1))
-                            , length(na.omit(sub.data.2)))
-                tot        <- sum(measure.2[2:3]) / 2
-                measure.2[2:3] <- measure.2[2:3] * 100 / tot
-            }
-            if(dim.data==3)
-            {
-                measure.2 <- c(NA
-                            , length(na.omit(sub.data.1))
-                            , length(na.omit(sub.data.2))
-                            , length(na.omit(sub.data.3)))
-                tot        <- sum(measure.2[2:4]) / 2
-                measure.2[2:4] <- measure.2[2:4] * 100 / tot
-            }
-            if(dim.data==4)
-            {
-                measure.2 <- c(NA
-                            , length(na.omit(sub.data.1))
-                            , length(na.omit(sub.data.2))
-                            , length(na.omit(sub.data.3))
-                            , length(na.omit(sub.data.4)))
-                tot        <- sum(measure.2[2:5]) / 2
-                measure.2[2:5] <- measure.2[2:5] * 100 / tot
-            }
-            if(dim.data==5)
-            {
-                measure.2 <- c(NA
-                            , length(na.omit(sub.data.1))
-                            , length(na.omit(sub.data.2))
-                            , length(na.omit(sub.data.3))
-                            , length(na.omit(sub.data.4))
-                            , length(na.omit(sub.data.5)))
-                tot        <- sum(measure.2[2:6]) / 2
-                measure.2[2:6] <- measure.2[2:6] * 100 / tot
-            }
+
+            # if(dim.data==1)
+            # {
+            #     measure.2 <- c(NA
+            #                 , length(na.omit(sub.data.1)))
+            #     tot        <- sum(measure.2[2:2]) / 2
+            #     measure.2[2:2] <- measure.2[2:2] * 100 / tot
+            # }
+            # if(dim.data==2)
+            # {
+            #     measure.2 <- c(NA
+            #                 , length(na.omit(sub.data.1))
+            #                 , length(na.omit(sub.data.2)))
+            #     tot        <- sum(measure.2[2:3]) / 2
+            #     measure.2[2:3] <- measure.2[2:3] * 100 / tot
+            # }
+            # if(dim.data==3)
+            # {
+            #     measure.2 <- c(NA
+            #                 , length(na.omit(sub.data.1))
+            #                 , length(na.omit(sub.data.2))
+            #                 , length(na.omit(sub.data.3)))
+            #     tot        <- sum(measure.2[2:4]) / 2
+            #     measure.2[2:4] <- measure.2[2:4] * 100 / tot
+            # }
+            # if(dim.data==4)
+            # {
+            #     measure.2 <- c(NA
+            #                 , length(na.omit(sub.data.1))
+            #                 , length(na.omit(sub.data.2))
+            #                 , length(na.omit(sub.data.3))
+            #                 , length(na.omit(sub.data.4)))
+            #     tot        <- sum(measure.2[2:5]) / 2
+            #     measure.2[2:5] <- measure.2[2:5] * 100 / tot
+            # }
+            # if(dim.data==5)
+            # {
+            #     measure.2 <- c(NA
+            #                 , length(na.omit(sub.data.1))
+            #                 , length(na.omit(sub.data.2))
+            #                 , length(na.omit(sub.data.3))
+            #                 , length(na.omit(sub.data.4))
+            #                 , length(na.omit(sub.data.5)))
+            #     tot        <- sum(measure.2[2:6]) / 2
+            #     measure.2[2:6] <- measure.2[2:6] * 100 / tot
+            # }
 
             measure.2 <- t(data.frame(measure.2))
             label.2   <- ifelse(lang=="de", "%", "%")
@@ -2272,7 +2300,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
 # Spezialfall: Variable 'i' --> wird als Indikator 'Recordeinheit' aufgefasst und als
 #                               'Kollektivgroesse' ausgegeben!
 #
-# descrTable  <- function(descr.table=NULL            # Resultattabelle (vorformatiert)
+# descrTable  <- function(descr.table=NULL          # Resultattabelle (vorformatiert)
 descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefinitionen
                         , sub.d1                    # Daten Spalte 1
                         , sub.d2=NULL               # Daten Spalte 2
@@ -2288,6 +2316,7 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                         , label.width=48            # Breite der ersten Spalte
                         , test.gr=NULL              # Welche Datenspalten sollten verglichen (getestet) werden?
                         , lang="de"                 # Sprache, 'de' oder 'en'
+                        , group.size.total=0        # Spalte mit Total der Kollektivgrösse
                         , verbose=0)                # 0 bis 2: Ausgabe Zwischenresultate
 {
     #
@@ -2327,6 +2356,7 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                                         , label.width=label.width
                                         , test.gr=test.gr
                                         , lang=lang
+                                        , group.size.total=group.size.total
                                         , verbose=verbose)
         descr.table <- descr.measures[[1]]
         i.test      <- pmax(i.test, descr.measures[[2]])
