@@ -1,16 +1,16 @@
 #
 # ==================================================================================================
 #
-# --------------- createDefMeasures              Vorlage fuer def.measures erstellen              .. # {{{
+# --------------- createDefMeasures              create template for def.measures                 .. # {{{
 # RR 20151110               --------------------------------------------------------------------- --
 createDefMeasures <- function (d.data, version=2, var.list)
 {
     #
-    # d.data       = Input-Daten fuer 'descrMeasures' resp. 'descrTable', z.B. dort verwendete sub.d1
-    # var.list     = Liste mit Variablennamen und Variablenbezeichnungen
+    # d.data       = input-data for 'descrMeasures' and 'descrTable'
+    # var.list     = list with variable names and labels
     #                var.list$var_name      ->  def.measures$measure_name
     #                var.list$var_label     ->  def.measures$measure_label
-    # def.measures = Resultat: Input-Parameter Tabelle fuer 'descrMeasures' resp. 'descrTable'
+    # def.measures = result: input-parameter table for 'descrMeasures' and 'descrTable'
     #
     # pasteClass local function ....................................................................
     pasteClass <- function(x)
@@ -153,60 +153,58 @@ createDefMeasures <- function (d.data, version=2, var.list)
     return(def.measures)
 }
 # --------------- createDefMeasures -------------------------------------------------------------- --
-# ENDE DER FUNKTION ----------------------------------------------------------------------------- --
+# END OF FUNCTION ------------------------------------------------------------------------------- --
 ## }}}
 # ==================================================================================================
 #
-# --------------- descrMeasures                  Kennzahlen deskriptiv -- allgemeine Funktion     .. # {{{
+# --------------- descrMeasures                  calculation of statistics for one entry          .. # {{{
 # RR 20150325     ------------------------------------------------------------------------------- --
 #
-# Kennzahlen fuer Subgruppen
+# first measure
+#   - count             factor oder Wert mit 1 Auspraegung (<- noch zu kontrollieren!!)
+#   - count_distinct    factor
+#   - portion           factor (for 'i' horizontal 100%, else  vertical 100%)
+#   - mean              numeric
+#   - wtd_mean          numeric
+#   - sd                numeric
+#   - median            numeric
+#   - wtd_median        numeric
+#   - IQR               numeric
+# second measure to a first measure
+#       - portion       factor (for 'i' horizontal 100%, else  vertical 100%)
+#       - mean          numeric
+#       - wtd_mean      numeric
+#       - sd            numeric
+#       - median        numeric
+#       - wtd_median    numeric
+#       - IQR           numeric
 #
-# Moegliche Kennzahlenaufrufe:
-#   - count             Faktor oder Wert mit 1 Auspraegung (<- noch zu kontrollieren!!)
-#   - count_distinct    Faktor
-#   - portion           Faktor -- vertikal 100%, sonst horizontal 100%
-#   - mean              numerisch
-#   - wtd_mean          numerisch
-#   - sd                numerisch
-#   - median            numerisch
-#   - wtd_median        numerisch
-#   - IQR               numerisch
-# Als zweite Kennzahl zusaetzlich zu einer bisherigen Kennzahl
-#       - portion       Faktor -- vertikal 100%, sonst horizontal 100%
-#       - mean          numerisch
-#       - wtd_mean      numerisch
-#       - sd            numerisch
-#       - median        numerisch
-#       - wtd_median    numerisch
-#       - IQR           numerisch
+# special case for variable 'i' --> interpreted as record entry for group size
 #
-# Spezialfall: Variable 'i' --> wird als Indikator 'Recordeinheit' aufgefasst und als
-#                               'Kollektivgroesse' ausgegeben!
-#
-descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorformatiert
-                           , var.measure.label          # Variablenbezeichnung
-                           , var.measure.name           # Variablenname / Attribut
-                           , measures                   # Funktion fuer Kennzahlen
-                           , measure.ref.level          # Referenzlevel fuer Faktoren
-                           , prec.digit                 # Praezision, d.h. Anzahl Nachkommastellen
-                           , sub.d1                     # Daten Spalte 1
-                           , sub.d2                     # Daten Spalte 2
-                           , sub.d3                     # Daten Spalte 3
-                           , sub.d4                     # Daten Spalte 4
-                           , sub.d5                     # Daten Spalte 5
-                           , weights.1                  # Gewichte (Daten Spalte 1)
-                           , weights.2                  # Gewichte (Daten Spalte 2)
-                           , weights.3                  # Gewichte (Daten Spalte 3)
-                           , weights.4                  # Gewichte (Daten Spalte 4)
-                           , weights.5                  # Gewichte (Daten Spalte 5)
-                           , label.compact              # Variablenliste und Messgroessen zusammen
-                           , label.width                # Breite der ersten Spalte (nur bei label.compact==TRUE)
-                           , test.gr                    # Welche Datenspalten sollten verglichen (getestet) werden?
-                           , lang                       # Sprache, 'de' oder 'en'
-                           , group.size.total           # Spalte mit Total der Kollektivgrösse
-                                                        # 0 (default) = letzte Spalte
-                           , verbose)                   # 0 bis 2: Ausgabe Zwischenresultate
+descrMeasures  <- function(descr.table=NULL             # result table to append to
+                           , var.measure.label          # variable label
+                           , var.measure.name           # variable name
+                           , measures                   # measures
+                           , measure.ref.level          # reference level for factors
+                           , prec.digit                 # digital precision
+                           , sub.d1                     # data column 1
+                           , sub.d2                     # data column 2
+                           , sub.d3                     # data column 3
+                           , sub.d4                     # data column 4
+                           , sub.d5                     # data column 5
+                           , weights.1                  # weights (data column 1)
+                           , weights.2                  # weights (data column 2)
+                           , weights.3                  # weights (data column 3)
+                           , weights.4                  # weights (data column 4)
+                           , weights.5                  # weights (data column 5)
+                           , label.compact              # combine variable label and measure
+                           , label.width                # width of 1st column (only if label.compact==TRUE)
+                           , test.gr                    # data columns to test
+                           , lang                       # language 'de' or 'en'
+                           , group.size.total           # data column containing the ttotal (if any)
+                                                        # 0 (default) = last data column
+                           , big.mark
+                           , verbose)                   # 0 bis 2: increasing verbosity
 {
     # ------------------------------------------------------------------------------------------- --
     if(verbose>1)
@@ -231,17 +229,17 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     }
     ## }}}
     # ------------------------------------------------------------------------------------------- --
-    # 0. ueberpruefung Eingabe Kennzahlen                                                         .. # {{{
+    # 0. check the measures and combination of measures                                           .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
-    #    Erste Kennzahl
+    #    first measure
     if(!measures[1]%in%c("count", "count_distinct", "portion", "mean", "wtd_mean", "sd", "median",
                          "wtd_median", "IQR", "min", "max"))
     {
         return(print(paste("selected first measure is not valid:", measures[1])))
     }
     #
-    #    Zweite Kennzahl
+    #    second measure
     if(length(measures)>1 & !is.na(measures[2]))
     {
         if(!measures[2]%in%c("portion", "mean", "wtd_mean", "sd", "median", "wtd_median", "IQR", "min", "max"))
@@ -255,27 +253,28 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
     # ------------------------------------------------------------------------------------------- --
-    # 0. Vorbereitungen                                                                           .. # {{{
+    # 0. preliminaries                                                                            .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
-    # Ausgabewert wenn kein Wert fuer P-Wert .......................................................
+    # default value for p-Value ....................................................................
     p.na <- "- "
     #
-    # Indikatorvariablen fuer Tests ................................................................
+    # indication flags for test statistics .........................................................
     i.chisq         <- 0
     i.wilcoxon      <- 0
     i.kruskal       <- 0
     i.test.warning  <- 0
     #
-    # Kennzahlenvektor zusammenfassen ..............................................................
+    # combind measure vector .......................................................................
     ifelse(is.na(measures[2]), measures <- c(measures[1]),
                                measures <- c(measures[1], measures[2]))
     #
-    # Gewichtete vs. ungewichtete Analyse ..........................................................
-    i.weights   <- 0                # 0: ungewichtete Analyse, 1: gewichtete Analyse
-    #                               # wird bei der Wahl von wtd_mean oder wtd_median auf 1 gesetzt
+    # default flag to unweighted statistics ........................................................
+    i.weights   <- 0                # 0: unweighted statistics
+                                    # 1: weighted statistics
+    #                               # is overwritten by wtd_mean or wtd_median
     #
-    # Anzahl Datenspalten ermitteln ................................................................
+    # get number of data dimensions ................................................................
     dim.data <- 1
     if(!is.null(sub.d2)) dim.data <- 2
     if(!is.null(sub.d3)) dim.data <- 3
@@ -283,7 +282,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     if(!is.null(sub.d5)) dim.data <- 5
     if(verbose==2) print(paste("dim.data: -- :", dim.data))
     #
-    # Datenvektoren erstellen ......................................................................
+    # create data vectors ..........................................................................
                    sub.data.1 <- sub.d1[, var.measure.name]
     if(dim.data>1) sub.data.2 <- sub.d2[, var.measure.name]
     if(dim.data>2) sub.data.3 <- sub.d3[, var.measure.name]
@@ -291,18 +290,18 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     if(dim.data>4) sub.data.5 <- sub.d5[, var.measure.name]
     rm(sub.d1, sub.d2, sub.d3, sub.d4, sub.d5)
     #
-    # Ueberpruefung auf NAs ........................................................................
+    # check occurrences of NAs .....................................................................
                    res.na <- c(        sum(is.na(sub.data.1)))
     if(dim.data>1) res.na <- c(res.na, sum(is.na(sub.data.2)))
     if(dim.data>2) res.na <- c(res.na, sum(is.na(sub.data.3)))
     if(dim.data>3) res.na <- c(res.na, sum(is.na(sub.data.4)))
     if(dim.data>4) res.na <- c(res.na, sum(is.na(sub.data.5)))
     #
-    # Variablentyp - Faktor vs. numerisch - bestimmen ..............................................
+    # check variable type - fakcor vs. numeric .....................................................
     var.is.factor <- is.factor(sub.data.1)      # && !"count"%in%measures
     if(verbose==2) print(paste("var.is.factor: -- :", var.is.factor))
     #
-    # Vorbereitungen fuer Faktoren .................................................................
+    # prepare for factors ..........................................................................
     if(var.is.factor & !is.na(measure.ref.level))
     {
         if(!(measure.ref.level%in%levels(sub.data.1))) {
@@ -319,7 +318,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
         }
     }
     #
-    # Kontrolle -- bei Faktoren darf kein 'level' einen leeren String aufweisen ................. ..
+    # control -- no factor level empty .......................................................... ..
     if(var.is.factor)
     {
         if(requireNamespace("DescTools", quietly=TRUE))
@@ -351,7 +350,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
         rm(m)
     }
     #
-    # Kontrolle -- bei Faktoren duerfen Levels keine Zahlen sein ................................ ..
+    # control -- no numbers as factor levels .......................................................
     if(var.is.factor &&
        sum(levels(sub.data.1)%in%c(0:10000))==length(levels(sub.data.1)) &&
        var.measure.name!="i")
@@ -363,7 +362,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
         if(dim.data>4) levels(sub.data.5) <- paste(levels(sub.data.5), "_", sep="")
     }
     #
-    # Kontrolle -- Fuer Faktorvariablen sind nur Anteile (portion) und Anzahlen (count) vorgesehen..
+    # control -- only portion and count are valid for factors ......................................
     if(var.is.factor)
     {
         not_m1 <- !measures[1]%in%c("portion", "count")
@@ -382,12 +381,12 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
     # ------------------------------------------------------------------------------------------- --
-    # 1. Kennzahl berechnen
+    # calculate 1. statistics
     # ------------------------------------------------------------------------------------------- --
     # Anzahl                                            'count'                                   .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
-    # NAs nicht beruecksichtigt !
+    # NAs not accounted for !
     #
     if(measures[1]=="count")
     {
@@ -445,7 +444,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     # Anzahl verschiedene                               'count_distinct'                          .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
-    # NAs beruecksichtigt !
+    # NAs accounted for !
     #
     if(measures[1]=="count_distinct")
     {
@@ -496,7 +495,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     # Anteile                                           'portion'                                 .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
-    # NAs nicht beruecksichtigt !
+    # NAs not accounted for !
     #
     if(measures[1]=="portion")
     {
@@ -948,7 +947,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     #
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
-    # Angabe Kennzahl                                                                             .. # {{{
+    # reading out result                                                                          .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     var.measure <- label.1
@@ -956,11 +955,11 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
     # ------------------------------------------------------------------------------------------- --
-    # 2. Kennzahl berechnen
+    # calculate 2. statistics
     # ------------------------------------------------------------------------------------------- --
     if(length(measures)>1)
     {
-        # Anteil horizontal -- nur nach "count"         'portion' 'i' nach 'count'                .. # {{{
+        # Anteil horizontal -- nur nach "count"         'portion' 'i' after 'count'               .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(measures[1]=="count" & measures[2]=="portion" & var.measure.name=="i")
@@ -972,10 +971,10 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
             # dim.data   <- 4
             # group.size.total <- 3
             #
-            # Als Standard-Spalte für Total wird die letzte Spalte verwendet
+            # default column for the total is last data column
             if(group.size.total==0) group.size.total <- dim.data
             #
-            # Anteile relativ zur angegebenen Spalte berechnen
+            # calculate relative parts to entry in total column
             dim.range <- c(1:dim.data)
             if(group.size.total%in%dim.range)
             {
@@ -1497,7 +1496,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Angabe Kennzahlen                                                                       .. # {{{
+        # reading out result                                                                      .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         # label.2     <- paste(measures[1], " (", measures[2], ")", sep="")
@@ -1508,8 +1507,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
         ## }}}
     }
     # ------------------------------------------------------------------------------------------- --
-    # 3. Test Unterschiedlichkeit in den Subgruppen
-    #    Nur wenn zwei oder drei Gruppen angegeben werden
+    # 3. test for differences in subgroups (at least 2 groups)
     pValue   <- ""
     n.groups <- length(test.gr)
     if(verbose==2) print(paste("n.groups: -- :", n.groups))
@@ -1517,7 +1515,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     if(n.groups>1)
     {
         #
-        # Zu testende Variablen zuordnen                                                          .. # {{{
+        # label groups                                                                            .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(test.gr[1]==1) test.gr.1 <- sub.data.1
@@ -1567,7 +1565,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Gewichte zuordnen (falls noetig)                                                        .. # {{{
+        # assign weights (if necessary)                                                           .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(i.weights==1) {
@@ -1610,7 +1608,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Test fuer Faktorvariablen      = 'Chi-Quadrat-Test'                                     .. # {{{
+        # test for facros                = 'Chi-Quadrat-Test'                                     .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(var.is.factor && var.measure.name!="i")
@@ -1730,7 +1728,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Test fuer numerische Variablen = 'Wilcoxon-Rangsummen-Test' und 'Kruskal-Wallis-Test'   .. # {{{
+        # test for numerical variables   = 'Wilcoxon-Rangsummen-Test' and 'Kruskal-Wallis-Test'   .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(!var.is.factor && var.measure.name!="i")
@@ -1910,46 +1908,26 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
       # if(measures[1]=="count") pValue <- ""
     }
     # ------------------------------------------------------------------------------------------- --
-    # 4. Ausgabe des Resultates
-    #    Ausgabeformat festlegen                                                                  .. # {{{
+    # 4. return results
+    #    define format                                                                            .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     # Breite fuer Text (Attributbezeichnung) ohne Kennzahlenangabe ..................................
     label.width.loc <- label.width - nchar(var.measure)
     #
-    # Eine Kennzahl ................................................................................
+    # one measure ..................................................................................
     prec.digit.1 <- prec.digit[1]
-                               sprintfFormat1 <- paste("%.", max(0, prec.digit.1), "f", sep="")
-    if(measures[1]=="portion") sprintfFormat1 <- paste("%.", max(0, prec.digit.1), "f%%", sep="")
     #
-    if(verbose==2) print(paste("sprintfFormat1: -- :", sprintfFormat1))
-    if(verbose==2) print(paste("measure.1: -- :", measure.1))
-    if(verbose==2) print(paste("length(measure.1[1]): -- :", length(measure.1[1])))
-    if(verbose==2) print(paste("class(measure.1): -- :", class(measure.1)))
-    if(verbose==2) print(paste("prec.digit.1: -- :", prec.digit.1))
-    #
-    # Zwei Kennzahlen ..............................................................................
+    # two measures .................................................................................
     if(length(measures)>1)
     {
         ifelse(length(prec.digit)>1, prec.digit.2 <- prec.digit[2],
                                      prec.digit.2 <- prec.digit[1])
-        #
-                                   sprintfFormat2 <- paste("%.", max(0, prec.digit.2), "f", sep="")
-        if(measures[2]=="portion") sprintfFormat2 <- paste("%.", max(0, prec.digit.2), "f%%", sep="")
-        #
-        if(verbose==2) print(paste("sprintfFormat2: -- :", sprintfFormat2))
-        if(verbose==2) print(paste("measure.2: -- :", measure.2))
-        if(verbose==2) print(paste("length(measure.2[1]): -- :", length(measure.2[1])))
-        if(verbose==2) print(paste("class(measure.2): -- :", class(measure.2)))
-        if(verbose==2) print(paste("prec.digit.2: -- :", prec.digit.2))
     }
-    #   prec.digit
-    #   sprintfFormat1
-    #   sprintfFormat2
     #
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
-    #    Resultat formatieren                                                                     .. # {{{
+    #    format result                                                                            .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     if(length(measures)>1)
@@ -1979,45 +1957,45 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
                                 )
                 label2 <- var.measure
             }
-
-            return.df <- data.frame(label1=label1, label2=label2,
-                                    dat1=paste(sprintf(sprintfFormat1, round(measure.1[, 2], prec.digit.1)),
-                                               " (",
-                                               sprintf(sprintfFormat2, round(measure.2[, 2], prec.digit.2)),
-                                               ")", sep=""))
+            # ......................................................................................
+                return.df <- data.frame(label1=label1, label2=label2,
+                                        dat1=paste(eval(parse(text="format(round(measure.1[, 2], prec.digit.1), big.mark=big.mark)")),
+                                                   " (",
+                                                   eval(parse(text="format(round(measure.2[, 2], prec.digit.2), big.mark=big.mark)")),
+                                                   ")", sep=""))
 
             if(dim.data>1)
             {
-                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[, 3], prec.digit.1)),
+                return.df <- cbind(return.df, paste(eval(parse(text="format(round(measure.1[, 3], prec.digit.1), big.mark=big.mark)")),
                                                     " (",
-                                                    sprintf(sprintfFormat2, round(measure.2[, 3], prec.digit.2)),
+                                                    eval(parse(text="format(round(measure.2[, 3], prec.digit.2), big.mark=big.mark)")),
                                                     ")", sep="")
                 )
                 colnames(return.df)[4] <- "dat2"
             }
             if(dim.data>2)
             {
-                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[, 4], prec.digit.1)),
+                return.df <- cbind(return.df, paste(eval(parse(text="format(round(measure.1[, 4], prec.digit.1), big.mark=big.mark)")),
                                                     " (",
-                                                    sprintf(sprintfFormat2, round(measure.2[, 4], prec.digit.2)),
+                                                    eval(parse(text="format(round(measure.2[, 4], prec.digit.2), big.mark=big.mark)")),
                                                     ")", sep="")
                 )
                 colnames(return.df)[5] <- "dat3"
             }
             if(dim.data>3)
             {
-                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[, 5], prec.digit.1)),
+                return.df <- cbind(return.df, paste(eval(parse(text="format(round(measure.1[, 5], prec.digit.1), big.mark=big.mark)")),
                                                     " (",
-                                                    sprintf(sprintfFormat2, round(measure.2[, 5], prec.digit.2)),
+                                                    eval(parse(text="format(round(measure.2[, 5], prec.digit.2), big.mark=big.mark)")),
                                                     ")", sep="")
                 )
                 colnames(return.df)[6] <- "dat4"
             }
             if(dim.data>4)
             {
-                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[, 6], prec.digit.1)),
+                return.df <- cbind(return.df, paste(eval(parse(text="format(round(measure.1[, 6], prec.digit.1), big.mark=big.mark)")),
                                                     " (",
-                                                    sprintf(sprintfFormat2, round(measure.2[, 6], prec.digit.2)),
+                                                    eval(parse(text="format(round(measure.2[, 6], prec.digit.2), big.mark=big.mark)")),
                                                     ")", sep="")
                 )
                 colnames(return.df)[7] <- "dat5"
@@ -2032,7 +2010,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
             if(!is.na(measure.1[1]) && measure.1[1]=="''")  measure.1[1] <- "  "
             if(label.compact==TRUE)
             {
-                label1 <- paste(sprintf(paste("%-", label.width.loc, "s", sep=""),
+                label1 <- paste(format(paste("%-", label.width.loc, "s", sep=""),
                                         paste(var.measure.label,
                                               ifelse(is.na(measure.1[1]),
                                                      "",
@@ -2048,43 +2026,44 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
                                 )
                 label2 <- var.measure
             }
-            return.df <- data.frame(label1=label1, label2=label2,
-                                    dat1=paste(sprintf(sprintfFormat1, round(measure.1[2], prec.digit.1)),
-                                               " (",
-                                               sprintf(sprintfFormat2, round(measure.2[2], prec.digit.2)),
-                                               ")", sep=""))
+            # ......................................................................................
+                return.df <- data.frame(label1=label1, label2=label2,
+                                        dat1=paste(eval(parse(text="format(round(measure.1[2], prec.digit.1), big.mark=big.mark)")),
+                                                   " (",
+                                                   eval(parse(text="format(round(measure.2[2], prec.digit.2), big.mark=big.mark)")),
+                                                   ")", sep=""))
             if(dim.data>1)
             {
-                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[3], prec.digit.1)),
+                return.df <- cbind(return.df, paste(eval(parse(text="format(round(measure.1[3], prec.digit.1), big.mark=big.mark)")),
                                                     " (",
-                                                    sprintf(sprintfFormat2, round(measure.2[3], prec.digit.2)),
+                                                    eval(parse(text="format(round(measure.2[3], prec.digit.2), big.mark=big.mark)")),
                                                     ")", sep="")
                 )
                 colnames(return.df)[4] <- "dat2"
             }
             if(dim.data>2)
             {
-                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[4], prec.digit.1)),
+                return.df <- cbind(return.df, paste(eval(parse(text="format(round(measure.1[4], prec.digit.1), big.mark=big.mark)")),
                                                     " (",
-                                                    sprintf(sprintfFormat2, round(measure.2[4], prec.digit.2)),
+                                                    eval(parse(text="format(round(measure.2[4], prec.digit.2), big.mark=big.mark)")),
                                                     ")", sep="")
                 )
                 colnames(return.df)[5] <- "dat3"
             }
             if(dim.data>3)
             {
-                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[5], prec.digit.1)),
+                return.df <- cbind(return.df, paste(eval(parse(text="format(round(measure.1[5], prec.digit.1), big.mark=big.mark)")),
                                                     " (",
-                                                    sprintf(sprintfFormat2, round(measure.2[5], prec.digit.2)),
+                                                    eval(parse(text="format(round(measure.2[5], prec.digit.2), big.mark=big.mark)")),
                                                     ")", sep="")
                 )
                 colnames(return.df)[6] <- "dat4"
             }
             if(dim.data>4)
             {
-                return.df <- cbind(return.df, paste(sprintf(sprintfFormat1, round(measure.1[6], prec.digit.1)),
+                return.df <- cbind(return.df, paste(eval(parse(text="format(round(measure.1[6], prec.digit.1), big.mark=big.mark)")),
                                                     " (",
-                                                    sprintf(sprintfFormat2, round(measure.2[6], prec.digit.2)),
+                                                    eval(parse(text="format(round(measure.2[6], prec.digit.2), big.mark=big.mark)")),
                                                     ")", sep="")
                 )
                 colnames(return.df)[7] <- "dat5"
@@ -2103,7 +2082,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
             if(!is.na(measure.1[, 1]) && measure.1[, 1]=="''")  measure.1[, 1] <- "  "
             if(label.compact==TRUE)
             {
-                label1 <- paste(sprintf(paste("%-", label.width.loc, "s", sep=""),
+                label1 <- paste(format(paste("%-", label.width.loc, "s", sep=""),
                                         paste(var.measure.label,
                                               ifelse(is.na(measure.1[, 1]),
                                                      "",
@@ -2119,26 +2098,27 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
                                 )
                 label2 <- var.measure
             }
+            # ......................................................................................
                  return.df <- data.frame(label1=label1, label2=label2,
-                                         dat1=sprintf(sprintfFormat1, round(measure.1[, 2], prec.digit.1)))
+                                         dat1=eval(parse(text="format(round(measure.1[, 2], prec.digit.1), big.mark=big.mark)")))
             if(dim.data>1)
             {
-                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[, 3], prec.digit.1)))
+                return.df <- cbind(return.df, eval(parse(text="format(round(measure.1[, 3], prec.digit.1), big.mark=big.mark)")))
                 colnames(return.df)[4] <- "dat2"
             }
             if(dim.data>2)
             {
-                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[, 4], prec.digit.1)))
+                return.df <- cbind(return.df, eval(parse(text="format(round(measure.1[, 4], prec.digit.1), big.mark=big.mark)")))
                 colnames(return.df)[5] <- "dat3"
             }
             if(dim.data>3)
             {
-                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[, 5], prec.digit.1)))
+                return.df <- cbind(return.df, eval(parse(text="format(round(measure.1[, 5], prec.digit.1), big.mark=big.mark)")))
                 colnames(return.df)[6] <- "dat4"
             }
             if(dim.data>4)
             {
-                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[, 6], prec.digit.1)))
+                return.df <- cbind(return.df, eval(parse(text="format(round(measure.1[, 6], prec.digit.1), big.mark=big.mark)")))
                 colnames(return.df)[7] <- "dat5"
             }
             return.df[ , dim.data+3]        <- " "
@@ -2151,7 +2131,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
             if(!is.na(measure.1[1]) && measure.1[1]=="''")  measure.1[1] <- "  "
             if(label.compact==TRUE)
             {
-                label1 <- paste(sprintf(paste("%-", label.width.loc, "s", sep=""),
+                label1 <- paste(format(paste("%-", label.width.loc, "s", sep=""),
                                         paste(var.measure.label,
                                               ifelse(is.na(measure.1[1]),
                                                      "",
@@ -2167,26 +2147,27 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
                                 )
                 label2 <- var.measure
             }
-                 return.df <- data.frame(label1=label1, label2=label2,
-                                         dat1=sprintf(sprintfFormat1, round(measure.1[2], prec.digit.1)))
+            # ......................................................................................
+            return.df <- data.frame(label1=label1, label2=label2,
+                                         dat1=eval(parse(text="format(round(measure.1[2], prec.digit.1), big.mark=big.mark)")))
             if(dim.data>1)
             {
-                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[3], prec.digit.1)))
+                return.df <- cbind(return.df, eval(parse(text="format(round(measure.1[3], prec.digit.1), big.mark=big.mark)")))
                 colnames(return.df)[4] <- "dat2"
             }
             if(dim.data>2)
             {
-                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[4], prec.digit.1)))
+                return.df <- cbind(return.df, eval(parse(text="format(round(measure.1[4], prec.digit.1), big.mark=big.mark)")))
                 colnames(return.df)[5] <- "dat3"
             }
             if(dim.data>3)
             {
-                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[5], prec.digit.1)))
+                return.df <- cbind(return.df, eval(parse(text="format(round(measure.1[5], prec.digit.1), big.mark=big.mark)")))
                 colnames(return.df)[6] <- "dat4"
             }
             if(dim.data>4)
             {
-                return.df <- cbind(return.df, sprintf(sprintfFormat1, round(measure.1[6], prec.digit.1)))
+                return.df <- cbind(return.df, eval(parse(text="format(round(measure.1[6], prec.digit.1), big.mark=big.mark)")))
                 colnames(return.df)[7] <- "dat5"
             }
             return.df[dim.data+3]           <- pValue
@@ -2213,7 +2194,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
     #
-    #    Ausgabe des Resultates                                                                   .. # {{{
+    #    return results                                                                           .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     if(verbose>0) print(return.df)
@@ -2269,7 +2250,7 @@ descrMeasures  <- function(descr.table=NULL             # Resultattabelle vorfor
 }
 #
 # --------------- descrMeasures  ----------------------------------------------------------------- --
-# ENDE DER FUNKTION ----------------------------------------------------------------------------- --
+# END OF FUNCTION ------------------------------------------------------------------------------- --
 ## }}}
 # ==================================================================================================
 #
@@ -2316,7 +2297,8 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                         , label.width=48            # Breite der ersten Spalte
                         , test.gr=NULL              # Welche Datenspalten sollten verglichen (getestet) werden?
                         , lang="de"                 # Sprache, 'de' oder 'en'
-                        , group.size.total=0        # Spalte mit Total der Kollektivgrösse
+                        , group.size.total=0        # Spalte mit Total der Kollektivgroesse
+                        , big.mark="'"
                         , verbose=0)                # 0 bis 2: Ausgabe Zwischenresultate
 {
     #
@@ -2357,6 +2339,7 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                                         , test.gr=test.gr
                                         , lang=lang
                                         , group.size.total=group.size.total
+                                        , big.mark=big.mark
                                         , verbose=verbose)
         descr.table <- descr.measures[[1]]
         i.test      <- pmax(i.test, descr.measures[[2]])
@@ -2383,7 +2366,7 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
 }
 #
 # --------------- descrTable -------------------------------------------------------------------- --
-# ENDE DER FUNKTION ----------------------------------------------------------------------------- --
+# END OF FUNCTION ------------------------------------------------------------------------------- --
 #
 # ==================================================================================================
 ## }}}
