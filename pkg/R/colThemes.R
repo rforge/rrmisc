@@ -2,8 +2,7 @@
 # --------------- color themes for lattice graphics                                               --
 # RR 20160825     ------------------------------------------------------------------------------- --
 #
-cols3.theme = function ()   #                                                                     .. # {{{
-{
+cols3.theme <- function (...) {
     # 7 Colors from palette 'H'
     # colors <- hc(nr=c(1:7), alpha=100)
     # colors <- c("#9A0941FF", "#F08100FF", "#FED037FF", "#CAB790FF", "#D35186FF", "#8296C4FF", "#B3BA12FF")
@@ -14,13 +13,13 @@ cols3.theme = function ()   #                                                   
     #
     colsA  <- colors[5:7]
     colA.theme <- lattice::simpleTheme(col=colsA,
-                              col.line=colsA[1],
-                              alpha=1,
-                              pch=16,
-                              lwd=1,
-                              fill=colsA[1],
-                              border="black"
-                              )
+                                       col.line=colsA[1],
+                                       alpha=1,
+                                       pch=16,
+                                       lwd=1,
+                                       fill=colsA[1],
+                                       border="black"
+                                       )
     #
     colA.theme[["strip.shingle"]]
     colA.theme[["strip.shingle"]]$col   <- colsA
@@ -37,10 +36,8 @@ cols3.theme = function ()   #                                                   
     #
     return(colA.theme)
 }
- # }}}
 #
-cols4.theme = function ()   #                                                                     .. # {{{
-{
+cols4.theme <- function (...) {
     # 7 Colors from palette 'H'
     # colors <- hc(nr=c(1:7), alpha=100)
     # colors <- c("#9A0941FF", "#F08100FF", "#FED037FF", "#CAB790FF", "#D35186FF", "#8296C4FF", "#B3BA12FF")
@@ -51,13 +48,13 @@ cols4.theme = function ()   #                                                   
     #
     colsA  <- colors[c(5:7, 4)]
     colA.theme <- lattice::simpleTheme(col=colsA,
-                              col.line=colsA[1],
-                              alpha=1,
-                              pch=16,
-                              lwd=1,
-                              fill=colsA[1],
-                              border="black"
-                              )
+                                       col.line=colsA[1],
+                                       alpha=1,
+                                       pch=16,
+                                       lwd=1,
+                                       fill=colsA[1],
+                                       border="black"
+                                       )
     #
     colA.theme[["strip.shingle"]]
     colA.theme[["strip.shingle"]]$col   <- colsA
@@ -74,10 +71,8 @@ cols4.theme = function ()   #                                                   
     #
     return(colA.theme)
 }
- # }}}
 #
-cols7.theme = function ()   #                                                                     .. # {{{
-{
+cols7.theme <- function (...) {
     # 7 Colors from palette 'H'
     # colors <- hc(nr=c(1:7), alpha=100)
     # colors <- c("#9A0941FF", "#F08100FF", "#FED037FF", "#CAB790FF", "#D35186FF", "#8296C4FF", "#B3BA12FF")
@@ -88,13 +83,13 @@ cols7.theme = function ()   #                                                   
     #
     colsA  <- colors
     colA.theme <- lattice::simpleTheme(col=colsA,
-                              col.line=colsA[1],
-                              alpha=1,
-                              pch=16,
-                              lwd=1,
-                              fill=colsA[1],
-                              border="black"
-                              )
+                                       col.line=colsA[1],
+                                       alpha=1,
+                                       pch=16,
+                                       lwd=1,
+                                       fill=colsA[1],
+                                       border="black"
+                                       )
     #
     colA.theme[["strip.shingle"]]
     colA.theme[["strip.shingle"]]$col   <- colsA
@@ -111,7 +106,6 @@ cols7.theme = function ()   #                                                   
     #
     return(colA.theme)
 }
- # }}}
 #
 # END OF FUNCTION  ----------------------------------------------------------------------------- --
 # --------------- color themes for lattice graphics                                               --

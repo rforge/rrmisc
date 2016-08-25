@@ -1,6 +1,7 @@
 # exportPattern("^[[:alpha:]]+")
 
-export("countDistinct",
+export("cols3.theme", "cols4.theme", "cols7.theme",
+       "countDistinct",
        "createDefMeasures", "descrTable",
        "defObjList", "setObjList",
        "formatPValue", "pFromF", "pFromT", "pFromZ",
