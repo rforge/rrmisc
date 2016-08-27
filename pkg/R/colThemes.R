@@ -12,7 +12,7 @@ cols3.theme <- function (...) {
     colors <- c("#9A0941CC", "#F08100CC", "#FED037CC", "#CAB790CC", "#D35186CC", "#8296C4CC", "#B3BA12CC")
     #
     colsA  <- colors[5:7]
-    colA.theme <- lattice::simpleTheme(col=colsA,
+    colA.theme <- simpleTheme(col=colsA,
                                        col.line=colsA[1],
                                        alpha=1,
                                        pch=16,
@@ -47,7 +47,7 @@ cols4.theme <- function (...) {
     colors <- c("#9A0941CC", "#F08100CC", "#FED037CC", "#CAB790CC", "#D35186CC", "#8296C4CC", "#B3BA12CC")
     #
     colsA  <- colors[c(5:7, 4)]
-    colA.theme <- lattice::simpleTheme(col=colsA,
+    colA.theme <- simpleTheme(col=colsA,
                                        col.line=colsA[1],
                                        alpha=1,
                                        pch=16,
@@ -82,7 +82,7 @@ cols7.theme <- function (...) {
     colors <- c("#9A0941CC", "#F08100CC", "#FED037CC", "#CAB790CC", "#D35186CC", "#8296C4CC", "#B3BA12CC")
     #
     colsA  <- colors
-    colA.theme <- lattice::simpleTheme(col=colsA,
+    colA.theme <- simpleTheme(col=colsA,
                                        col.line=colsA[1],
                                        alpha=1,
                                        pch=16,

@@ -3,7 +3,7 @@
 #
 # --------------- createDefMeasures              create template for def.measures                 .. # {{{
 # RR 20151110               --------------------------------------------------------------------- --
-createDefMeasures <- function (d.data, version=2, var.list)
+createDefMeasures <- function (d.data, var.list)
 {
     #
     # d.data       = input-data for 'descrMeasures' and 'descrTable'
@@ -52,17 +52,15 @@ createDefMeasures <- function (d.data, version=2, var.list)
                 def.measures[i.row, "measure_prec_1"] <- 1
                 def.measures[i.row, "measure_prec_2"] <- 1
                 i.row <- i.row + 1
-                if(version>1)
-                {
-                    def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                    def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                    def.measures[i.row, "measure_1"] <- "sd"
-                    def.measures[i.row, "measure_2"] <- "IQR"
-                    def.measures[i.row, "measure_ref_level"] <- NA
-                    def.measures[i.row, "measure_prec_1"] <- 1
-                    def.measures[i.row, "measure_prec_2"] <- 1
-                    i.row <- i.row + 1
-                }
+
+                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
+                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
+                def.measures[i.row, "measure_1"] <- "sd"
+                def.measures[i.row, "measure_2"] <- "IQR"
+                def.measures[i.row, "measure_ref_level"] <- NA
+                def.measures[i.row, "measure_prec_1"] <- 1
+                def.measures[i.row, "measure_prec_2"] <- 1
+                i.row <- i.row + 1
             }
             if(pasteClass(d.data[, i])=="integer")
             {
@@ -74,17 +72,15 @@ createDefMeasures <- function (d.data, version=2, var.list)
                 def.measures[i.row, "measure_prec_1"] <- 1
                 def.measures[i.row, "measure_prec_2"] <- 1
                 i.row <- i.row + 1
-                if(version>1)
-                {
-                    def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                    def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                    def.measures[i.row, "measure_1"] <- "sd"
-                    def.measures[i.row, "measure_2"] <- "IQR"
-                    def.measures[i.row, "measure_ref_level"] <- NA
-                    def.measures[i.row, "measure_prec_1"] <- 1
-                    def.measures[i.row, "measure_prec_2"] <- 1
-                    i.row <- i.row + 1
-                }
+
+                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
+                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
+                def.measures[i.row, "measure_1"] <- "sd"
+                def.measures[i.row, "measure_2"] <- "IQR"
+                def.measures[i.row, "measure_ref_level"] <- NA
+                def.measures[i.row, "measure_prec_1"] <- 1
+                def.measures[i.row, "measure_prec_2"] <- 1
+                i.row <- i.row + 1
             }
             if(pasteClass(d.data[, i])=="factor")
             {
@@ -146,8 +142,8 @@ createDefMeasures <- function (d.data, version=2, var.list)
         def.measures$nr <- NULL
 
         # apply and name original column order
-        def.measures <- def.measures[, c("var_label", "measure_name", "measure_1", "measure_2"
-                                         , "measure_ref_level", "measure_prec_1", "measure_prec_2")]
+        def.measures <- def.measures[, c("var_label", "measure_name", "measure_1", "measure_2",
+                                         "measure_ref_level", "measure_prec_1", "measure_prec_2")]
         colnames(def.measures)[1] <- "measure_label"
     }
     return(def.measures)
@@ -1528,7 +1524,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
         if(test.gr[2]==3) test.gr.2 <- sub.data.3
         if(test.gr[2]==4) test.gr.2 <- sub.data.4
         if(test.gr[2]==5) test.gr.2 <- sub.data.5
-        if(n.groups==3)
+        if(n.groups>2)
         {
             if(test.gr[3]==1) test.gr.3 <- sub.data.1
             if(test.gr[3]==2) test.gr.3 <- sub.data.2
@@ -1536,7 +1532,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
             if(test.gr[3]==4) test.gr.3 <- sub.data.4
             if(test.gr[3]==5) test.gr.3 <- sub.data.5
         }
-        if(n.groups==4)
+        if(n.groups>3)
         {
             if(test.gr[4]==1) test.gr.4 <- sub.data.1
             if(test.gr[4]==2) test.gr.4 <- sub.data.2
@@ -1544,7 +1540,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
             if(test.gr[4]==4) test.gr.4 <- sub.data.4
             if(test.gr[4]==5) test.gr.4 <- sub.data.5
         }
-        if(n.groups==5)
+        if(n.groups>4)
         {
             if(test.gr[5]==1) test.gr.5 <- sub.data.1
             if(test.gr[5]==2) test.gr.5 <- sub.data.2
@@ -2302,7 +2298,10 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                         , verbose=0)                # 0 bis 2: Ausgabe Zwischenresultate
 {
     #
-    if(missing(def.measures) || is.null(def.measures)) def.measures <- createDefMeasures(d.data=sub.d1)
+    if(missing(def.measures) || is.null(def.measures)) {
+        # def.measures <- createDefMeasures(d.data=sub.d1)
+        stop("please supply 'def.measures' for characteristics of description table")
+    }
     #
     # ------------------------------------------------------------------------------------------- --
     #  Definition lokaler Funktionen                                                              ..

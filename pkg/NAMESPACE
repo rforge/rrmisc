@@ -4,11 +4,13 @@ export("cols3.theme", "cols4.theme", "cols7.theme",
        "countDistinct",
        "createDefMeasures", "descrTable",
        "defObjList", "setObjList",
-       "formatPValue", "pFromF", "pFromT", "pFromZ",
+       "formatPValue",
        "grepColEntries", "grepColNA", "grepColNames", "grepMultipleEntries",
        "grepNotCompleteEntries", "grepObjNames", "grepRowNames",
        "listObjSizes", "listObjContrasts",
-       "percentLabel")
+       "percentLabel",
+       "pFromF", "pFromT", "pFromZ"
+       )
 #      "colThemes", "d.sport")
 
 # import(utils)
@@ -19,6 +21,6 @@ importFrom("stats", "IQR", "chisq.test", "complete.cases",
            "kruskal.test", "median", "na.omit", "pf", "pnorm", "pt",
            "relevel", "sd", "t.test", "wilcox.test")
 importFrom("utils", "object.size", "data")
-importFrom("lattice", "trellis.par.set", "show.settings")
+importFrom("lattice", "trellis.par.set", "show.settings", "simpleTheme")
 importFrom("latticeExtra", "theEconomist.theme")
 
