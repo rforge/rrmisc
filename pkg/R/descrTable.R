@@ -12,6 +12,9 @@ createDefMeasures <- function (d.data, var.list)
     #                var.list$var_label     ->  def.measures$measure_label
     # def.measures = result: input-parameter table for 'descrMeasures' and 'descrTable'
     #
+    # local options ................................................................................
+    options(stringsAsFactors=FALSE)
+    #
     # pasteClass local function ....................................................................
     pasteClass <- function(x)
     {
@@ -202,6 +205,9 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
                            , big.mark
                            , verbose)                   # 0 bis 2: increasing verbosity
 {
+    # local options ................................................................................
+    options(stringsAsFactors=FALSE)
+    #
     # ------------------------------------------------------------------------------------------- --
     if(verbose>1)
     {
@@ -2298,20 +2304,20 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                         , verbose=0)                # 0 bis 2: Ausgabe Zwischenresultate
 {
     #
+    # local options ................................................................................
+    options(stringsAsFactors=FALSE)
+    #
+    # ------------------------------------------------------------------------------------------- --
+    #  Definition lokaler Funktionen                                                              ..
+    trim.loc <- function (x) gsub("^\\s+|\\s+$", "", x)
+    #
+    # ------------------------------------------------------------------------------------------- --
+    #  Resultattabelle erstellen                    -  descr.table <- descrMeasures(...)          ..
+    #
     if(missing(def.measures) || is.null(def.measures)) {
         # def.measures <- createDefMeasures(d.data=sub.d1)
         stop("please supply 'def.measures' for characteristics of description table")
     }
-    #
-    # ------------------------------------------------------------------------------------------- --
-    #  Definition lokaler Funktionen                                                              ..
-    #
-    trim.loc <- function (x) gsub("^\\s+|\\s+$", "", x)
-    #
-    #
-    #
-    # ------------------------------------------------------------------------------------------- --
-    #  Resultattabelle erstellen                    -  descr.table <- descrMeasures(...)          ..
     #
     i.test <- c(0, 0, 0, 0)
     for(i in 1:nrow(def.measures))
@@ -2360,7 +2366,7 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
         test.str <- paste(test.str, collapse=", ")
     }
     # ------------------------------------------------------------------------------------------- --
-    return(list(descr.table, test.str))
+    return(list(unique(descr.table), test.str))
     # ------------------------------------------------------------------------------------------- --
 }
 #

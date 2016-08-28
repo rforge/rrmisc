@@ -3,7 +3,6 @@
 export("cols3.theme", "cols4.theme", "cols7.theme",
        "countDistinct",
        "createDefMeasures", "descrTable",
-       "defObjList", "setObjList",
        "formatPValue",
        "grepColEntries", "grepColNA", "grepColNames", "grepMultipleEntries",
        "grepNotCompleteEntries", "grepObjNames", "grepRowNames",
@@ -11,6 +10,7 @@ export("cols3.theme", "cols4.theme", "cols7.theme",
        "percentLabel",
        "pFromF", "pFromT", "pFromZ"
        )
+#      "defObjList", "setObjList",
 #      "colThemes", "d.sport")
 
 # import(utils)

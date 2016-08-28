@@ -9,7 +9,7 @@
     Package: \tab rrMisc\cr
     Type: \tab Package\cr
     Version: \tab 0.20\cr
-    Date: \tab 2016-08-27\cr
+    Date: \tab 2016-08-28\cr
     License: \tab GPL (>=2)
 }
 Some rather small helpers like the 'grep' funktions to facilitate handling of objects.
