@@ -24,46 +24,39 @@
 
 \examples{
 if(require("MASS")){
-print("--")
-print("load example data")
-data(crabs, package="MASS")
-dim(crabs)
-head(crabs)
-#
-print("--")
-print("example for 'grepColEntries'")
-head(grepColEntries(crabs, "sex", "M"))
-head(grepColEntries(crabs, "index", "2"))
-#
-print("--")
-print("example for 'grepColNames'")
-grepColNames(crabs, "W")
-#
-print("--")
-print("example for 'grepColNA'")
-grepColNA(crabs)
-grepColNA(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6))
-#
-print("--")
-print("example for 'grepObjNames'")
-grepObjNames("Pfad")
-#
-print("--")
-print("example for 'grepNotCompleteEntries'")
-df <- crabs
-df[33, 4] <- NA
-df[55, 5] <- NA
-df[77, 6] <- NA
-df[99, 7] <- NA
-grepNotCompleteEntries(df)
-rm(df)
-#
-print("--")
-print("example for 'grepMultipleEntries '")
-print(" - with one column")
-head(grepMultipleEntries(crabs, "FL"), n=10)
-#
-print(" - with two columns")
-head(grepMultipleEntries(crabs, c("sex", "FL")))
+    # load example data
+    data(crabs, package="MASS")
+    dim(crabs)
+    head(crabs)
+    #
+    # example for 'grepColEntries'
+    head(grepColEntries(crabs, "sex", "M"))
+    head(grepColEntries(crabs, "index", "2"))
+    #
+    # example for 'grepColNames'
+    grepColNames(crabs, "W")
+    #
+    # example for 'grepColNA'
+    grepColNA(crabs)
+    grepColNA(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6))
+    #
+    # example for 'grepObjNames'
+    grepObjNames("Pfad")
+    #
+    # example for 'grepNotCompleteEntries'
+    df <- crabs
+    df[33, 4] <- NA
+    df[55, 5] <- NA
+    df[77, 6] <- NA
+    df[99, 7] <- NA
+    grepNotCompleteEntries(df)
+    rm(df)
+    #
+    # example for 'grepMultipleEntries'
+    # - with one column
+    head(grepMultipleEntries(crabs, "FL"), n=10)
+    #
+    # - with two columns
+    head(grepMultipleEntries(crabs, c("sex", "FL")))
 }
 }

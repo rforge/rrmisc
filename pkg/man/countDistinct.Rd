@@ -12,7 +12,6 @@
 \author{ Roland Rapold }
 \note{ under continuous developement }
 \examples{
-print("--")
 print("Example for vector")
                       c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)
                length(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6))
@@ -20,7 +19,6 @@ print("Example for vector")
        length(na.omit(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)))
 countDistinct(na.omit(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)))
 #
-print("--")
 if(require("MASS"))
 {
     print("Example for data.frame")

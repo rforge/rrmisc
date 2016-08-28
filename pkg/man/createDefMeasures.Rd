@@ -18,35 +18,35 @@
 \seealso{ other utility-functions in this R-package }
 \examples{
 if(require("car")) {
-print("load sample data 'Mroz' from package 'car' .......................................")
-data(Mroz)
-str(Mroz)
+    # load sample data 'Mroz' from package 'car'
+    data(Mroz)
+    str(Mroz)
 
-print("insert attribute 'i' for population size ........................................")
-Mroz <- merge(data.frame(i=as.factor(1)), Mroz)
-str(Mroz)
+    # insert attribute 'i' for population size
+    Mroz <- merge(data.frame(i=as.factor(1)), Mroz)
+    str(Mroz)
 
-print("reference list for variable labels ........................................")
-var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
-                       var_label=c("population",
-                                   "employed",
-                                   "# children to 5", "# children 6-18",
-                                   "wife college",
-                                   "log expected wage",
-                                   "family income excl. wife"))
+    # reference list for variable labels
+    var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
+                           var_label=c("population",
+                                       "employed",
+                                       "# children to 5", "# children 6-18",
+                                       "wife college",
+                                       "log expected wage",
+                                       "family income excl. wife"))
 
-print("create definition-table without variable for groups")
-Mroz_hc      <- Mroz[ , -which(colnames(Mroz)=="hc")]
+    # create definition-table without variable for groups
+    Mroz_hc      <- Mroz[ , -which(colnames(Mroz)=="hc")]
 
-print("variation 1: default, no adjustments")
-def.measures.1 <- createDefMeasures(d.data=Mroz_hc)
-print(def.measures.1)
+    # variation 1: default, no adjustments
+    def.measures.1 <- createDefMeasures(d.data=Mroz_hc)
+    print(def.measures.1)
 
-print("variation 2: apply variable labels")
-def.measures.2 <- createDefMeasures(d.data=Mroz_hc, var.list=var.list)
-def.measures.2[2, 6] <- -2
-def.measures.2[9, 6] <- -1
-print(def.measures.2)
+    # variation 2: apply variable labels
+    def.measures.2 <- createDefMeasures(d.data=Mroz_hc, var.list=var.list)
+    def.measures.2[2, 6] <- -2
+    def.measures.2[9, 6] <- -1
+    print(def.measures.2)
 
 } }
 

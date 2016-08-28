@@ -15,14 +15,14 @@
 \seealso{ other utility-functions in this R-package }
 \examples{
 if(require("MASS")){
-print("Example - loading data")
-data(crabs, package="MASS")
-head(crabs)
-#
-print("Example for 'listObjContrasts")
-listObjContrasts(crabs)
-#
-print("Example for 'listObjSizes'")
-listObjSizes()
+    # Example - loading data
+    data(crabs, package="MASS")
+    head(crabs)
+    #
+    # Example for 'listObjContrasts
+    listObjContrasts(crabs)
+    #
+    # Example for 'listObjSizes'
+    listObjSizes()
 }
 }
