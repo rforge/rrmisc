@@ -27,12 +27,6 @@ if(require(lattice)&require(latticeExtra))
                     par.settings=cols4.theme(), main="color scheme 'cols4.theme'")
     bc4 <- barchart(prop.table(postdoc, margin=1), xlab="Proportion", # auto.key=list(adj=1),
                     par.settings=cols7.theme(), main="color scheme 'cols7.theme'")
-    if(.Platform$OS.type=="unix")
-    {
-        x11(width=14, height=8)
-    } else {
-        windows(width=14, height=8)
-    }
     plot(bc1, split=c(1, 1, 2, 2), more=TRUE)
     plot(bc2, split=c(1, 2, 2, 2), more=TRUE)
     plot(bc3, split=c(2, 1, 2, 2), more=TRUE)
