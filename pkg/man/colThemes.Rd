@@ -19,13 +19,13 @@ if(require(lattice)&require(latticeExtra))
 {
     require(latticeExtra)
     data(postdoc, package="latticeExtra")
-    bc1 <- barchart(prop.table(postdoc, margin=1), xlab="Proportion", # auto.key=list(adj=1),
+    bc1 <- barchart(prop.table(postdoc, margin=1), xlab="Proportion",
                     main="default color scheme")
-    bc2 <- barchart(prop.table(postdoc, margin=1), xlab="Proportion", # auto.key=list(adj=1),
+    bc2 <- barchart(prop.table(postdoc, margin=1), xlab="Proportion",
                     par.settings=cols3.theme(), main="color scheme 'cols3.theme'")
-    bc3 <- barchart(prop.table(postdoc, margin=1), xlab="Proportion", # auto.key=list(adj=1),
+    bc3 <- barchart(prop.table(postdoc, margin=1), xlab="Proportion",
                     par.settings=cols4.theme(), main="color scheme 'cols4.theme'")
-    bc4 <- barchart(prop.table(postdoc, margin=1), xlab="Proportion", # auto.key=list(adj=1),
+    bc4 <- barchart(prop.table(postdoc, margin=1), xlab="Proportion",
                     par.settings=cols7.theme(), main="color scheme 'cols7.theme'")
     plot(bc1, split=c(1, 1, 2, 2), more=TRUE)
     plot(bc2, split=c(1, 2, 2, 2), more=TRUE)

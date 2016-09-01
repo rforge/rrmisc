@@ -17,12 +17,12 @@
 if(require("MASS")){
     # Example - loading data
     data(crabs, package="MASS")
-    head(crabs)
+    print(head(crabs))
     #
     # Example for 'listObjContrasts
-    listObjContrasts(crabs)
+    print(listObjContrasts(crabs))
     #
     # Example for 'listObjSizes'
-    listObjSizes()
+    print(listObjSizes())
 }
 }

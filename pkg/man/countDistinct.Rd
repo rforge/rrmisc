@@ -23,10 +23,9 @@ if(require("MASS"))
 {
     print("Example for data.frame")
     data(crabs, package="MASS")
-    head(crabs)
     str(crabs)
-    countDistinct(crabs[, c("sp")])
-    countDistinct(crabs[, c("sex")])
-    countDistinct(crabs[, c("FL")])
+    print(countDistinct(crabs[, c("sp")]))
+    print(countDistinct(crabs[, c("sex")]))
+    print(countDistinct(crabs[, c("FL")]))
 }
 }

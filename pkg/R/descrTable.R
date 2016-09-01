@@ -209,6 +209,10 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     options(stringsAsFactors=FALSE)
     #
     # ------------------------------------------------------------------------------------------- --
+    #  Definition lokaler Funktionen                                                              ..
+    trim.loc <- function (x) gsub("^\\s+|\\s+$", "", x)
+    #
+    # ------------------------------------------------------------------------------------------- --
     if(verbose>1)
     {
         print(paste("var.measure.label=", var.measure.label))
@@ -323,14 +327,14 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     # control -- no factor level empty .......................................................... ..
     if(var.is.factor)
     {
-        if(requireNamespace("DescTools", quietly=TRUE))
-        {
-                           levels(sub.data.1) <- DescTools::StrTrim(levels(sub.data.1))
-            if(dim.data>1) levels(sub.data.2) <- DescTools::StrTrim(levels(sub.data.2))
-            if(dim.data>2) levels(sub.data.3) <- DescTools::StrTrim(levels(sub.data.3))
-            if(dim.data>3) levels(sub.data.4) <- DescTools::StrTrim(levels(sub.data.4))
-            if(dim.data>4) levels(sub.data.5) <- DescTools::StrTrim(levels(sub.data.5))
-        }
+        # if(requireNamespace("DescTools", quietly=TRUE))
+        # {
+                           levels(sub.data.1) <- trim.loc(levels(sub.data.1))
+            if(dim.data>1) levels(sub.data.2) <- trim.loc(levels(sub.data.2))
+            if(dim.data>2) levels(sub.data.3) <- trim.loc(levels(sub.data.3))
+            if(dim.data>3) levels(sub.data.4) <- trim.loc(levels(sub.data.4))
+            if(dim.data>4) levels(sub.data.5) <- trim.loc(levels(sub.data.5))
+            # }
         m <- which(levels(sub.data.1)=="")
         if(length(m)>0)
         {
@@ -2314,7 +2318,8 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
     # ------------------------------------------------------------------------------------------- --
     #  Resultattabelle erstellen                    -  descr.table <- descrMeasures(...)          ..
     #
-    if(missing(def.measures) || is.null(def.measures)) {
+    if(missing(def.measures) || is.null(def.measures))
+    {
         # def.measures <- createDefMeasures(d.data=sub.d1)
         stop("please supply 'def.measures' for characteristics of description table")
     }
@@ -2364,6 +2369,14 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                       , "(k) = Kruskal-Wallis test", "'*' test resulted warnings")
         test.str <- test.str[as.logical(i.test)]
         test.str <- paste(test.str, collapse=", ")
+    }
+    # ------------------------------------------------------------------------------------------- --
+    if(missing(test.gr) || is.null(test.gr))
+    {
+        descr.table[, "p-value"] <- NULL
+    } else {
+        colnames(descr.table)[which(colnames(descr.table)=="p-value")] <- 
+            paste0("p-value(", paste(test.gr, collapse="-"), ")")
     }
     # ------------------------------------------------------------------------------------------- --
     return(list(unique(descr.table), test.str))
