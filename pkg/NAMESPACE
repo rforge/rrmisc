@@ -23,4 +23,5 @@ importFrom("stats", "IQR", "chisq.test", "complete.cases",
 importFrom("utils", "object.size", "data")
 importFrom("lattice", "trellis.par.set", "show.settings", "simpleTheme")
 importFrom("latticeExtra", "theEconomist.theme")
+importFrom("grDevices", "rgb")                      # for image() in example of cols3.theme
 

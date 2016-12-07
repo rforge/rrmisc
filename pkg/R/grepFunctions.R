@@ -46,7 +46,7 @@ grepColNames <- function(d.frame, part.name, ...) {
     #
     ns <- names(d.frame)
     ni <- grep(part.name, ns)
-    cl <- unlist(sapply(d.frame, class))
+    cl <- unlist(lapply(sapply(d.frame, class), paste, collapse=" - "))
     ty <- unlist(sapply(d.frame, typeof))
     mo <- unlist(sapply(d.frame, mode))
     sm <- unlist(sapply(d.frame, storage.mode))
