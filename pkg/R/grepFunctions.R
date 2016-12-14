@@ -4,6 +4,63 @@
 # --------------- grepColEntries                    show records with specified text              --
 # RR 20140807               --------------------------------------------------------------------- --
 #
+
+
+#' obtain grep components of object easily
+#' 
+#' obtain grep components of object easily
+#' 
+#' functions facilitating handling of objects
+#' 
+#' @aliases grepColEntries grepColNames grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames
+#' @export  grepColEntries grepColNames grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames
+#' @param d.frame R-object
+#' @param col.name Name of column.
+#' @param part.name Search string in column names.
+#' @param \dots Arguments passed to further functions.
+#' @return Column names, values containing search string or entries not complete or multiple entries.
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @seealso other utility-functions in this R-package
+#' @references none
+#' @examples
+#' 
+#' if(require("MASS")){
+#'     # load example data
+#'     data(crabs, package="MASS")
+#'     head(crabs)
+#'     #
+#'     # example for 'grepColEntries'
+#'     print(head(grepColEntries(crabs, "sex", "M")))
+#'     print(head(grepColEntries(crabs, "index", "2")))
+#'     #
+#'     # example for 'grepColNames'
+#'     print(grepColNames(crabs, "W"))
+#'     #
+#'     # example for 'grepColNA'
+#'     print(grepColNA(crabs))
+#'     print(grepColNA(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)))
+#'     #
+#'     # example for 'grepObjNames'
+#'     print(grepObjNames("Pfad"))
+#'     #
+#'     # example for 'grepNotCompleteEntries'
+#'     df <- crabs
+#'     df[33, 4] <- NA
+#'     df[55, 5] <- NA
+#'     df[77, 6] <- NA
+#'     df[99, 7] <- NA
+#'     print(grepNotCompleteEntries(df))
+#'     rm(df)
+#'     #
+#'     # example for 'grepMultipleEntries'
+#'     # - with one column
+#'     print(head(grepMultipleEntries(crabs, "FL"), n=10))
+#'     #
+#'     # - with two columns
+#'     print(head(grepMultipleEntries(crabs, c("sex", "FL"))))
+#' }
+#' 
 grepColEntries <- function(d.frame, col.name, part.name, ...) {
     #
     # method                                        ............................................. ..
@@ -163,7 +220,7 @@ grepNotCompleteEntries <- function(d.frame, ...) {
     #
     if(!is.data.frame(d.frame)) return("Please provide a data frame!")
     #
-    id <- which(!complete.cases(d.frame))
+    id <- which(!stats::complete.cases(d.frame))
     #
     return(d.frame[id, ])
     #

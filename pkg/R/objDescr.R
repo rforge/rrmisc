@@ -4,6 +4,37 @@
 # --------------- listObjSizes                      list all objects with their size -- in order  --
 # RR 20130816  ---------------------------------------------------------------------------------- --
 #
+
+
+#' get properties of objects easily.
+#' 
+#' get sizes and contrasts of objects.
+#' 
+#' function for the description of properties of objects rather than processing
+#' of data.
+#' 
+#' @aliases listObjSizes listObjContrasts
+#' @export  listObjSizes listObjContrasts
+#' @param \dots arguments passed to further functions
+#' @return sizes and contrasts of loaded objects
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @seealso other utility-functions in this R-package
+#' @references none
+#' @examples
+#' 
+#' if(require("MASS")){
+#'     # Example - loading data
+#'     data(crabs, package="MASS")
+#'     print(head(crabs))
+#'     #
+#'     # Example for 'listObjContrasts
+#'     print(listObjContrasts(crabs))
+#'     #
+#'     # Example for 'listObjSizes'
+#'     print(listObjSizes())
+#' }
+#' 
 listObjSizes <- function(...) {
     #
     # method                                        ............................................. ..
@@ -19,7 +50,7 @@ listObjSizes <- function(...) {
 
     for(i in 1:length(obj))
     {
-        objsz[i, ] <- c(obj[i], object.size(get(obj[i]))[1])
+        objsz[i, ] <- c(obj[i], utils::object.size(get(obj[i]))[1])
     }
     #
     objsz$size <- as.integer(objsz$size)
