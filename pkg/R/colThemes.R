@@ -179,7 +179,7 @@ cols7.theme <- function (...) {
 # ----------------------------------------------------------------------------------
 #
 # SEQxx The Sequential Color Scheme ................................................................
-# seq01 -- 9 Farben dunkel- bis hell-blau
+# seq01 -- 9 Colors blue from dark to light
 # seq01.theme                                                                                     .. # {{{
 seq01.theme <- function (...) {
     #
@@ -219,7 +219,7 @@ seq01.theme <- function (...) {
 ## }}}
 # show.settings(seq01.theme())
 #
-# seq02 -- 9 Farben dunkel- bis hell-rot
+# seq02 -- 9 Colors red from dark to light
 # seq02.theme                                                                                     .. # {{{
 seq02.theme <- function (...) {
     #
@@ -259,7 +259,7 @@ seq02.theme <- function (...) {
 ## }}}
 # show.settings(seq02.theme())
 #
-# seq03 -- 9 Farben dunkel- bis hell-grün
+# seq03 -- 9 Colors green from dark to light
 # seq03.theme                                                                                     .. # {{{
 seq03.theme <- function (...) {
     #
@@ -299,7 +299,7 @@ seq03.theme <- function (...) {
 ## }}}
 # show.settings(seq03.theme())
 #
-# seq04 -- 9 Farben dunkel- bis hell-braun
+# seq04 -- 9 Colors brown from dark to light
 # seq04.theme                                                                                     .. # {{{
 seq04.theme <- function (...) {
     #
@@ -381,7 +381,7 @@ div01.theme <- function (...) {
 ## }}}
 # show.settings(div01.theme())
 #
-# div01 -- 6 Farben blau - weiss - rot
+# div01 -- 6 Colors from blue to white to red
 # div02.theme                                                                                     .. # {{{
 div02.theme <- function (...) {
     #
@@ -430,7 +430,7 @@ div02.theme <- function (...) {
 ## }}}
 # show.settings(div02.theme())
 #
-# div03 -- 9 Farben grün - weiss - braun
+# div03 -- 9 Colrs from green to white to brown
 # div03.theme                                                                                     .. # {{{
 div03.theme <- function (...) {
     #
