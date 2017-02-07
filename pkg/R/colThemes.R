@@ -481,7 +481,7 @@ div03.theme <- function (...) {
 #
 #
 # qualxx The Qualitative Color Scheme ..............................................................
-# qual01.theme                                                                                     .. # {{{
+# qual01.theme                                                                                    .. # {{{
 qual01.theme <- function (...) {
     #
     qual01.rgb <- c(c( 88, 132, 179), c(182, 206, 229),
@@ -532,7 +532,7 @@ qual01.theme <- function (...) {
 ## }}}
 # show.settings(qual01.theme())
 #
-# qual02.theme                                                                                     .. # {{{
+# qual02.theme                                                                                    .. # {{{
 qual02.theme <- function (...) {
     #
     qual02a.rgb <- c(c( 88, 132, 179), c(182, 206, 229),

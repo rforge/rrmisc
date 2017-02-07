@@ -45,27 +45,46 @@ NULL
 
 # --------------------------------------------------------------------------------------------------
 # Administrative tasks for creating the package
+#
 # --------------------------------------------------------------------------------------------------
-
+# Use Roxygen to create/update the documentation files .............................................
+#
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
 # getwd()
 # roxygen2::roxygenise()
 
 # --------------------------------------------------------------------------------------------------
+# Compile package ..................................................................................
+#
+# rrMiscVers <- "0.24"
+# setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
+# getwd()
+# system(       "R --vanilla CMD build pkg")
+# system(paste0("R --vanilla CMD check rrMisc_", rrMiscVers, ".tar.gz"))
+#
 # system("gv /home/roland/Statistik/R_rrMisc/rrmisc/rrMisc.Rcheck/rrMisc-manual.pdf &")
-
+#
 # --------------------------------------------------------------------------------------------------
-
-# version <- "0.23"
+# Remove old version and install new package .......................................................
+#
+# rrMiscVers <- "0.24"
 # detach("package:rrMisc", character.only=TRUE)
 # unloadNamespace("rrMisc")
 # remove.packages("rrMisc")
+#
+# -- install local copy of package
 # install.packages(paste0("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc_",
-#                         version, ".tar.gz"),
+#                         rrMiscVers, ".tar.gz"),
 #                  repos=NULL)
 # library(rrMisc)
 #
+# -- install copy from r-forge
 # install.packages("rrMisc", repos="http://R-Forge.R-project.org")
+#
+# -- test installation
 # library(rrMisc)
+# ??rrMisc
+# ?cols7.theme
+# ?div01.theme
 #
 # --------------------------------------------------------------------------------------------------

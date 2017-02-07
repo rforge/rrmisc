@@ -46,13 +46,25 @@ countDistinct <- function(x, ...) {
     # output                                        ............................................. ..
     # - integer number of count
     #
-    if(is.null(dim(x))) {
-        return(length(unique(x)))
-    } else {
-        return(nrow(unique(x)))
+{
+
+    naString <- ifelse(sum(is.na(x))>0, "plus NA", "")
+
+    if(is.null(dim(x)))                             # x is vector
+
+    {
+
+        return(c(length(unique(stats::na.omit(x))), naString))
+
     }
-    #
-}
-# END OF FUNCTION  ----------------------------------------------------------------------------- --
+
+    else {                                          # x is data.frame ...
+
+        return(c(nrow(unique(stats::na.omit(x))), naString))
+
+    }
+
+}}
+# END OF FUNCTION  ------------------------------------------------------------------------------ --
 # --------------- countDistinct  ---------------------------------------------------------------- --
 #
