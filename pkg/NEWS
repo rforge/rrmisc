@@ -1,4 +1,18 @@
 
+rrMisc v0.25    (Release date: 2017-03-23)
+============
+
+Changes:
+
+* countDistinct() named vector of numbers
+  - count:  number of different entries (without NAs)
+  - NAs:    index of NAs present (0=no, 1=yes)
+
+* new function grepColNegNum()  show columns of dataframe with negative numbers
+* new function grepColFactors() show attributes in data.frame wich are factors
+* new function compTwoCols      compare two vectors for equals and NAs
+
+
 rrMisc v0.24    (Release date: 2017-02-07)
 ============
 

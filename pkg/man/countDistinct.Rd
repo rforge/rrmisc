@@ -12,7 +12,11 @@ countDistinct(x, ...)
 \item{\dots}{arguments passed to further functions}
 }
 \value{
-count (integer)
+named vector of numbers
+
+- count:  number of different entries (without NAs)
+
+- NAs:    index of NAs present (0=no, 1=yes)
 }
 \description{
 SQL-command 'count(distinct ...)' convreted to R

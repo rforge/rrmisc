@@ -49,6 +49,7 @@ NULL
 # --------------------------------------------------------------------------------------------------
 # Use Roxygen to create/update the documentation files .............................................
 #
+# -->> delete help-files so that they can be rebuilt by roxygen2
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
 # getwd()
 # roxygen2::roxygenise()
@@ -56,7 +57,7 @@ NULL
 # --------------------------------------------------------------------------------------------------
 # Compile package ..................................................................................
 #
-# rrMiscVers <- "0.24"
+# rrMiscVers <- "0.25"
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
 # getwd()
 # system(       "R --vanilla CMD build pkg")
@@ -67,7 +68,7 @@ NULL
 # --------------------------------------------------------------------------------------------------
 # Remove old version and install new package .......................................................
 #
-# rrMiscVers <- "0.24"
+# rrMiscVers <- "0.25"
 # detach("package:rrMisc", character.only=TRUE)
 # unloadNamespace("rrMisc")
 # remove.packages("rrMisc")
@@ -86,5 +87,16 @@ NULL
 # ??rrMisc
 # ?cols7.theme
 # ?div01.theme
+#
+# --------------------------------------------------------------------------------------------------
+# Send to r-forge.r-project.org via SVN ............................................................
+# --> change to promt
+# cd /home/roland/Statistik/R_rrMisc/rrmisc
+# svn commit
+#
+# svn log
+# svn status
+# svn add pkg/file.R
+# svn update            (can help if problems occur)
 #
 # --------------------------------------------------------------------------------------------------

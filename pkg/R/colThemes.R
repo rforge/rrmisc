@@ -184,22 +184,22 @@ cols7.theme <- function (...) {
 seq01.theme <- function (...) {
     #
     seq01.rgb <- c(c( 54,  62,  73), c( 53,  77, 103), c( 54,  90, 129),
-                c( 55, 103, 153), c( 55, 117, 179), c( 97, 145, 199),
-                c(137, 173, 217), c(179, 201, 235), c(220, 232, 253))
+                   c( 55, 103, 153), c( 55, 117, 179), c( 97, 145, 199),
+                   c(137, 173, 217), c(179, 201, 235), c(220, 232, 253))
     seq01 <- grDevices::rgb(red=seq01.rgb[seq(1, 25, 3)],
-                green=seq01.rgb[seq(2, 26, 3)],
-                blue= seq01.rgb[seq(3, 27, 3)],
-                names=paste0("seq01.", 1:9),
-                maxColorValue=255)
+                            green=seq01.rgb[seq(2, 26, 3)],
+                            blue= seq01.rgb[seq(3, 27, 3)],
+                            names=paste0("seq01.", 1:9),
+                            maxColorValue=255)
 
     seq01.theme <- lattice::simpleTheme(col=seq01,
-                               col.line=seq01[1],
-                               alpha=1,
-                               pch=16,
-                               lwd=1,
-                               fill=seq01[1],
-                               border="black"
-                               )
+                                        col.line=seq01[1],
+                                        alpha=1,
+                                        pch=16,
+                                        lwd=1,
+                                        fill=seq01[1],
+                                        border="black"
+                                        )
     #
     seq01.theme[["strip.shingle"]]
     seq01.theme[["strip.shingle"]]$col   <- seq01
@@ -227,19 +227,19 @@ seq02.theme <- function (...) {
                    c(173,  84,  97), c(204,  95, 111), c(217, 130, 142),
                    c(228, 166, 172), c(241, 199, 204), c(252, 235, 235))
     seq02 <- grDevices::rgb(red=seq02.rgb[seq(1, 25, 3)],
-                green=seq02.rgb[seq(2, 26, 3)],
-                blue= seq02.rgb[seq(3, 27, 3)],
-                names=paste0("seq02.", 1:9),
-                maxColorValue=255)
+                            green=seq02.rgb[seq(2, 26, 3)],
+                            blue= seq02.rgb[seq(3, 27, 3)],
+                            names=paste0("seq02.", 1:9),
+                            maxColorValue=255)
 
     seq02.theme <- lattice::simpleTheme(col=seq02,
-                               col.line=seq02[1],
-                               alpha=1,
-                               pch=16,
-                               lwd=1,
-                               fill=seq02[1],
-                               border="black"
-                               )
+                                        col.line=seq02[1],
+                                        alpha=1,
+                                        pch=16,
+                                        lwd=1,
+                                        fill=seq02[1],
+                                        border="black"
+                                        )
     #
     seq02.theme[["strip.shingle"]]
     seq02.theme[["strip.shingle"]]$col   <- seq02
@@ -267,19 +267,19 @@ seq03.theme <- function (...) {
                    c( 65, 110, 108), c( 71, 128, 123), c(107, 150, 146),
                    c(140, 174, 172), c(173, 197, 197), c(209, 222, 221))
     seq03 <- grDevices::rgb(red=seq03.rgb[seq(1, 25, 3)],
-                green=seq03.rgb[seq(2, 26, 3)],
-                blue= seq03.rgb[seq(3, 27, 3)],
-                names=paste0("seq03.", 1:9),
-                maxColorValue=255)
+                            green=seq03.rgb[seq(2, 26, 3)],
+                            blue= seq03.rgb[seq(3, 27, 3)],
+                            names=paste0("seq03.", 1:9),
+                            maxColorValue=255)
 
     seq03.theme <- lattice::simpleTheme(col=seq03,
-                               col.line=seq03[1],
-                               alpha=1,
-                               pch=16,
-                               lwd=1,
-                               fill=seq03[1],
-                               border="black"
-                               )
+                                        col.line=seq03[1],
+                                        alpha=1,
+                                        pch=16,
+                                        lwd=1,
+                                        fill=seq03[1],
+                                        border="black"
+                                        )
     #
     seq03.theme[["strip.shingle"]]
     seq03.theme[["strip.shingle"]]$col   <- seq03
@@ -307,19 +307,19 @@ seq04.theme <- function (...) {
                    c(144, 107,  79), c(165, 124,  87), c(183, 147, 119),
                    c(199, 172, 149), c(214, 197, 181), c(232, 222, 211))
     seq04 <- grDevices::rgb(red=seq04.rgb[seq(1, 25, 3)],
-                green=seq04.rgb[seq(2, 26, 3)],
-                blue= seq04.rgb[seq(3, 27, 3)],
-                names=paste0("seq04.", 1:9),
-                maxColorValue=255)
+                            green=seq04.rgb[seq(2, 26, 3)],
+                            blue= seq04.rgb[seq(3, 27, 3)],
+                            names=paste0("seq04.", 1:9),
+                            maxColorValue=255)
 
     seq04.theme <- lattice::simpleTheme(col=seq04,
-                               col.line=seq04[1],
-                               alpha=1,
-                               pch=16,
-                               lwd=1,
-                               fill=seq04[1],
-                               border="black"
-                               )
+                                        col.line=seq04[1],
+                                        alpha=1,
+                                        pch=16,
+                                        lwd=1,
+                                        fill=seq04[1],
+                                        border="black"
+                                        )
     #
     seq04.theme[["strip.shingle"]]
     seq04.theme[["strip.shingle"]]$col   <- seq04
@@ -349,19 +349,19 @@ div01.theme <- function (...) {
                    c(196, 210, 226), c(241, 241, 241), c(233, 205, 210),
                    c(224, 169, 176), c(214, 131, 144), c(204,  95, 111))
     div01 <- grDevices::rgb(red=div01.rgb[seq(1, 25, 3)],
-                 green=div01.rgb[seq(2, 26, 3)],
-                 blue= div01.rgb[seq(3, 27, 3)],
-                 names=paste0("div01.", 1:9),
-                 maxColorValue=255)
+                            green=div01.rgb[seq(2, 26, 3)],
+                            blue= div01.rgb[seq(3, 27, 3)],
+                            names=paste0("div01.", 1:9),
+                            maxColorValue=255)
 
     div01.theme <- lattice::simpleTheme(col=div01,
-                               col.line=div01[1],
-                               alpha=1,
-                               pch=16,
-                               lwd=1,
-                               fill=div01[1],
-                               border="black"
-                               )
+                                        col.line=div01[1],
+                                        alpha=1,
+                                        pch=16,
+                                        lwd=1,
+                                        fill=div01[1],
+                                        border="black"
+                                        )
     #
     div01.theme[["strip.shingle"]]
     div01.theme[["strip.shingle"]]$col   <- div01
@@ -393,20 +393,20 @@ div02.theme <- function (...) {
     div02.rgb <- div01.rgb[c(1:9, 19:27)]
 
     div02 <- grDevices::rgb(red=div02.rgb[seq(1, 16, 3)],
-                 green=div02.rgb[seq(2, 17, 3)],
-                 blue= div02.rgb[seq(3, 18, 3)],
-                 names=paste0("div02.", 1:6),
-                 maxColorValue=255)
+                            green=div02.rgb[seq(2, 17, 3)],
+                            blue= div02.rgb[seq(3, 18, 3)],
+                            names=paste0("div02.", 1:6),
+                            maxColorValue=255)
     # pie(1:6, col=div02)
 
     div02.theme <- lattice::simpleTheme(col=div02,
-                               col.line=div02, #[1],
-                               alpha=1,
-                               pch=16,
-                               lwd=1,
-                               fill=div02, #[1],
-                               border="black"
-                               )
+                                        col.line=div02, #[1],
+                                        alpha=1,
+                                        pch=16,
+                                        lwd=1,
+                                        fill=div02, #[1],
+                                        border="black"
+                                        )
     # div02.theme$superpose.polygon$col
     #
     div02.theme[["strip.shingle"]]
@@ -442,20 +442,20 @@ div03.theme <- function (...) {
     # div03.rgb <- div01.rgb[c(1:9, 19:27)]
 
     div03 <- grDevices::rgb(red=div03.rgb[seq(1, 25, 3)],
-                 green=div03.rgb[seq(2, 26, 3)],
-                 blue= div03.rgb[seq(3, 27, 3)],
-                 names=paste0("div03.", 1:9),
-                 maxColorValue=255)
+                            green=div03.rgb[seq(2, 26, 3)],
+                            blue= div03.rgb[seq(3, 27, 3)],
+                            names=paste0("div03.", 1:9),
+                            maxColorValue=255)
     # pie(1:6, col=div03)
 
     div03.theme <- lattice::simpleTheme(col=div03,
-                               col.line=div03, #[1],
-                               alpha=1,
-                               pch=16,
-                               lwd=1,
-                               fill=div03, #[1],
-                               border="black"
-                               )
+                                        col.line=div03, #[1],
+                                        alpha=1,
+                                        pch=16,
+                                        lwd=1,
+                                        fill=div03, #[1],
+                                        border="black"
+                                        )
     # div03.theme$superpose.polygon$col
     #
     div03.theme[["strip.shingle"]]
@@ -495,20 +495,20 @@ qual01.theme <- function (...) {
     # qual01.rgb <- div01.rgb[c(1:9, 19:27)]
 
     qual01 <- grDevices::rgb(red=qual01.rgb[seq(1, 34, 3)],
-                 green=qual01.rgb[seq(2, 35, 3)],
-                 blue= qual01.rgb[seq(3, 36, 3)],
-                 names=paste0("qual01.", 1:12),
-                 maxColorValue=255)
+                             green=qual01.rgb[seq(2, 35, 3)],
+                             blue= qual01.rgb[seq(3, 36, 3)],
+                             names=paste0("qual01.", 1:12),
+                             maxColorValue=255)
     # pie(1:6, col=qual01)
 
     qual01.theme <- lattice::simpleTheme(col=qual01,
-                               col.line=qual01, #[1],
-                               alpha=1,
-                               pch=16,
-                               lwd=1,
-                               fill=qual01, #[1],
-                               border="black"
-                               )
+                                         col.line=qual01, #[1],
+                                         alpha=1,
+                                         pch=16,
+                                         lwd=1,
+                                         fill=qual01, #[1],
+                                         border="black"
+                                         )
     # qual01.theme$superpose.polygon$col
     #
     qual01.theme[["strip.shingle"]]
@@ -536,30 +536,30 @@ qual01.theme <- function (...) {
 qual02.theme <- function (...) {
     #
     qual02a.rgb <- c(c( 88, 132, 179), c(182, 206, 229),
-                    c(204, 102, 134), c(229, 181, 197),
-                    c(232, 123, 112), c(242, 206, 193),
-                    c(229, 207, 108), c(249, 235, 170),
-                    c(145, 190, 100), c(206, 229, 181),
-                    c( 91, 190, 148), c(182, 228, 209))
+                     c(204, 102, 134), c(229, 181, 197),
+                     c(232, 123, 112), c(242, 206, 193),
+                     c(229, 207, 108), c(249, 235, 170),
+                     c(145, 190, 100), c(206, 229, 181),
+                     c( 91, 190, 148), c(182, 228, 209))
 
     # qual02.rgb <- div01.rgb[c(1:3, 7:9)]
     qual02b.rgb <- qual02a.rgb[c(1:3, 7:9, 13:15, 19:21, 25:27, 31:33)]
 
     qual02 <- grDevices::rgb(red=qual02b.rgb[seq(1, 16, 3)],
-                 green=qual02b.rgb[seq(2, 17, 3)],
-                 blue= qual02b.rgb[seq(3, 18, 3)],
-                 names=paste0("qual02.", 1:6),
-                 maxColorValue=255)
+                             green=qual02b.rgb[seq(2, 17, 3)],
+                             blue= qual02b.rgb[seq(3, 18, 3)],
+                             names=paste0("qual02.", 1:6),
+                             maxColorValue=255)
     # pie(1:6, col=qual02)
 
     qual02.theme <- lattice::simpleTheme(col=qual02,
-                               col.line=qual02, #[1],
-                               alpha=1,
-                               pch=16,
-                               lwd=1,
-                               fill=qual02, #[1],
-                               border="black"
-                               )
+                                         col.line=qual02, #[1],
+                                         alpha=1,
+                                         pch=16,
+                                         lwd=1,
+                                         fill=qual02, #[1],
+                                         border="black"
+                                         )
     # qual02.theme$superpose.polygon$col
     #
     qual02.theme[["strip.shingle"]]
