@@ -53,7 +53,7 @@ NULL
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
 # getwd()
 # roxygen2::roxygenise()
-
+#
 # --------------------------------------------------------------------------------------------------
 # Compile package ..................................................................................
 #

@@ -10,7 +10,7 @@ Changes:
 
 * new function grepColNegNum()  show columns of dataframe with negative numbers
 * new function grepColFactors() show attributes in data.frame wich are factors
-* new function compTwoCols      compare two vectors for equals and NAs
+* new function compTwoVects()   compare two vectors for equals and NAs
 
 
 rrMisc v0.24    (Release date: 2017-02-07)

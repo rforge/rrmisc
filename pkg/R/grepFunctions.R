@@ -1,7 +1,7 @@
 #
 # ==================================================================================================
 #
-# --------------- grepColEntries                    show records with specified text              -- # {{{
+# --------------- grepColEntries                    show entries in data.frame with search string -- # {{{
 # RR 20140807               --------------------------------------------------------------------- --
 #
 
@@ -15,36 +15,37 @@
 #' @aliases grepColEntries grepColNames grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
 #' @export  grepColEntries grepColNames grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
 #' @param d.frame R-object
-#' @param col.name Name of column.
-#' @param part.name Search string in column names.
-#' @param \dots Arguments passed to further functions.
-#' @return Column names, values containing search string or entries not complete or multiple entries.
+#' @param col.name Name of column
+#' @param part.name Search string in column names
+#' @param \dots Arguments passed to further functions
+#' @return Column names, values containing search string or entries not complete or multiple entries
 #' @note under continuous developement
 #' @author Roland Rapold
 #' @seealso other utility-functions in this R-package
 #' @references none
 #' @examples
-#' 
-#' if(require("MASS")){
+#'
+#' if(require("MASS"))
+#' {
 #'     # load example data
 #'     data(crabs, package="MASS")
 #'     head(crabs)
 #'     #
-#'     # example for 'grepColEntries'
+#'     # example for grepColEntries()
 #'     print(head(grepColEntries(crabs, "sex", "M")))
 #'     print(head(grepColEntries(crabs, "index", "2")))
 #'     #
-#'     # example for 'grepColNames'
+#'     # example for grepColNames()
 #'     print(grepColNames(crabs, "W"))
 #'     #
-#'     # example for 'grepColNA'
+#'     # example for grepColNA()
 #'     print(grepColNA(crabs))
 #'     print(grepColNA(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)))
 #'     #
 #'     # example for 'grepObjNames'
 #'     print(grepObjNames("Pfad"))
 #'     #
-#'     # example for 'grepNotCompleteEntries'
+#'     # example for grepNotCompleteEntries()
 #'     df <- crabs
 #'     df[33, 4] <- NA
 #'     df[55, 5] <- NA
@@ -53,32 +54,30 @@
 #'     print(grepNotCompleteEntries(df))
 #'     rm(df)
 #'     #
-#'     # example for 'grepMultipleEntries'
+#'     # example for grepMultipleEntries()
 #'     # - with one column
 #'     print(head(grepMultipleEntries(crabs, "FL"), n=10))
 #'     #
 #'     # - with two columns
 #'     print(head(grepMultipleEntries(crabs, c("sex", "FL"))))
 #'     #
-#'     # example for 'grepColNegNum'
-#'     if(base::require("Mroz"))
+#'     # example for grepColNegNum()
+#'     if(require("car"))
 #'     {
 #'       data(Mroz, package="car")
-#'       summary(Mroz)
-#'       grepColNegNum(Mroz)
+#'       print(grepColNegNum(Mroz))
 #'     }
 #'     #
-#'     # example for 'grepColFactors'
-#'     if(base::require("Mroz"))
+#'     # example for grepColFactors()
+#'     if(require("car"))
 #'     {
 #'       data(Mroz, package="car")
 #'       Mroz$wc_ord <- as.ordered(Mroz$wc)
-#'       grepColFactors(Mroz)
+#'       print(grepColFactors(Mroz))
 #'     }
 #'     #
 #' }
-#' # }}}
-# --------------- grepColEntries                    show entries in data.frame with search string -- # {{{
+#' 
 grepColEntries <- function(d.frame, col.name, part.name, ...) {
     #
     # method                                        ............................................. ..
@@ -324,8 +323,7 @@ grepRowNames <- function(d.frame, part.name, ...) {
 # --------------- grepColNegNum                     show columns with negative values             .. # {{{
 # RR 20130920     ------------------------------------------------------------------------------- --
 #
-grepColNegNum <- function(x)
-{
+grepColNegNum <- function(x) {
     #
     # ----------------------------------------------------------------------------------------------
     # method
@@ -385,8 +383,7 @@ grepColNegNum <- function(x)
 # # }}}
 # --------------- grepColFactors                    show factor columns in data.frame             .. # {{{
 # RR 20150601     ------------------------------------------------------------------------------- --
-grepColFactors <- function(x)
-{
+grepColFactors <- function(x) {
     #
     # ----------------------------------------------------------------------------------------------
     # method
