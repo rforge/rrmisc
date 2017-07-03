@@ -4,15 +4,15 @@
 \alias{cols3.theme}
 \alias{cols4.theme}
 \alias{cols7.theme}
+\alias{seq01.theme}
+\alias{seq02.theme}
+\alias{seq03.theme}
+\alias{seq04.theme}
 \alias{div01.theme}
 \alias{div02.theme}
 \alias{div03.theme}
 \alias{qual01.theme}
 \alias{qual02.theme}
-\alias{seq01.theme}
-\alias{seq02.theme}
-\alias{seq03.theme}
-\alias{seq04.theme}
 \title{Custom color schemes for lattict graphics}
 \usage{
 cols3.theme(...)
@@ -79,11 +79,10 @@ if(!require(lattice)&require(latticeExtra))
 }
 
 }
-\author{
-Roland Rapold
-}
 \references{
 for seq0x.theme(), qal0x.theme, and div0x.theme() https://datavisualization.ch/inside/how-we-created-color-scales/
 }
+\author{
+Roland Rapold
+}
 \keyword{graphics}
-

@@ -1,4 +1,17 @@
 
+
+rrMisc v0.26    (Release date: 2017-07-03)
+============
+
+Changes:
+
+* descrTable
+    - now can calculate the sum of indicated attributes
+    - for group sizes (attribute 'i') the variable 'group.size.total' indicates the column which
+      contains total size of the investigated group. For group.size.total = 0 there is no column
+      containing all individuals but the total is made up of the sum of all given data.frames.
+
+
 rrMisc v0.25    (Release date: 2017-03-23)
 ============
 

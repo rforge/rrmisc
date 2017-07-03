@@ -62,13 +62,12 @@ if(require("car")) {
 
 } 
 }
-\author{
-Roland Rapold
-}
 \references{
 none
 }
 \seealso{
 other utility-functions in this R-package
 }
-
+\author{
+Roland Rapold
+}

@@ -27,11 +27,10 @@ Calculate p-values from z-statistics.
         pFromF(f_value= 1.96, df1=10, df2=1000, two.sided=TRUE)
 
 }
-\author{
-Roland Rapold
-}
 \seealso{
 \code{Link{pFromT}} and \code{Link{pFromF}}
 }
+\author{
+Roland Rapold
+}
 \keyword{p-value}
-

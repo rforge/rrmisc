@@ -118,6 +118,15 @@ createDefMeasures <- function (d.data, var.list)
                 def.measures[i.row, "measure_prec_1"] <- 1
                 def.measures[i.row, "measure_prec_2"] <- 1
                 i.row <- i.row + 1
+
+                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
+                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
+                def.measures[i.row, "measure_1"] <- "sum"
+                def.measures[i.row, "measure_2"] <- NA
+                def.measures[i.row, "measure_ref_level"] <- NA
+                def.measures[i.row, "measure_prec_1"] <- 1
+                def.measures[i.row, "measure_prec_2"] <- NA
+                i.row <- i.row + 1
             }
             if(pasteClass(d.data[, i])=="integer")
             {
@@ -137,6 +146,15 @@ createDefMeasures <- function (d.data, var.list)
                 def.measures[i.row, "measure_ref_level"] <- NA
                 def.measures[i.row, "measure_prec_1"] <- 1
                 def.measures[i.row, "measure_prec_2"] <- 1
+                i.row <- i.row + 1
+
+                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
+                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
+                def.measures[i.row, "measure_1"] <- "sum"
+                def.measures[i.row, "measure_2"] <- NA
+                def.measures[i.row, "measure_ref_level"] <- NA
+                def.measures[i.row, "measure_prec_1"] <- 1
+                def.measures[i.row, "measure_prec_2"] <- NA
                 i.row <- i.row + 1
             }
             if(pasteClass(d.data[, i])=="factor")
@@ -213,24 +231,25 @@ createDefMeasures <- function (d.data, var.list)
 # --------------- descrMeasures                  calculation of statistics for one entry          .. # {{{
 # RR 20150325     ------------------------------------------------------------------------------- --
 #
-# first measure
-#   - count             factor oder Wert mit 1 Auspraegung (<- noch zu kontrollieren!!)
+# Possible characteristics:
+#   - count             factor or Value with 1 value (Auspraegung) (<- noch zu kontrollieren!!)
 #   - count_distinct    factor
-#   - portion           factor (for 'i' horizontal 100%, else  vertical 100%)
+#   - portion           factor -- vertical 100%, otherwise horizontal 100%
 #   - mean              numeric
 #   - wtd_mean          numeric
 #   - sd                numeric
 #   - median            numeric
 #   - wtd_median        numeric
 #   - IQR               numeric
-# second measure to a first measure
-#       - portion       factor (for 'i' horizontal 100%, else  vertical 100%)
-#       - mean          numeric
-#       - wtd_mean      numeric
-#       - sd            numeric
-#       - median        numeric
-#       - wtd_median    numeric
-#       - IQR           numeric
+#   - sum               numeric
+# Second characteristics after the first
+#       - portion       factor -- vertical 100%, otherwise horizontal 100%
+#       - mean          numerisch
+#       - wtd_mean      numerisch
+#       - sd            numerisch
+#       - median        numerisch
+#       - wtd_median    numerisch
+#       - IQR           numerisch
 #
 # special case for variable 'i' --> interpreted as record entry for group size
 #
@@ -255,7 +274,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
                            , test.gr                    # data columns to test
                            , lang                       # language 'de' or 'en'
                            , group.size.total           # data column containing the ttotal (if any)
-                                                        # 0 (default) = last data column
+                                                        # 0 (default) = no total column defined
                            , big.mark
                            , verbose)                   # 0 bis 2: increasing verbosity
 {
@@ -294,7 +313,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     #
     #    first measure
     if(!measures[1]%in%c("count", "count_distinct", "portion", "mean", "wtd_mean", "sd", "median",
-                         "wtd_median", "IQR", "min", "max"))
+                         "wtd_median", "IQR", "min", "max", "sum"))
     {
         return(print(paste("selected first measure is not valid:", measures[1])))
     }
@@ -302,7 +321,8 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     #    second measure
     if(length(measures)>1 & !is.na(measures[2]))
     {
-        if(!measures[2]%in%c("portion", "mean", "wtd_mean", "sd", "median", "wtd_median", "IQR", "min", "max"))
+        if(!measures[2]%in%c("portion", "mean", "wtd_mean", "sd", "median",
+                             "wtd_median", "IQR", "min", "max", "sum"))
         {
             return(print(paste("selected second measure ist not valid:", measures[2])))
         }
@@ -443,7 +463,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     # ------------------------------------------------------------------------------------------- --
     # calculate 1. statistics
     # ------------------------------------------------------------------------------------------- --
-    # Anzahl                                            'count'                                   .. # {{{
+    # Number of occurrence                              'count'                                   .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     # NAs not accounted for !
@@ -501,7 +521,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     #
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
-    # Anzahl verschiedene                               'count_distinct'                          .. # {{{
+    # Number of differen occurrences                    'count_distinct'                          .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     # NAs accounted for !
@@ -552,7 +572,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     #
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
-    # Anteile                                           'portion'                                 .. # {{{
+    # Portions of different levels                      'portion'                                 .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     # NAs not accounted for !
@@ -706,7 +726,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     #
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
-    # Mittelwert                                        'mean'                                    .. # {{{
+    # Mean                                              'mean'                                    .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     if(measures[1]=="mean")
@@ -755,7 +775,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     #
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
-    # Mittelwert gewichtet                              'wtd_mean'                                .. # {{{
+    # Mean weighted                                     'wtd_mean'                                .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     if(measures[1]=="wtd_mean")
@@ -857,7 +877,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     #
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
-    # Median gewichtet                                  'wtd_median'                              .. # {{{
+    # Median weighted                                   'wtd_median'                              .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     if(measures[1]=="wtd_median")
@@ -909,7 +929,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     #
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
-    # Standardabweichung                                'sd'                                      .. # {{{
+    # Standard deviation                                'sd'                                      .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
     if(measures[1]=="sd")
@@ -1007,6 +1027,55 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     #
     # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
     ## }}}
+    # Sum of variable                                   'sum'                                     .. # {{{
+    # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
+    #
+    if(measures[1]=="sum")
+    {
+        if(dim.data==1)
+        {
+            measure.1 <- c(NA
+                        , base::sum(sub.data.1, na.rm=TRUE))
+        }
+        if(dim.data==2)
+        {
+            measure.1 <- c(NA
+                        , base::sum(sub.data.1, na.rm=TRUE)
+                        , base::sum(sub.data.2, na.rm=TRUE))
+        }
+        if(dim.data==3)
+        {
+            measure.1 <- c(NA
+                        , base::sum(sub.data.1, na.rm=TRUE)
+                        , base::sum(sub.data.2, na.rm=TRUE)
+                        , base::sum(sub.data.3, na.rm=TRUE))
+        }
+        if(dim.data==4)
+        {
+            measure.1 <- c(NA
+                        , base::sum(sub.data.1, na.rm=TRUE)
+                        , base::sum(sub.data.2, na.rm=TRUE)
+                        , base::sum(sub.data.3, na.rm=TRUE)
+                        , base::sum(sub.data.4, na.rm=TRUE))
+        }
+        if(dim.data==5)
+        {
+            measure.1 <- c(NA
+                        , base::sum(sub.data.1, na.rm=TRUE)
+                        , base::sum(sub.data.2, na.rm=TRUE)
+                        , base::sum(sub.data.3, na.rm=TRUE)
+                        , base::sum(sub.data.4, na.rm=TRUE)
+                        , base::sum(sub.data.5, na.rm=TRUE))
+        }
+
+        label.1   <- ifelse(lang=="de", "Summe", "sum")
+
+        if(verbose==2) print(paste("sd - measure.1: -- :", measure.1))
+        if(verbose==2) print(paste("sd - label.1: -- :", label.1))
+    }
+    #
+    # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+    ## }}}
     # reading out result                                                                          .. # {{{
     # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx x
     #
@@ -1019,7 +1088,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     # ------------------------------------------------------------------------------------------- --
     if(length(measures)>1)
     {
-        # Anteil horizontal -- nur nach "count"         'portion' 'i' after 'count'               .. # {{{
+        # Portions horizontal -- only after "count"     'portion' 'i' after 'count'               .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(measures[1]=="count" & measures[2]=="portion" & var.measure.name=="i")
@@ -1031,70 +1100,94 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
             # dim.data   <- 4
             # group.size.total <- 3
             #
-            # default column for the total is last data column
-            if(group.size.total==0) group.size.total <- dim.data
+            #
+            # check all i's are filled with 1
+            # str(Mroz$i)
+            # sum(Mroz$i!=1)
+            # sub.data.1 <- Mroz[1:12, ]$i
+            # i <- 1
+            # dim.data   <- 2
+            for(i in c(1:dim.data))
+            {
+                if(sum(get(paste0("sub.data.", i))!=1)!=0)
+                {
+                    stop(print(paste("all i's should have value 1 in data.frame", i)))
+                }
+            }
+            if(!group.size.total%in%c(0:dim.data))
+            {
+                print(paste("dim.data: -- ", dim.data))
+                print(paste("group.size.total: -- ", group.size.total))
+                stop("specify 'group.size.total' between 0 and the number of data.frames 'dim.data'")
+            }
+            #
+            total_i <- 0
+            # group.size.total = 0: there is no total column, make total of sum of columns
+            if(group.size.total==0)
+            {
+                for(i in c(1:dim.data))
+                {
+                    total_i <- total_i + length(get(paste0("sub.data.", i)))
+                }
+            } else {
+                total_i <- length(get(paste0("sub.data.", group.size.total)))
+            }
             #
             # calculate relative parts to entry in total column
-            dim.range <- c(1:dim.data)
-            if(group.size.total%in%dim.range)
-            {
-                dim.range.part <- dim.range[-which(dim.range==group.size.total)]
-                n.vector <- 1
-                for(i in dim.range)
-                {
-                    n.vector[i] <- length(stats::na.omit(get(paste0("sub.data.", i))))
-                }
-                n.vector <- n.vector / sum(n.vector[dim.range.part])
-                measure.2 <- c(NA, n.vector*100)
-            } else {
-                measure.2 <- c(NA, rep(0, dim.data))
-            }
+            # if(group.size.total%in%dim.range)
+            # {
+            #     dim.range.part <- dim.range[-which(dim.range==group.size.total)]
+            #     n.vector <- 1
+            #     for(i in dim.range)
+            #     {
+            #         n.vector[i] <- length(stats::na.omit(get(paste0("sub.data.", i))))
+            #     }
+            #     n.vector <- n.vector / sum(n.vector[dim.range.part])
+            #     measure.2 <- c(NA, n.vector*100)
+            # } else {
+            #     measure.2 <- c(NA, rep(0, dim.data))
+            # }
 
-            # if(dim.data==1)
-            # {
-            #     measure.2 <- c(NA
-            #                 , length(stats::na.omit(sub.data.1)))
-            #     tot        <- sum(measure.2[2:2]) / 2
-            #     measure.2[2:2] <- measure.2[2:2] * 100 / tot
-            # }
-            # if(dim.data==2)
-            # {
-            #     measure.2 <- c(NA
-            #                 , length(stats::na.omit(sub.data.1))
-            #                 , length(stats::na.omit(sub.data.2)))
-            #     tot        <- sum(measure.2[2:3]) / 2
-            #     measure.2[2:3] <- measure.2[2:3] * 100 / tot
-            # }
-            # if(dim.data==3)
-            # {
-            #     measure.2 <- c(NA
-            #                 , length(stats::na.omit(sub.data.1))
-            #                 , length(stats::na.omit(sub.data.2))
-            #                 , length(stats::na.omit(sub.data.3)))
-            #     tot        <- sum(measure.2[2:4]) / 2
-            #     measure.2[2:4] <- measure.2[2:4] * 100 / tot
-            # }
-            # if(dim.data==4)
-            # {
-            #     measure.2 <- c(NA
-            #                 , length(stats::na.omit(sub.data.1))
-            #                 , length(stats::na.omit(sub.data.2))
-            #                 , length(stats::na.omit(sub.data.3))
-            #                 , length(stats::na.omit(sub.data.4)))
-            #     tot        <- sum(measure.2[2:5]) / 2
-            #     measure.2[2:5] <- measure.2[2:5] * 100 / tot
-            # }
-            # if(dim.data==5)
-            # {
-            #     measure.2 <- c(NA
-            #                 , length(stats::na.omit(sub.data.1))
-            #                 , length(stats::na.omit(sub.data.2))
-            #                 , length(stats::na.omit(sub.data.3))
-            #                 , length(stats::na.omit(sub.data.4))
-            #                 , length(stats::na.omit(sub.data.5)))
-            #     tot        <- sum(measure.2[2:6]) / 2
-            #     measure.2[2:6] <- measure.2[2:6] * 100 / tot
-            # }
+            if(dim.data==1)
+            {
+                measure.2 <- c(NA
+                               , length(stats::na.omit(sub.data.1)))
+                measure.2[2:2] <- measure.2[2:2] * 100 / total_i
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- c(NA
+                               , length(stats::na.omit(sub.data.1))
+                               , length(stats::na.omit(sub.data.2)))
+                measure.2[2:3] <- measure.2[2:3] * 100 / total_i
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- c(NA
+                               , length(stats::na.omit(sub.data.1))
+                               , length(stats::na.omit(sub.data.2))
+                               , length(stats::na.omit(sub.data.3)))
+                measure.2[2:4] <- measure.2[2:4] * 100 / total_i
+            }
+            if(dim.data==4)
+            {
+                measure.2 <- c(NA
+                               , length(stats::na.omit(sub.data.1))
+                               , length(stats::na.omit(sub.data.2))
+                               , length(stats::na.omit(sub.data.3))
+                               , length(stats::na.omit(sub.data.4)))
+                measure.2[2:5] <- measure.2[2:5] * 100 / total_i
+            }
+            if(dim.data==5)
+            {
+                measure.2 <- c(NA
+                               , length(stats::na.omit(sub.data.1))
+                               , length(stats::na.omit(sub.data.2))
+                               , length(stats::na.omit(sub.data.3))
+                               , length(stats::na.omit(sub.data.4))
+                               , length(stats::na.omit(sub.data.5)))
+                measure.2[2:6] <- measure.2[2:6] * 100 / total_i
+            }
 
             measure.2 <- t(data.frame(measure.2))
             label.2   <- ifelse(lang=="de", "%", "%")
@@ -1105,7 +1198,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Anteil vertikal   -- bei Faktoren             'portion'     nach 'count'                .. # {{{
+        # Portions vertical   -- for factors            'portion'     after 'count'               .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(measures[1]=="count" & measures[2]=="portion" & var.measure.name!="i")
@@ -1160,7 +1253,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Mittelwert                                    'mean'                                    .. # {{{
+        # Mean                                          'mean'                                    .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(measures[2]=="mean")
@@ -1307,7 +1400,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Mittelwert gewichtet                          'wtd_mean'                                .. # {{{
+        # Mean weighted                                 'wtd_mean'                                .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(measures[2]=="wtd_mean" & i.weights==1)  # nur wenn erste Kennzahl auch gewichtet
@@ -1407,7 +1500,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Median gewichtet                              'wtd_median'                              .. # {{{
+        # Median weighted                               'wtd_median'                              .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
         #
         if(measures[2]=="wtd_median" & i.weights==1)    # nur wenn erste Kennzahl auch gewichtet
@@ -1458,7 +1551,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
         ## }}}
-        # Standardabweichung                            'sd'                                      .. # {{{
+        # Standard deviation                            'sd'                                      .. # {{{
         # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
         #
         if(measures[2]=="sd")
@@ -1552,6 +1645,55 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 
             if(verbose==2) print(paste("IQR - measure.2: -- :", measure.2))
             if(verbose==2) print(paste("IQR - label.2: -- :", label.2))
+        }
+        #
+        # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+        ## }}}
+        # Sum of variable                               'sd'                                      .. # {{{
+        # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx 
+        #
+        if(measures[2]=="sum")
+        {
+            if(dim.data==1)
+            {
+                measure.2 <- c(NA
+                               , base::sum(sub.data.1, na.rm=TRUE))
+            }
+            if(dim.data==2)
+            {
+                measure.2 <- c(NA
+                               , base::sum(sub.data.1, na.rm=TRUE)
+                               , base::sum(sub.data.2, na.rm=TRUE))
+            }
+            if(dim.data==3)
+            {
+                measure.2 <- c(NA
+                               , base::sum(sub.data.1, na.rm=TRUE)
+                               , base::sum(sub.data.2, na.rm=TRUE)
+                               , base::sum(sub.data.3, na.rm=TRUE))
+            }
+            if(dim.data==4)
+            {
+                measure.2 <- c(NA
+                               , base::sum(sub.data.1, na.rm=TRUE)
+                               , base::sum(sub.data.2, na.rm=TRUE)
+                               , base::sum(sub.data.3, na.rm=TRUE)
+                               , base::sum(sub.data.4, na.rm=TRUE))
+            }
+            if(dim.data==5)
+            {
+                measure.2 <- c(NA
+                               , base::sum(sub.data.1, na.rm=TRUE)
+                               , base::sum(sub.data.2, na.rm=TRUE)
+                               , base::sum(sub.data.3, na.rm=TRUE)
+                               , base::sum(sub.data.4, na.rm=TRUE)
+                               , base::sum(sub.data.5, na.rm=TRUE))
+            }
+
+            label.2   <- ifelse(lang=="de", "Summe", "sum")
+
+            if(verbose==2) print(paste("sd - measure.2: -- :", measure.2))
+            if(verbose==2) print(paste("sd - label.2: -- :", label.2))
         }
         #
         # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
@@ -2314,23 +2456,24 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 ## }}}
 # ==================================================================================================
 #
-# --------------- descrTable                     Kennzahlen deskriptiv -- allgemeine Funktion     .. # {{{
+# --------------- descrTable                     characteriscis deskriptive                       .. # {{{
 # RR 20150325     ------------------------------------------------------------------------------- --
 #
-# Kennzahlen fuer Subgruppen
+# Characteristic number for subroups
 #
-# Moegliche Kennzahlenaufrufe:
-#   - count             Faktor oder Wert mit 1 Auspraegung (<- noch zu kontrollieren!!)
-#   - count_distinct    Faktor
-#   - portion           Faktor -- vertikal 100%, sonst horizontal 100%
-#   - mean              numerisch
-#   - wtd_mean          numerisch
-#   - sd                numerisch
-#   - median            numerisch
-#   - wtd_median        numerisch
-#   - IQR               numerisch
-# Als zweite Kennzahl zusaetzlich zu einer bisherigen Kennzahl
-#       - portion       Faktor -- vertikal 100%, sonst horizontal 100%
+# Possible characteristics:
+#   - count             factor or Value with 1 value (Auspraegung) (<- noch zu kontrollieren!!)
+#   - count_distinct    factor
+#   - portion           factor -- vertical 100%, otherwise horizontal 100%
+#   - mean              numeric
+#   - wtd_mean          numeric
+#   - sd                numeric
+#   - median            numeric
+#   - wtd_median        numeric
+#   - IQR               numeric
+#   - sum               numeric
+# Second characteristics after the first
+#       - portion       factor -- vertical 100%, otherwise horizontal 100%
 #       - mean          numerisch
 #       - wtd_mean      numerisch
 #       - sd            numerisch
@@ -2338,12 +2481,11 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #       - wtd_median    numerisch
 #       - IQR           numerisch
 #
-# Spezialfall: Variable 'i' --> wird als Indikator 'Recordeinheit' aufgefasst und als
-#                               'Kollektivgroesse' ausgegeben!
+# Special case: Variable 'i' --> is seen as indicator (record unit)' and shown as
+#                                'group size' (Kollektivgroesse)
 #
 # descrTable  <- function(descr.table=NULL          # Resultattabelle (vorformatiert)
-
-
+#
 #' Create descritive table
 #' 
 #' Create descriptive table with up to five subgroups/total and comparison
@@ -2365,7 +2507,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #' @param label.compact If to compact result columns label and measure or make two columns.
 #' @param label.width Width of first column if label.compact==TRUE.
 #' @param test.gr Index of columns to compare.
-#' @param lang Language for certain key words, 'de' or 'en'.
+#' @param lang Language for certain key words german 'de' or english 'en'.
 #' @param group.size.total Column for group size total (if 'portion' is requested).
 #' @param big.mark Thousand separator as used in format().
 #' @param verbose Verbose level between 0 and 2.
@@ -2380,13 +2522,13 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #' if(require("car"))
 #' {
 #'     # load sample data 'Mroz' from package 'car'
-#'     data(Mroz)
+#'     data(Mroz, package="car")
 #'     str(Mroz)
-#' 
+#'
 #'     # insert attribute 'i' for population size
 #'     Mroz <- merge(data.frame(i=as.factor(1)), Mroz)
 #'     str(Mroz)
-#' 
+#'
 #'     # reference list for variable labels
 #'     var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
 #'                            var_label=c("population",
@@ -2411,6 +2553,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #' 
 #'     # run different scenarios with modified data
 #'     #  - variation 1: default, no adjustments
+#'     descrTable1 <- NULL
 #'     descrTable1 <- descrTable(def.measures = def.measures.1,
 #'                               sub.d1 = subset(Mroz, hc=="no"),
 #'                               sub.d2 = subset(Mroz, hc=="yes"),
@@ -2431,7 +2574,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #'     if(require("doBy"))
 #'     {
 #'         #  - variation 1: verify statistics
-#'         print(doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median)))
+#'         print(doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median, sum)))
 #'         print(table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc")))
 #'         print(table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc")))
 #'     }

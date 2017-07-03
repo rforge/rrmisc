@@ -43,13 +43,12 @@ plot(x=x.sam, y=y.sam, yaxt="n", xlim=c(-0.5, 1.5), ylim=c(-0.5, 1.5))
 axis(2, at=p.lab$position ,labels=p.lab$text, las=1, cex.axis=0.8)
 
 }
-\author{
-Roland Rapold
-}
 \references{
 none
 }
 \seealso{
 see other functions in this R-package
 }
-
+\author{
+Roland Rapold
+}

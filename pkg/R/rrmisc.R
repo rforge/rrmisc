@@ -68,7 +68,7 @@ NULL
 # --------------------------------------------------------------------------------------------------
 # Remove old version and install new package .......................................................
 #
-# rrMiscVers <- "0.25"
+# rrMiscVers <- "0.26"
 # detach("package:rrMisc", character.only=TRUE)
 # unloadNamespace("rrMisc")
 # remove.packages("rrMisc")

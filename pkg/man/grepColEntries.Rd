@@ -2,14 +2,14 @@
 % Please edit documentation in R/grepFunctions.R
 \name{grepColEntries}
 \alias{grepColEntries}
-\alias{grepColFactors}
-\alias{grepColNA}
 \alias{grepColNames}
-\alias{grepColNegNum}
-\alias{grepMultipleEntries}
-\alias{grepNotCompleteEntries}
+\alias{grepColNA}
 \alias{grepObjNames}
+\alias{grepNotCompleteEntries}
+\alias{grepMultipleEntries}
 \alias{grepRowNames}
+\alias{grepColNegNum}
+\alias{grepColFactors}
 \title{obtain grep components of object easily}
 \usage{
 grepColEntries(d.frame, col.name, part.name, ...)
@@ -91,13 +91,12 @@ if(require("MASS"))
 }
 
 }
-\author{
-Roland Rapold
-}
 \references{
 none
 }
 \seealso{
 other utility-functions in this R-package
 }
-
+\author{
+Roland Rapold
+}

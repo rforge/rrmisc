@@ -39,7 +39,7 @@ descrTable(def.measures, sub.d1, sub.d2 = NULL, sub.d3 = NULL,
 
 \item{test.gr}{Index of columns to compare.}
 
-\item{lang}{Language for certain key words, 'de' or 'en'.}
+\item{lang}{Language for certain key words german 'de' or english 'en'.}
 
 \item{group.size.total}{Column for group size total (if 'portion' is requested).}
 
@@ -65,7 +65,7 @@ under continuous developement
 if(require("car"))
 {
     # load sample data 'Mroz' from package 'car'
-    data(Mroz)
+    data(Mroz, package="car")
     str(Mroz)
 
     # insert attribute 'i' for population size
@@ -96,6 +96,7 @@ if(require("car"))
 
     # run different scenarios with modified data
     #  - variation 1: default, no adjustments
+    descrTable1 <- NULL
     descrTable1 <- descrTable(def.measures = def.measures.1,
                               sub.d1 = subset(Mroz, hc=="no"),
                               sub.d2 = subset(Mroz, hc=="yes"),
@@ -116,7 +117,7 @@ if(require("car"))
     if(require("doBy"))
     {
         #  - variation 1: verify statistics
-        print(doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median)))
+        print(doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median, sum)))
         print(table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc")))
         print(table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc")))
     }
@@ -180,13 +181,12 @@ if(require("car"))
 
 } 
 }
-\author{
-Roland Rapold
-}
 \references{
 none
 }
 \seealso{
 other utility-functions in this R-package
 }
-
+\author{
+Roland Rapold
+}

@@ -31,11 +31,10 @@ Calculate p-values from t-statistics.
         formatPValue(p_value, digits=3)
 
 }
-\author{
-Roland Rapold
-}
 \seealso{
 \code{Link{pFromZ}} and \code{Link{pFromF}}
 }
+\author{
+Roland Rapold
+}
 \keyword{p-value}
-

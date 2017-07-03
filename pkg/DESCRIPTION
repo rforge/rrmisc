@@ -1,6 +1,6 @@
 Package: rrMisc
-Version: 0.25
-Date: 2017-03-23
+Version: 0.26
+Date: 2017-07-03
 Title: Little Helpers
 Author: Roland Rapold
 Maintainer: Roland Rapold <roland.rapold@alumni.ethz.ch>
@@ -17,4 +17,4 @@ Description: Little helpers for the daily work with R.
 License: GPL (>=2)
 LazyData: no
 NeedsCompilation: no
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

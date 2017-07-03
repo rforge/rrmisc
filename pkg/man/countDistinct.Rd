@@ -44,10 +44,9 @@ if(require("MASS"))
 }
 
 }
-\author{
-Roland Rapold
-}
 \references{
 none
 }
-
+\author{
+Roland Rapold
+}

@@ -40,13 +40,12 @@ under continuous developement
     formatPValue(x, digits=3)
 
 }
-\author{
-Roland Rapold
-}
 \references{
 none
 }
 \seealso{
 other utility-functions in this R-package
 }
-
+\author{
+Roland Rapold
+}
