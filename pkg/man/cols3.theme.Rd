@@ -31,7 +31,6 @@ color to another color 'div..' and some qualitative colors 'qual..'.
 under continuous developement
 }
 \examples{
-
 if(!require(lattice)&require(latticeExtra))
 {
     print("please install packages 'lattice' and 'latticeExtra' for this example to work!")
@@ -77,7 +76,6 @@ if(!require(lattice)&require(latticeExtra))
     image(x=c(1:6), y=1, z=matrix(1:6, ncol=1), col=qual02.theme()$superpose.polygon$col,
           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="qual02.theme()", cex.main=2)
 }
-
 }
 \references{
 for seq0x.theme(), qal0x.theme, and div0x.theme() https://datavisualization.ch/inside/how-we-created-color-scales/

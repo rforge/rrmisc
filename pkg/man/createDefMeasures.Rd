@@ -28,7 +28,6 @@ utility function for formating
 under continuous developement
 }
 \examples{
-
 if(require("car")) {
     # load sample data 'Mroz' from package 'car'
     data(Mroz)

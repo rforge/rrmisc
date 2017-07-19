@@ -1,8 +1,5 @@
-#' sample data
-#' 
-#' sport measures from 15 athletes
-#' 
-#' 
+#' @title sample data
+#' @description sport measures from 15 athletes
 #' @name d.sport
 #' @docType data
 #' @format
@@ -18,22 +15,16 @@
 #' @references "http://stat.ethz.ch/Teaching/Datasets/WBL/sport.dat" accessed 2016-06-03
 #' @keywords data
 #' @examples
-#' 
 #'     data(d.sport)
 #'     print(d.sport)
-#' 
 NULL
 
-#' Some R-helpers
-#' 
-#' Some helpers of R to process data smoothly
-#' 
-#' The main function are the 'grep' functions for quickly accessing information of data objects and
-#' the descrTable() function to generate descriptive statistics of a data object.
-#' 
+#' @title Some R-helpers
+#' @description Some helpers of R to process data smoothly
+#' @details The main function are the 'grep' functions for quickly accessing information of data
+#' objects and the descrTable() function to generate descriptive statistics of a data object.
 #' @name rrMisc-package
 #' @import latticeExtra
-#' 
 # #' @aliases rrMisc-package rrMisc
 # #' @docType package
 # #' @author Author and Maintainer: roland.rapold@@alumni.ethz.ch
@@ -52,12 +43,15 @@ NULL
 # -->> delete help-files so that they can be rebuilt by roxygen2
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
 # getwd()
+# library(roxygen2)
 # roxygen2::roxygenise()
 #
 # --------------------------------------------------------------------------------------------------
 # Compile package ..................................................................................
 #
-# rrMiscVers <- "0.25"
+# rrMiscVers <- "0.27"
+# -- adjust the version number and date in the 'DESCRIPTION' file
+# -- update NEWS file
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
 # getwd()
 # system(       "R --vanilla CMD build pkg")
@@ -68,7 +62,7 @@ NULL
 # --------------------------------------------------------------------------------------------------
 # Remove old version and install new package .......................................................
 #
-# rrMiscVers <- "0.26"
+# rrMiscVers <- "0.27"
 # detach("package:rrMisc", character.only=TRUE)
 # unloadNamespace("rrMisc")
 # remove.packages("rrMisc")

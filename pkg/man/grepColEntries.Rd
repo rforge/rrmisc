@@ -36,7 +36,6 @@ functions facilitating handling of objects
 under continuous developement
 }
 \examples{
-
 if(require("MASS"))
 {
     # load example data
@@ -89,7 +88,6 @@ if(require("MASS"))
     }
     #
 }
-
 }
 \references{
 none

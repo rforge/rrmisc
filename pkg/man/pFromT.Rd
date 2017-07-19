@@ -19,6 +19,9 @@ corresponding p-Value from the t-, z- or F-statistics
 \description{
 Calculate p-values from t-statistics.
 }
+\details{
+utility function for conversion of p-values
+}
 \examples{
         pFromT(t_value=1.96, df=10)
         pFromT(t_value=1.96, df=100)
@@ -29,7 +32,6 @@ Calculate p-values from t-statistics.
         p_value <- pFromT(t_value=x, df=100)
         p_value
         formatPValue(p_value, digits=3)
-
 }
 \seealso{
 \code{Link{pFromZ}} and \code{Link{pFromF}}

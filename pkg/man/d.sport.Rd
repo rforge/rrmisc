@@ -17,10 +17,8 @@
 sport measures from 15 athletes
 }
 \examples{
-
     data(d.sport)
     print(d.sport)
-
 }
 \references{
 "http://stat.ethz.ch/Teaching/Datasets/WBL/sport.dat" accessed 2016-06-03

@@ -21,11 +21,13 @@ named vector of numbers
 \description{
 SQL-command 'count(distinct ...)' convreted to R
 }
+\details{
+Returns the number of distinct values and indicates if there are NAs present
+}
 \note{
 under continuous developement
 }
 \examples{
-
 print("Example for vector")
                       c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)
                length(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6))
@@ -42,7 +44,6 @@ if(require("MASS"))
     print(countDistinct(crabs[, c("sex")]))
     print(countDistinct(crabs[, c("FL")]))
 }
-
 }
 \references{
 none

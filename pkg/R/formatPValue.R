@@ -3,13 +3,12 @@
 # --------------- formatPValaue                     format p-values                               --# {{{
 # RR 20130920     ------------------------------------------------------------------------------- --
 #
-
-
-#' Format p-values
+# Manual          ------------------------------------------------------------------------------- --
+#' @title Format p-values
 #' 
-#' Format p-values
+#' @description Format p-values
 #' 
-#' utility function for formating
+#' @details utility function for formating
 #' 
 #' @param x p-value
 #' @param digits number of decimal-digits
@@ -19,9 +18,7 @@
 #' @author Roland Rapold
 #' @seealso other utility-functions in this R-package
 #' @references none
-#' @export
 #' @examples
-#' 
 #'     formatPValue(0.23478,     digits=3)
 #'     formatPValue(0.023478,    digits=3)
 #'     formatPValue(0.0023478,   digits=3)
@@ -33,7 +30,7 @@
 #' 
 #'     x <- c(seq(0.0001, 0.6, 0.01), NA, seq(0.6001, 1.0, 0.01))
 #'     formatPValue(x, digits=3)
-#' 
+#' @export
 formatPValue <- function(x, digits=3, ...) {
     #
     # method                                        ............................................. ..

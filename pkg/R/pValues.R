@@ -3,11 +3,10 @@
 #
 # --------------- pFromT                         p-value from t-value                             .. # {{{
 # RR 20150109     ---------------------------------------------------
-
-
+# Manual          ------------------------------------------------------------------------------- --
 #' @title       Calculate p-values from t-statistics.
 #' @description Calculate p-values from t-statistics.
-#' @export
+#' @details utility function for conversion of p-values
 #' @param t_value The t-statistics to be converted into a p-Value.
 #' @param df Degree of freedom in t-statistics.
 #' @param two.sided Indicator of the statistics be calculatede as two-sided (TURE) or one-sided (FALSE).
@@ -25,7 +24,7 @@
 #'         p_value <- pFromT(t_value=x, df=100)
 #'         p_value
 #'         formatPValue(p_value, digits=3)
-#' 
+#' @export
 pFromT <- function(t_value=1.96, df=10, two.sided=FALSE)
 {
     #
@@ -45,9 +44,10 @@ pFromT <- function(t_value=1.96, df=10, two.sided=FALSE)
 #
 # --------------- pFromZ                         p-value from z-value (normal distribution)       .. # {{{
 # RR 20150109     ---------------------------------------------------
+# Manual          ------------------------------------------------------------------------------- --
 #' @title       Calculate p-values from z-statistics.
 #' @description Calculate p-values from z-statistics.
-#' @export
+#' @details utility function for conversion of p-values
 #' @param z_value The z-statistics to be converted into a p-Value.
 #' @param two.sided Indicator of the statistics be calculatede as two-sided (TURE) or one-sided (FALSE).
 #' @return corresponding p-Value from the t-, z- or F-statistics
@@ -62,7 +62,7 @@ pFromT <- function(t_value=1.96, df=10, two.sided=FALSE)
 #'         pFromF(f_value= 1.96, df1=10, df2=1000)
 #'         pFromF(f_value= 1.96, df1=10, df2=1000, two.sided=TRUE)
 #'         pFromF(f_value= 1.96, df1=10, df2=1000, two.sided=TRUE)
-#' 
+#' @export
 pFromZ <- function(z_value=1.96, two.sided=FALSE)
 {
     #
@@ -82,9 +82,10 @@ pFromZ <- function(z_value=1.96, two.sided=FALSE)
 #
 # --------------- pFromF                         p-value from F-value                             .. # {{{
 # RR 20150109     ---------------------------------------------------
+# Manual          ------------------------------------------------------------------------------- --
 #' @title       Calculate p-values from F-statistics.
 #' @description Calculate p-values from F-statistics.
-#' @export
+#' @details utility function for conversion of p-values
 #' @param f_value The f-statistics to be converted into a p-Value.
 #' @param df1,df2 Degrees of freedom in F-statistics.
 #' @param two.sided Indicator of the statistics be calculatede as two-sided (TURE) or one-sided (FALSE).
@@ -100,7 +101,7 @@ pFromZ <- function(z_value=1.96, two.sided=FALSE)
 #'         pFromF(f_value= 1.96, df1=10, df2=1000)
 #'         pFromF(f_value= 1.96, df1=10, df2=1000, two.sided=TRUE)
 #'         pFromF(f_value= 1.96, df1=10, df2=1000, two.sided=TRUE)
-#' 
+#' @export
 pFromF <- function(f_value=1.96, df1=10, df2=10, two.sided=FALSE)
 {
     #

@@ -28,20 +28,18 @@ utility function for formatting
 under continuous developement
 }
 \examples{
-
-# list from 0 to 1 in 5 - steps
-percentLabel(perc.dist=5, min.perc=0)
-#
-# example for usage in plot()
-p.lab <- percentLabel(perc.dist=20, min.perc=-100, max.perc=200)
-x.sam <- rnorm(40, 0.4, 0.4)
-y.sam <- rnorm(40, 0.4, 0.4)
-par(mfrow=c(1, 2))
-plot(x=x.sam, y=y.sam, yaxt="n", xlim=c(-0.5, 1.5), ylim=c(-0.5, 1.5))
-axis(2, at=p.lab$position ,labels=p.lab$text)
-plot(x=x.sam, y=y.sam, yaxt="n", xlim=c(-0.5, 1.5), ylim=c(-0.5, 1.5))
-axis(2, at=p.lab$position ,labels=p.lab$text, las=1, cex.axis=0.8)
-
+     # list from 0 to 1 in 5 - steps
+     percentLabel(perc.dist=5, min.perc=0)
+     #
+     # example for usage in plot()
+     p.lab <- percentLabel(perc.dist=20, min.perc=-100, max.perc=200)
+     x.sam <- rnorm(40, 0.4, 0.4)
+     y.sam <- rnorm(40, 0.4, 0.4)
+     par(mfrow=c(1, 2))
+     plot(x=x.sam, y=y.sam, yaxt="n", xlim=c(-0.5, 1.5), ylim=c(-0.5, 1.5))
+     axis(2, at=p.lab$position ,labels=p.lab$text)
+     plot(x=x.sam, y=y.sam, yaxt="n", xlim=c(-0.5, 1.5), ylim=c(-0.5, 1.5))
+     axis(2, at=p.lab$position ,labels=p.lab$text, las=1, cex.axis=0.8)
 }
 \references{
 none

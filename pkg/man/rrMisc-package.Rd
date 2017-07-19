@@ -7,6 +7,6 @@
 Some helpers of R to process data smoothly
 }
 \details{
-The main function are the 'grep' functions for quickly accessing information of data objects and
-the descrTable() function to generate descriptive statistics of a data object.
+The main function are the 'grep' functions for quickly accessing information of data
+objects and the descrTable() function to generate descriptive statistics of a data object.
 }

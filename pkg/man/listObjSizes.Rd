@@ -17,14 +17,12 @@ sizes and contrasts of loaded objects
 get sizes and contrasts of objects.
 }
 \details{
-function for the description of properties of objects rather than processing
-of data.
+function for the description of properties of objects rather than processing of data.
 }
 \note{
 under continuous developement
 }
 \examples{
-
 if(require("MASS")){
     # Example - loading data
     data(crabs, package="MASS")
@@ -36,7 +34,6 @@ if(require("MASS")){
     # Example for 'listObjSizes'
     print(listObjSizes())
 }
-
 }
 \references{
 none

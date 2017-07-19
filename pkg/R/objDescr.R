@@ -4,14 +4,12 @@
 # --------------- listObjSizes                      list all objects with their size -- in order  --# {{{
 # RR 20130816  ---------------------------------------------------------------------------------- --
 #
-
-
-#' get properties of objects easily.
+# Manual          ------------------------------------------------------------------------------- --
+#' @title get properties of objects easily.
 #' 
-#' get sizes and contrasts of objects.
+#' @description get sizes and contrasts of objects.
 #' 
-#' function for the description of properties of objects rather than processing
-#' of data.
+#' @details function for the description of properties of objects rather than processing of data.
 #' 
 #' @aliases listObjSizes listObjContrasts
 #' @export  listObjSizes listObjContrasts
@@ -22,7 +20,6 @@
 #' @seealso other utility-functions in this R-package
 #' @references none
 #' @examples
-#' 
 #' if(require("MASS")){
 #'     # Example - loading data
 #'     data(crabs, package="MASS")
@@ -34,7 +31,7 @@
 #'     # Example for 'listObjSizes'
 #'     print(listObjSizes())
 #' }
-#' 
+#' @export
 listObjSizes <- function(...) {
     #
     # method                                        ............................................. ..

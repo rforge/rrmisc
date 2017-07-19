@@ -26,7 +26,6 @@ utility function for formating
 under continuous developement
 }
 \examples{
-
     formatPValue(0.23478,     digits=3)
     formatPValue(0.023478,    digits=3)
     formatPValue(0.0023478,   digits=3)
@@ -38,7 +37,6 @@ under continuous developement
 
     x <- c(seq(0.0001, 0.6, 0.01), NA, seq(0.6001, 1.0, 0.01))
     formatPValue(x, digits=3)
-
 }
 \references{
 none

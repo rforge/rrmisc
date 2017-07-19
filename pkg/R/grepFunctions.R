@@ -4,13 +4,12 @@
 # --------------- grepColEntries                    show entries in data.frame with search string -- # {{{
 # RR 20140807               --------------------------------------------------------------------- --
 #
-
-
-#' obtain grep components of object easily
+# Manual          ------------------------------------------------------------------------------- --
+#' @title obtain grep components of object easily
 #' 
-#' obtain grep components of object easily
+#' @description obtain grep components of object easily
 #' 
-#' functions facilitating handling of objects
+#' @details functions facilitating handling of objects
 #' 
 #' @aliases grepColEntries grepColNames grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
 #' @export  grepColEntries grepColNames grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
@@ -24,7 +23,6 @@
 #' @seealso other utility-functions in this R-package
 #' @references none
 #' @examples
-#'
 #' if(require("MASS"))
 #' {
 #'     # load example data
@@ -77,7 +75,7 @@
 #'     }
 #'     #
 #' }
-#' 
+#' @export
 grepColEntries <- function(d.frame, col.name, part.name, ...) {
     #
     # method                                        ............................................. ..

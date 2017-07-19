@@ -4,13 +4,11 @@
 # --------------- countDistinct                     Number of different Entries                   -- # {{{
 # RR 20130920     ------------------------------------------------------------------------------- --
 #
-
-
-#' SQL-command 'count(distinct ...)' convreted to R
-#' 
-#' SQL-command 'count(distinct ...)' convreted to R
-#' 
-#' 
+# Manual          ------------------------------------------------------------------------------- --
+#'
+#' @title  SQL-command 'count(distinct ...)' convreted to R
+#' @description SQL-command 'count(distinct ...)' convreted to R
+#' @details Returns the number of distinct values and indicates if there are NAs present
 #' @param x Vector or data.frame in which the number of different entries are counted.
 #' @param \dots arguments passed to further functions
 #' @return named vector of numbers
@@ -19,9 +17,7 @@
 #' @note under continuous developement
 #' @author Roland Rapold
 #' @references none
-#' @export
 #' @examples
-#' 
 #' print("Example for vector")
 #'                       c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)
 #'                length(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6))
@@ -38,7 +34,7 @@
 #'     print(countDistinct(crabs[, c("sex")]))
 #'     print(countDistinct(crabs[, c("FL")]))
 #' }
-#' 
+#' @export
 countDistinct <- function(x, ...) {
     #
     # method                                        ............................................. ..
@@ -70,12 +66,11 @@ countDistinct <- function(x, ...) {
 # --------------- compTwoVects                      Compare two vectors of the same length        .. # {{{
 # RR 20160822     ------------------------------------------------------------------------------- --
 #
-
-
-#' Compare two columns of a data.frame
+# Manual          ------------------------------------------------------------------------------- --
+#
+#' @title Compare two columns of a data.frame
 #' 
-#' Compare two columns of a data.frame
-#' 
+#' @description Compare two columns of a data.frame
 #' 
 #' @param x vector one
 #' @param y vector of same length as x
@@ -84,10 +79,8 @@ countDistinct <- function(x, ...) {
 #' @note under continuous developement
 #' @author Roland Rapold
 #' @references none
-#' @export
 #' @examples
-#' 
-#' if(base::require("Mroz")) {
+#' if(base::require("car")) {
 #'    data(Mroz, package="car")
 #'    str(Mroz)
 #'    dim(Mroz)
@@ -103,7 +96,7 @@ countDistinct <- function(x, ...) {
 #'    #
 #'    compTwoVects(Mroz$wc, Mroz$wc_new)
 #' }
-#' 
+#' @export
 compTwoVects <- function(x, y, ...)
 {
     #

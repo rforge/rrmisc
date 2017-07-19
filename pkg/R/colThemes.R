@@ -2,8 +2,9 @@
 # RR 20160825     ------------------------------------------------------------------------------- --
 #
 # cols3.theme                                                                                     ..# {{{
-
-
+#
+# Manual          ------------------------------------------------------------------------------- --
+#
 #' @title Custom color schemes for lattict graphics
 #' 
 #' @description Lattice color schemes with sequences of colors from light to dark 'seq..', from one
@@ -18,7 +19,6 @@
 #' @references for seq0x.theme(), qal0x.theme, and div0x.theme() https://datavisualization.ch/inside/how-we-created-color-scales/
 #' @keywords graphics
 #' @examples
-#' 
 #' if(!require(lattice)&require(latticeExtra))
 #' {
 #'     print("please install packages 'lattice' and 'latticeExtra' for this example to work!")
@@ -64,7 +64,7 @@
 #'     image(x=c(1:6), y=1, z=matrix(1:6, ncol=1), col=qual02.theme()$superpose.polygon$col,
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="qual02.theme()", cex.main=2)
 #' }
-#' 
+#' @export
 cols3.theme <- function (...) {
     # 7 Colors from palette 'H'
     # colors <- hc(nr=c(1:7), alpha=100)
