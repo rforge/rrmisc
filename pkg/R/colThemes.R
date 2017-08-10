@@ -59,7 +59,7 @@
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="div02.theme()", cex.main=2)
 #'     image(x=c(1:9), y=1, z=matrix(1:9, ncol=1), col=div03.theme()$superpose.polygon$col,
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="div03.theme()", cex.main=2)
-#'     image(x=c(1:9), y=1, z=matrix(1:9, ncol=1), col=qual01.theme()$superpose.polygon$col,
+#'     image(x=c(1:12), y=1, z=matrix(1:12, ncol=1), col=qual01.theme()$superpose.polygon$col,
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="qual01.theme()", cex.main=2)
 #'     image(x=c(1:6), y=1, z=matrix(1:6, ncol=1), col=qual02.theme()$superpose.polygon$col,
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="qual02.theme()", cex.main=2)
