@@ -49,7 +49,7 @@ NULL
 # --------------------------------------------------------------------------------------------------
 # Compile package ..................................................................................
 #
-# rrMiscVers <- "0.27"
+# rrMiscVers <- "0.29"
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
@@ -62,7 +62,7 @@ NULL
 # --------------------------------------------------------------------------------------------------
 # Remove old version and install new package .......................................................
 #
-# rrMiscVers <- "0.27"
+# rrMiscVers <- "0.29"
 # detach("package:rrMisc", character.only=TRUE)
 # unloadNamespace("rrMisc")
 # remove.packages("rrMisc")

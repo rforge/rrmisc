@@ -1,4 +1,15 @@
 
+rrMisc v0.29    (Release date: 2017-09-08)
+============
+
+Changes:
+
+* fix documentation for compTwoVects()
+* in descrTable introduce attribute 'only.first.label' to give only the first label of the resulting
+  table
+* descrTable() minor bug fixes
+
+
 rrMisc v0.28    (Release date: 2017-08-10)
 ============
 

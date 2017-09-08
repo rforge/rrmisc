@@ -68,9 +68,9 @@ countDistinct <- function(x, ...) {
 #
 # Manual          ------------------------------------------------------------------------------- --
 #
-#' @title Compare two columns of a data.frame
+#' @title Compare two numeric vectors
 #' 
-#' @description Compare two columns of a data.frame
+#' @description Compare two numeric vectors of same length for NAs and equals.
 #' 
 #' @param x vector one
 #' @param y vector of same length as x
@@ -109,7 +109,7 @@ compTwoVects <- function(x, y, ...)
     # - y       = second vector
     #
     # output
-    # - description of comparison of the two columns
+    # - description of comparison of the two vectors
     # ----------------------------------------------------------------------------------------------
     #
     if(length(x)!=length(y))
@@ -126,10 +126,10 @@ compTwoVects <- function(x, y, ...)
     cat(sprintf("%-45s", "length of vectors"), "\t", formatC(length(x), big.mark="'", width=10), "\n")
     cat(sprintf("%-45s", paste0("number of NAs in vector 1 ")), "\t", formatC(sum(rows_na_1), big.mark="'", width=10), "\n")
     cat(sprintf("%-45s", paste0("number of NAs in vector 2 ")), "\t", formatC(sum(rows_na_2), big.mark="'", width=10), "\n")
-    cat(sprintf("%-45s", paste0("number of NAs in both columns")), "\t", formatC(rows_na_12,     big.mark="'", width=10), "\n")
-    cat(sprintf("%-45s", paste0("number of NAs in at least one column")), "\t", formatC(rows_na_1o2, big.mark="'", width=10), "\n\n")
+    cat(sprintf("%-45s", paste0("number of NAs in both vectors")), "\t", formatC(rows_na_12,     big.mark="'", width=10), "\n")
+    cat(sprintf("%-45s", paste0("number of NAs in at least one vector")), "\t", formatC(rows_na_1o2, big.mark="'", width=10), "\n\n")
     #
-    # compare NAs in one column but not in the other
+    # compare NAs in one vector but not in the other
     cat("compare NAs in one but not the other vector ---------------")
     rows_na_1_notna_2 <- sum(rows_na_1==TRUE  & rows_na_2==FALSE)
     rows_notna_1_na_2 <- sum(rows_na_1==FALSE & rows_na_2==TRUE)
@@ -137,7 +137,7 @@ compTwoVects <- function(x, y, ...)
     cat(sprintf("%-45s", paste0("number of NAs in vector1 not in vector2")), "\t", formatC(rows_na_1_notna_2, big.mark="'", width=10), "\n")
     cat(sprintf("%-45s", paste0("number of NAs in vector2 not in vector1")), "\t", formatC(rows_notna_1_na_2, big.mark="'", width=10), "\n\n")
     #
-    # compare equals (not NA in both columns)
+    # compare equals (not NA in both vectors)
     cat("compare equals (not NA in both vectors) -------------------")
     x1 <- x[((1-rows_na_1) + (1-rows_na_2))==2]
     y1 <- y[((1-rows_na_1) + (1-rows_na_2))==2]

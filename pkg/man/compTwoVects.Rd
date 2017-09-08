@@ -2,7 +2,7 @@
 % Please edit documentation in R/countDistinct.R
 \name{compTwoVects}
 \alias{compTwoVects}
-\title{Compare two columns of a data.frame}
+\title{Compare two numeric vectors}
 \usage{
 compTwoVects(x, y, ...)
 }
@@ -17,7 +17,7 @@ compTwoVects(x, y, ...)
 comparisons of vector contents with respect to equality and NAs
 }
 \description{
-Compare two columns of a data.frame
+Compare two numeric vectors of same length for NAs and equals.
 }
 \note{
 under continuous developement

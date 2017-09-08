@@ -8,7 +8,8 @@ descrTable(def.measures, sub.d1, sub.d2 = NULL, sub.d3 = NULL,
   sub.d4 = NULL, sub.d5 = NULL, weights.1 = NULL, weights.2 = NULL,
   weights.3 = NULL, weights.4 = NULL, weights.5 = NULL,
   label.compact = FALSE, label.width = 48, test.gr = NULL, lang = "de",
-  group.size.total = 0, big.mark = "'", verbose = 0)
+  group.size.total = 0, big.mark = "'", only.first.label = FALSE,
+  verbose = 0)
 }
 \arguments{
 \item{def.measures}{description scheme with measures, e.g. from createDefMeasures()}
@@ -44,6 +45,8 @@ descrTable(def.measures, sub.d1, sub.d2 = NULL, sub.d3 = NULL,
 \item{group.size.total}{Column for group size total (if 'portion' is requested).}
 
 \item{big.mark}{Thousand separator as used in format().}
+
+\item{only.first.label}{For multiple lines of a label, show label only in first line}
 
 \item{verbose}{Verbose level between 0 and 2.}
 }
@@ -162,7 +165,7 @@ if(require("car"))
                               sub.d2 = subset(Mroz_, hc=="yes"),
                               sub.d3 = Mroz_,
                               test.gr = c(1, 2),
-                              lang="en")
+                              lang="en", only.first.label=TRUE)
     print(descrTable5)
 
     # - variation 5: compare 4 groups
@@ -176,7 +179,7 @@ if(require("car"))
                               sub.d2 = subset(Mroz, wchc=="no-yes"),
                               sub.d3 = subset(Mroz, wchc=="yes-no"),
                               sub.d4 = subset(Mroz, wchc=="yes-yes"),
-                              test.gr=c(1, 2 , 3, 4))
+                              test.gr=c(1, 2 , 3, 4), only.first.label=TRUE)
     print(descrTable6)
 
 } 

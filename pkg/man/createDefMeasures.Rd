@@ -9,9 +9,7 @@ createDefMeasures(d.data, var.list)
 \arguments{
 \item{d.data}{Data frame to report statistics from}
 
-\item{var.list}{A data frame for the mapping of the variable names to
-meaningful labels. The attribute 'var_name' for the variable names in d.data
-and 'var_label' for the labels.}
+\item{var.list}{A data frame for the mapping of the variable names to meaningful labels. The attribute 'var_name' for the variable names in d.data and 'var_label' for the labels.}
 }
 \value{
 data.frame as input for 'descrTable'
@@ -59,7 +57,7 @@ if(require("car")) {
     def.measures.2[9, 6] <- -1
     print(def.measures.2)
 
-} 
+}
 }
 \references{
 none
