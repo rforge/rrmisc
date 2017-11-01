@@ -86,6 +86,7 @@ NULL
 # Send to r-forge.r-project.org via SVN ............................................................
 # --> change to promt
 # cd /home/roland/Statistik/R_rrMisc/rrmisc
+# svn add file ....
 # svn commit
 #
 # svn log
