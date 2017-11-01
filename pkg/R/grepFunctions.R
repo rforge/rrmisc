@@ -1,6 +1,4 @@
-#
 # ==================================================================================================
-#
 # --------------- grepColEntries                    show entries in data.frame with search string -- # {{{
 # RR 20140807               --------------------------------------------------------------------- --
 #
@@ -101,7 +99,7 @@ grepColEntries <- function(d.frame, col.name, part.name, ...) {
 # --------------- grepColNames                      show attributes containing specified text     -- # {{{
 # RR 20131122               --------------------------------------------------------------------- --
 #
-grepColNames <- function(d.frame, part.name, ...) {
+grepColNames <- function(d.frame, part.name, sort.col="nr", ...) {
     #
     # method                                        ............................................. ..
     # - use 'grep'
@@ -109,6 +107,7 @@ grepColNames <- function(d.frame, part.name, ...) {
     # input                                         ............................................. ..
     # - d.frame         data frame
     # - part.name       character string to look for in names()
+    # - sort.col        column name to sort output upon
     #
     # output                                        ............................................. ..
     # - attributes found; provide characteristics of attributes
@@ -127,6 +126,9 @@ grepColNames <- function(d.frame, part.name, ...) {
                          , mode=mo[ni]
                          , storage.mode=sm[ni])
     rownames(result) <- NULL
+    if(sort.col%in%colnames(result)){
+        result <- result[order(result[, sort.col]), ]
+    }
     #
     return(result)
     #

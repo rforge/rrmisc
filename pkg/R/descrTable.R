@@ -1,6 +1,4 @@
-#
 # ==================================================================================================
-#
 # --------------- createDefMeasures              create template for def.measures                 .. # {{{
 # RR 20151110               --------------------------------------------------------------------- --
 #
@@ -206,8 +204,13 @@ createDefMeasures <- function (d.data, var.list)
                               , all.x = TRUE)
 
         # get default labels when missing from reference list
-        def.measures[is.na(def.measures$var_label), "var_label"] <-
-            def.measures[is.na(def.measures$var_label), "measure_name"]
+        missing_label <- which(is.na(def.measures$var_label) | def.measures$var_label=="")
+        def.measures[missing_label, "var_label"] <- 
+        def.measures[missing_label, "measure_name"]
+        # def.measures[is.na(def.measures$var_label), "var_label"] <-
+        # def.measures[is.na(def.measures$var_label), "measure_name"]
+        # def.measures[def.measures$var_label=="", "var_label"] <-
+        # def.measures[def.measures$var_label=="", "measure_name"]
 
         # apply original order of rows
         def.measures <- def.measures[order(def.measures$nr), ]
@@ -224,8 +227,6 @@ createDefMeasures <- function (d.data, var.list)
 # --------------- createDefMeasures -------------------------------------------------------------- --
 # END OF FUNCTION ------------------------------------------------------------------------------- --
 ## }}}
-# ==================================================================================================
-#
 # --------------- descrMeasures                  calculation of statistics for one entry          .. # {{{
 # RR 20150325     ------------------------------------------------------------------------------- --
 #
@@ -2466,8 +2467,6 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 # --------------- descrMeasures  ----------------------------------------------------------------- --
 # END OF FUNCTION ------------------------------------------------------------------------------- --
 ## }}}
-# ==================================================================================================
-#
 # --------------- descrTable                     characteriscis deskriptive                       .. # {{{
 # RR 20150325     ------------------------------------------------------------------------------- --
 #

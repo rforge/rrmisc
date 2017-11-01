@@ -49,28 +49,28 @@ NULL
 # --------------------------------------------------------------------------------------------------
 # Compile package ..................................................................................
 #
-# rrMiscVers <- "0.29"
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
+# rrMiscVers <- "0.30"
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
 # getwd()
 # system(       "R --vanilla CMD build pkg")
 # system(paste0("R --vanilla CMD check rrMisc_", rrMiscVers, ".tar.gz"))
+# system("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc.Rcheck/00check.log &")
 #
-# system("gv /home/roland/Statistik/R_rrMisc/rrmisc/rrMisc.Rcheck/rrMisc-manual.pdf &")
+# system("gv /home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc.Rcheck/rrMisc-manual.pdf &")
 #
 # --------------------------------------------------------------------------------------------------
 # Remove old version and install new package .......................................................
 #
-# rrMiscVers <- "0.29"
 # detach("package:rrMisc", character.only=TRUE)
 # unloadNamespace("rrMisc")
 # remove.packages("rrMisc")
 #
 # -- install local copy of package
+# rrMiscVers <- "0.30"
 # install.packages(paste0("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc_",
-#                         rrMiscVers, ".tar.gz"),
-#                  repos=NULL)
+#                         rrMiscVers, ".tar.gz"), repos=NULL)
 # library(rrMisc)
 #
 # -- install copy from r-forge

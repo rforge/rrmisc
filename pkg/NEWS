@@ -1,4 +1,13 @@
 
+rrMisc v0.30    (Release date: 2017-11-01)
+============
+
+Changes:
+
+* new function naToZero() -- converting NAs to 0 and '-' respectively
+* in createDefMeasures -- if no variable label is provided then use variable name instead -- fixed
+
+
 rrMisc v0.29    (Release date: 2017-09-08)
 ============
 
