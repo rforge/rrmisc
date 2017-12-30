@@ -7,11 +7,9 @@
 #' 
 #' @description Get a subset of a data.frame with specified string in a given column.
 #' 
-#' @details Unlike subset which works with '==' or '%in%', here search is performed using grep() in
+#' @details Unlike subset which works with '==' or '\%in\%', here search is performed using grep() in
 #' a fashion of 'like', meaning substrings are recognized.
 #' 
-#' @aliases grepColEntries
-#' @export  grepColEntries
 #' @param d.frame data.frame
 #' @param col.name Name of column
 #' @param part.name Search string in column names
@@ -19,7 +17,9 @@
 #' @return Subset of data.frame for which selection conditions are met.
 #' @note under continuous developement
 #' @author Roland Rapold
-#' @seealso grepColNames grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
+#' @seealso \code{\link{grepColNames}} \code{\link{grepColNA}} \code{\link{grepObjNames}}
+#' \code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}} \code{\link{grepRowNames}}
+#' \code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 #' @references none
 #' @examples
 #' if(require("MASS"))
@@ -60,11 +60,9 @@ grepColEntries <- function(d.frame, col.name, part.name, ...) {
 #' @description Specify a character string and find the column names in a data.frame containing this
 #' character string.
 #' 
-#' @details Unlike using '==' or '%in%', here search is performed using grep() in a fashion of
+#' @details Unlike using '==' or '\%in\%', here search is performed using grep() in a fashion of
 #' 'like', meaning substrings are recognized.
 #' 
-#' @aliases grepColNames
-#' @export  grepColNames
 #' @param d.frame data.frame
 #' @param part.name Search string in column names
 #' @param sort.col specify output column to sort by
@@ -72,7 +70,9 @@ grepColEntries <- function(d.frame, col.name, part.name, ...) {
 #' @return grepColNames() returns the found column names and details
 #' @note under continuous developement
 #' @author Roland Rapold
-#' @seealso grepColEntries grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
+#' @seealso \code{\link{grepColEntries}} \code{\link{grepColNA}} \code{\link{grepObjNames}}
+#' \code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}} \code{\link{grepRowNames}}
+#' \code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 #' @references none
 #' @examples
 #' if(require("MASS"))
@@ -131,15 +131,14 @@ grepColNames <- function(d.frame, part.name, sort.col="nr", ...) {
 #' @details If the input is a vector, grepColNA() indicates if NAs are present. If the input is a
 #' data.frame, grepColNA() returns the colums which contain NAs.
 #' 
-#' @aliases grepColNA
-#' @export  grepColNA
 #' @param x data.frame
 #' @param \dots Arguments passed to further functions
 #' @return Column names which values contain NAs or indication about NAs.
 #' @note under continuous developement
 #' @author Roland Rapold
-#' @seealso grepColEntries grepColNames grepObjNames grepNotCompleteEntries grepMultipleEntries
-#' grepRowNames grepColNegNum grepColFactors
+#' @seealso \code{\link{grepColEntries}} \code{\link{grepColNames}} \code{\link{grepObjNames}}
+#' \code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}} \code{\link{grepRowNames}}
+#' \code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 #' @references none
 #' @examples
 #' if(require("MASS"))
@@ -212,17 +211,17 @@ grepColNA <- function(x, ...) {
 #' @description The function grepObjNames() gets the objects whose names contain the specified
 #' search string.
 #' 
-#' @details Unlike subset which works with '==' or '%in%', here search is performed in a fashion of
+#' @details Unlike subset which works with '==' or '\%in\%', here search is performed in a fashion of
 #' 'like', meaning substrings are recognized.
 #' 
-#' @aliases grepObjNames
-#' @export  grepObjNames
 #' @param part.name search string in object names
 #' @param \dots Arguments passed to further functions
 #' @return column names which values contain NAs or indication about NAs
 #' @note under continuous developement
 #' @author Roland Rapold
-#' @seealso grepColEntries grepColNames grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
+#' @seealso \code{\link{grepColEntries}} \code{\link{grepColNames}} \code{\link{grepColNA}}
+#' \code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}} \code{\link{grepRowNames}}
+#' \code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 #' @references none
 #' @examples
 #'     a  <- 1
@@ -270,14 +269,14 @@ grepObjNames <- function(part.name, ...) {
 #' @details The input is a data.frame of which the records are returned that contain NAs in any
 #' values.
 #' 
-#' @aliases grepNotCompleteEntries
-#' @export  grepNotCompleteEntries
 #' @param d.frame data.frame
 #' @param \dots Arguments passed to further functions
 #' @return Subset of data.frame where records contain NAs.
 #' @note under continuous developement
 #' @author Roland Rapold
-#' @seealso grepColEntries grepColNA grepObjNames grepColNames grepMultipleEntries grepRowNames grepColNegNum grepColFactors
+#' @seealso \code{\link{grepColEntries}} \code{\link{grepColNames}} \code{\link{grepColNA}}
+#' \code{\link{grepObjNames}} \code{\link{grepMultipleEntries}} \code{\link{grepRowNames}}
+#' \code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 #' @references none
 #' @examples
 #' if(require("MASS"))
@@ -324,15 +323,15 @@ grepNotCompleteEntries <- function(d.frame, ...) {
 #' @details The multiple entries are found with duplicated() and the whole records of these entries
 #' are returned.
 #' 
-#' @aliases grepMultipleEntries
-#' @export  grepMultipleEntries
 #' @param d.frame data.frame
 #' @param var variable(s) to search for duplicates
 #' @param \dots Arguments passed to further functions
 #' @return Subset of data.frame for which selection conditions are met
 #' @note under continuous developement
 #' @author Roland Rapold
-#' @seealso grepColEntries grepColNA grepObjNames grepNotCompleteEntries grepColNames grepRowNames grepColNegNum grepColFactors
+#' @seealso \code{\link{grepColEntries}} \code{\link{grepColNames}} \code{\link{grepColNA}}
+#' \code{\link{grepObjNames}} \code{\link{grepNotCompleteEntries}} \code{\link{grepRowNames}}
+#' \code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 #' @references none
 #' @examples
 #' if(require("MASS"))
@@ -404,18 +403,18 @@ grepMultipleEntries <- function(d.frame, var, ...) {
 #' @description Specify a character string and find the row names in a data.frame containing this
 #' character string.
 #' 
-#' @details Unlike using '==' or '%in%', here search is performed using grep() in a fashion of
+#' @details Unlike using '==' or '\%in\%', here search is performed using grep() in a fashion of
 #' 'like', meaning substrings are recognized.
 #' 
-#' @aliases grepRowNames
-#' @export  grepRowNames
 #' @param d.frame data.frame
 #' @param part.name Search string in row names
 #' @param \dots Arguments passed to further functions
 #' @return Number and names of found row names.
 #' @note under continuous developement
 #' @author Roland Rapold
-#' @seealso grepColEntries grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepColNames grepColNegNum grepColFactors
+#' @seealso \code{\link{grepColEntries}} \code{\link{grepColNames}} \code{\link{grepColNA}}
+#' \code{\link{grepObjNames}} \code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}}
+#' \code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 #' @references none
 #' @examples
 #' if(require("MASS"))
@@ -464,15 +463,14 @@ grepRowNames <- function(d.frame, part.name, ...) {
 #' 
 #' @details Only numeric attributes (numeric and integer) are searched and reported.
 #' 
-#' @aliases grepColNegNum
-#' @export  grepColNegNum
 #' @param x data.frame
 #' @return grepColNegNum() returns the column number and names of columns containing negabive
 #' numeric values.
 #' @note under continuous developement
 #' @author Roland Rapold
-#' @seealso grepColEntries grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries
-#' grepRowNames grepColNames grepColFactors
+#' @seealso \code{\link{grepColEntries}} \code{\link{grepColNames}} \code{\link{grepColNA}}
+#' \code{\link{grepObjNames}} \code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}}
+#' \code{\link{grepRowNames}} \code{\link{grepColFactors}}
 #' @references none
 #' @examples
 #' if(require("MASS"))
@@ -549,15 +547,14 @@ grepColNegNum <- function(x) {
 #' 
 #' @details Factor variables are returned and indicated if also defined as 'ordered'.
 #' 
-#' @aliases grepColFactors
-#' @export  grepColFactors
 #' @param x data.frame
 #' @return grepColFactors() returns variables are returned and indicated if also defined as
 #' 'ordered'.
 #' @note under continuous developement
 #' @author Roland Rapold
-#' @seealso grepColEntries grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries
-#' grepRowNames grepColNegNum grepColNames
+#' @seealso \code{\link{grepColEntries}} \code{\link{grepColNames}} \code{\link{grepColNA}}
+#' \code{\link{grepObjNames}} \code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}}
+#' \code{\link{grepRowNames}} \code{\link{grepColNegNum}}
 #' @references none
 #' @examples
 #' if(require("car"))

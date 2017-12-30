@@ -69,7 +69,7 @@ NULL
 # remove.packages("rrMisc")
 #
 # -- install local copy of package
-# rrMiscVers <- "0.30"
+# rrMiscVers <- "0.31"
 # install.packages(paste0("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc_",
 #                         rrMiscVers, ".tar.gz"), repos=NULL)
 # library(rrMisc)

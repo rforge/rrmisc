@@ -78,7 +78,7 @@ if(!require(lattice)&require(latticeExtra))
 }
 }
 \references{
-for seq0x.theme(), qal0x.theme, and div0x.theme() https://datavisualization.ch/inside/how-we-created-color-scales/
+For seq0x.theme(), qal0x.theme, and div0x.theme() see https://datavisualization.ch/inside/how-we-created-color-scales/
 }
 \author{
 Roland Rapold

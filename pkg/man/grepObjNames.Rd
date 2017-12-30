@@ -19,7 +19,7 @@ The function grepObjNames() gets the objects whose names contain the specified
 search string.
 }
 \details{
-Unlike subset which works with '==' or '%in%', here search is performed in a fashion of
+Unlike subset which works with '==' or '\%in\%', here search is performed in a fashion of
 'like', meaning substrings are recognized.
 }
 \note{
@@ -41,7 +41,9 @@ under continuous developement
 none
 }
 \seealso{
-grepColEntries grepColNames grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
+\code{\link{grepColEntries}} \code{\link{grepColNames}} \code{\link{grepColNA}}
+\code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}} \code{\link{grepRowNames}}
+\code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 }
 \author{
 Roland Rapold

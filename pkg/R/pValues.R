@@ -121,7 +121,7 @@ pFromF <- function(f_value=1.96, df1=10, df2=10, two.sided=FALSE)
 # Manual          ------------------------------------------------------------------------------- --
 #' @title       Substitution of NAs in data.frame or vector
 #' @description Substitution of NAs in a data.frame or a vector. NAs in numeric fields (integer,
-#' numeric) are substituted by 0, NAs in caracter fields are substituted ba '-'.
+#' numeric) are substituted by 0, NAs in caracter fields are substituted by '-'.
 #' @details utility function for treating NAs
 #' @param dataf data.frame or vector
 #' @param substit_numeric shall numeric fields (integer, numerical) be substituted?

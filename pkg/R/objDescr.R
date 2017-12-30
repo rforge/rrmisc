@@ -10,8 +10,6 @@
 #' @details listObjSizes() returns a list of all objects in memory and lists them in order of
 #' increasing size. Object size is reported by the function utils::object.size()
 #' 
-#' @aliases listObjSizes
-#' @export  listObjSizes
 #' @param \dots arguments passed to further functions
 #' @return List of sizes of R-objects in memory.
 #' @note under continuous developement
@@ -60,8 +58,6 @@ listObjSizes <- function(...) {
 #' 
 #' @details Get the contrasts of all factor variables in a data.frame.
 #' 
-#' @aliases listObjContrasts
-#' @export  listObjContrasts
 #' @param d.frame data.frame
 #' @param \dots arguments passed to further functions
 #' @return contrasts of factor variables of data.frame

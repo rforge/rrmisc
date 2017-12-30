@@ -23,7 +23,7 @@ Specify a character string and find the column names in a data.frame containing 
 character string.
 }
 \details{
-Unlike using '==' or '%in%', here search is performed using grep() in a fashion of
+Unlike using '==' or '\%in\%', here search is performed using grep() in a fashion of
 'like', meaning substrings are recognized.
 }
 \note{
@@ -42,7 +42,9 @@ if(require("MASS"))
 none
 }
 \seealso{
-grepColEntries grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
+\code{\link{grepColEntries}} \code{\link{grepColNA}} \code{\link{grepObjNames}}
+\code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}} \code{\link{grepRowNames}}
+\code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 }
 \author{
 Roland Rapold

@@ -42,8 +42,9 @@ if(require("MASS"))
 none
 }
 \seealso{
-grepColEntries grepColNames grepObjNames grepNotCompleteEntries grepMultipleEntries
-grepRowNames grepColNegNum grepColFactors
+\code{\link{grepColEntries}} \code{\link{grepColNames}} \code{\link{grepObjNames}}
+\code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}} \code{\link{grepRowNames}}
+\code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 }
 \author{
 Roland Rapold

@@ -16,7 +16,7 @@
 #' @return List with definition of lattice color scheme.
 #' @note under continuous developement
 #' @author Roland Rapold
-#' @references for seq0x.theme(), qal0x.theme, and div0x.theme() https://datavisualization.ch/inside/how-we-created-color-scales/
+#' @references For seq0x.theme(), qal0x.theme, and div0x.theme() see https://datavisualization.ch/inside/how-we-created-color-scales/
 #' @keywords graphics
 #' @examples
 #' if(!require(lattice)&require(latticeExtra))

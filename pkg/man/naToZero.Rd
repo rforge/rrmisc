@@ -20,7 +20,7 @@ corresponding data.frame or vector with substituted NAs
 }
 \description{
 Substitution of NAs in a data.frame or a vector. NAs in numeric fields (integer,
-numeric) are substituted by 0, NAs in caracter fields are substituted ba '-'.
+numeric) are substituted by 0, NAs in caracter fields are substituted by '-'.
 }
 \details{
 utility function for treating NAs

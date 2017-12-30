@@ -34,8 +34,9 @@ if(require("car"))
 none
 }
 \seealso{
-grepColEntries grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries
-grepRowNames grepColNegNum grepColNames
+\code{\link{grepColEntries}} \code{\link{grepColNames}} \code{\link{grepColNA}}
+\code{\link{grepObjNames}} \code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}}
+\code{\link{grepRowNames}} \code{\link{grepColNegNum}}
 }
 \author{
 Roland Rapold

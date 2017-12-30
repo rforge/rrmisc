@@ -22,7 +22,7 @@ Subset of data.frame for which selection conditions are met.
 Get a subset of a data.frame with specified string in a given column.
 }
 \details{
-Unlike subset which works with '==' or '%in%', here search is performed using grep() in
+Unlike subset which works with '==' or '\%in\%', here search is performed using grep() in
 a fashion of 'like', meaning substrings are recognized.
 }
 \note{
@@ -40,7 +40,9 @@ if(require("MASS"))
 none
 }
 \seealso{
-grepColNames grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
+\code{\link{grepColNames}} \code{\link{grepColNA}} \code{\link{grepObjNames}}
+\code{\link{grepNotCompleteEntries}} \code{\link{grepMultipleEntries}} \code{\link{grepRowNames}}
+\code{\link{grepColNegNum}} \code{\link{grepColFactors}}
 }
 \author{
 Roland Rapold
