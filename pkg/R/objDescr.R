@@ -3,30 +3,24 @@
 # RR 20130816  ---------------------------------------------------------------------------------- --
 #
 # Manual          ------------------------------------------------------------------------------- --
-#' @title get properties of objects easily.
+#' @title Show sizes of R-objects in Memory
 #' 
-#' @description get sizes and contrasts of objects.
+#' @description Show sizes of R-objects in Memory
 #' 
-#' @details function for the description of properties of objects rather than processing of data.
+#' @details listObjSizes() returns a list of all objects in memory and lists them in order of
+#' increasing size. Object size is reported by the function utils::object.size()
 #' 
-#' @aliases listObjSizes listObjContrasts
-#' @export  listObjSizes listObjContrasts
+#' @aliases listObjSizes
+#' @export  listObjSizes
 #' @param \dots arguments passed to further functions
-#' @return sizes and contrasts of loaded objects
+#' @return List of sizes of R-objects in memory.
 #' @note under continuous developement
 #' @author Roland Rapold
 #' @seealso other utility-functions in this R-package
 #' @references none
 #' @examples
 #' if(require("MASS")){
-#'     # Example - loading data
 #'     data(crabs, package="MASS")
-#'     print(head(crabs))
-#'     #
-#'     # Example for 'listObjContrasts
-#'     print(listObjContrasts(crabs))
-#'     #
-#'     # Example for 'listObjSizes'
 #'     print(listObjSizes())
 #' }
 #' @export
@@ -59,6 +53,28 @@ listObjSizes <- function(...) {
 # --------------- listObjContrasts                  list contrasts of all factor attributes       --# {{{
 # RR 20141027  ---------------------------------------------------------------------------------- --
 #
+# Manual          ------------------------------------------------------------------------------- --
+#' @title Get contrasts of data.frame
+#' 
+#' @description Get the contrasts of all factor variables in a data.frame.
+#' 
+#' @details Get the contrasts of all factor variables in a data.frame.
+#' 
+#' @aliases listObjContrasts
+#' @export  listObjContrasts
+#' @param d.frame data.frame
+#' @param \dots arguments passed to further functions
+#' @return contrasts of factor variables of data.frame
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @seealso other utility-functions in this R-package
+#' @references none
+#' @examples
+#' if(require("MASS")){
+#'     data(crabs, package="MASS")
+#'     print(listObjContrasts(crabs))
+#' }
+#' @export
 listObjContrasts <- function(d.frame, ...) {
     #
     # method                                        ............................................. ..

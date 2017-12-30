@@ -198,8 +198,8 @@ naToZero <- function(dataf, substit_numeric=TRUE, substit_character=FALSE, ...)
                     }
                     return(dataf)
                 })
-        # print("Es wird ein 'data.frame' oder ein numerischer Vektor als Datenobjekt benötigt !")
-        return()
+        warning("naToZero: please input a data.frame or a numeric vector")
+        return(dataf)
     }
 }
 # --------------- naToZero ------------------------------------------

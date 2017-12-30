@@ -1,3 +1,13 @@
+rrMisc v0.31    (Release date: 2017-12-30)
+============
+
+Changes:
+
+* naToZero() -- missing return for factor-input fixed
+* createDefMeasures() -- slight change in default statistics, grouped combination of measures
+  mean/sd and median/IQR
+* Improved documentation, especially for the grep..() functions
+
 
 rrMisc v0.30    (Release date: 2017-11-01)
 ============
@@ -5,7 +15,7 @@ rrMisc v0.30    (Release date: 2017-11-01)
 Changes:
 
 * new function naToZero() -- converting NAs to 0 and '-' respectively
-* in createDefMeasures -- if no variable label is provided then use variable name instead -- fixed
+* in createDefMeasures() -- if no variable label is provided then use variable name instead -- fixed
 
 
 rrMisc v0.29    (Release date: 2017-09-08)
@@ -14,8 +24,8 @@ rrMisc v0.29    (Release date: 2017-09-08)
 Changes:
 
 * fix documentation for compTwoVects()
-* in descrTable introduce attribute 'only.first.label' to give only the first label of the resulting
-  table
+* in descrTable() introduce attribute 'only.first.label' to give only the first label of the
+  resulting table
 * descrTable() minor bug fixes
 
 
@@ -32,7 +42,7 @@ rrMisc v0.27    (Release date: 2017-07-19)
 
 Changes:
 
-* compTwoVects
+* compTwoVects()
     - documentation now available
 
 
@@ -41,7 +51,7 @@ rrMisc v0.26    (Release date: 2017-07-03)
 
 Changes:
 
-* descrTable
+* descrTable()
     - now can calculate the sum of indicated attributes
     - for group sizes (attribute 'i') the variable 'group.size.total' indicates the column which
       contains total size of the investigated group. For group.size.total = 0 there is no column

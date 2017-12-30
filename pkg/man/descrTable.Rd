@@ -51,7 +51,11 @@ descrTable(def.measures, sub.d1, sub.d2 = NULL, sub.d3 = NULL,
 \item{verbose}{Verbose level between 0 and 2.}
 }
 \value{
-List with 1. descriptive table, 2. tests used, 3. attributes with NA's.
+List with:
+
+-- descriptive table according to scheme defined in 'def_measures' (usually created by #' 'createDefMeasures()' and potentially modified)
+
+-- indication of tests used
 }
 \description{
 Create descriptive table with up to five subgroups/total and comparison
@@ -64,7 +68,6 @@ utility function for formating
 under continuous developement
 }
 \examples{
-
 if(require("car"))
 {
     # load sample data 'Mroz' from package 'car'

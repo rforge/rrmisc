@@ -2,8 +2,7 @@
 % Please edit documentation in R/objDescr.R
 \name{listObjSizes}
 \alias{listObjSizes}
-\alias{listObjContrasts}
-\title{get properties of objects easily.}
+\title{Show sizes of R-objects in Memory}
 \usage{
 listObjSizes(...)
 }
@@ -11,27 +10,21 @@ listObjSizes(...)
 \item{\dots}{arguments passed to further functions}
 }
 \value{
-sizes and contrasts of loaded objects
+List of sizes of R-objects in memory.
 }
 \description{
-get sizes and contrasts of objects.
+Show sizes of R-objects in Memory
 }
 \details{
-function for the description of properties of objects rather than processing of data.
+listObjSizes() returns a list of all objects in memory and lists them in order of
+increasing size. Object size is reported by the function utils::object.size()
 }
 \note{
 under continuous developement
 }
 \examples{
 if(require("MASS")){
-    # Example - loading data
     data(crabs, package="MASS")
-    print(head(crabs))
-    #
-    # Example for 'listObjContrasts
-    print(listObjContrasts(crabs))
-    #
-    # Example for 'listObjSizes'
     print(listObjSizes())
 }
 }

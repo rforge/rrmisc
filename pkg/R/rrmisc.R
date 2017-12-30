@@ -51,12 +51,13 @@ NULL
 #
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
-# rrMiscVers <- "0.30"
+# rrMiscVers <- "0.31"
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
 # getwd()
 # system(       "R --vanilla CMD build pkg")
 # system(paste0("R --vanilla CMD check rrMisc_", rrMiscVers, ".tar.gz"))
 # system("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc.Rcheck/00check.log &")
+# system("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc.Rcheck/00install.out &")
 #
 # system("gv /home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc.Rcheck/rrMisc-manual.pdf &")
 #

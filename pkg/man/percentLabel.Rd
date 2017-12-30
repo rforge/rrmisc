@@ -2,7 +2,7 @@
 % Please edit documentation in R/percentLabel.R
 \name{percentLabel}
 \alias{percentLabel}
-\title{list of percent values, e.g. for axis displays.}
+\title{List of percent values, e.g. for axis displays.}
 \usage{
 percentLabel(perc.dist = 1, min.perc = -100, max.perc = 100, ...)
 }
@@ -19,10 +19,11 @@ percentLabel(perc.dist = 1, min.perc = -100, max.perc = 100, ...)
 data-frame with percentage as number and character string
 }
 \description{
-list of percent values, e.g. for axis displays.
+List of percent values, e.g. for axis displays.
 }
 \details{
-utility function for formatting
+data.frame of number and corresponding representation as percentage values. E.g. for use
+as axix label in graphics.
 }
 \note{
 under continuous developement

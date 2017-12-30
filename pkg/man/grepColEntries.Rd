@@ -2,20 +2,12 @@
 % Please edit documentation in R/grepFunctions.R
 \name{grepColEntries}
 \alias{grepColEntries}
-\alias{grepColNames}
-\alias{grepColNA}
-\alias{grepObjNames}
-\alias{grepNotCompleteEntries}
-\alias{grepMultipleEntries}
-\alias{grepRowNames}
-\alias{grepColNegNum}
-\alias{grepColFactors}
-\title{obtain grep components of object easily}
+\title{Subset of data.frame containing string}
 \usage{
 grepColEntries(d.frame, col.name, part.name, ...)
 }
 \arguments{
-\item{d.frame}{R-object}
+\item{d.frame}{data.frame}
 
 \item{col.name}{Name of column}
 
@@ -24,13 +16,14 @@ grepColEntries(d.frame, col.name, part.name, ...)
 \item{\dots}{Arguments passed to further functions}
 }
 \value{
-Column names, values containing search string or entries not complete or multiple entries
+Subset of data.frame for which selection conditions are met.
 }
 \description{
-obtain grep components of object easily
+Get a subset of a data.frame with specified string in a given column.
 }
 \details{
-functions facilitating handling of objects
+Unlike subset which works with '==' or '%in%', here search is performed using grep() in
+a fashion of 'like', meaning substrings are recognized.
 }
 \note{
 under continuous developement
@@ -38,62 +31,16 @@ under continuous developement
 \examples{
 if(require("MASS"))
 {
-    # load example data
     data(crabs, package="MASS")
-    head(crabs)
-    #
-    # example for grepColEntries()
     print(head(grepColEntries(crabs, "sex", "M")))
     print(head(grepColEntries(crabs, "index", "2")))
-    #
-    # example for grepColNames()
-    print(grepColNames(crabs, "W"))
-    #
-    # example for grepColNA()
-    print(grepColNA(crabs))
-    print(grepColNA(c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6)))
-    #
-    # example for 'grepObjNames'
-    print(grepObjNames("Pfad"))
-    #
-    # example for grepNotCompleteEntries()
-    df <- crabs
-    df[33, 4] <- NA
-    df[55, 5] <- NA
-    df[77, 6] <- NA
-    df[99, 7] <- NA
-    print(grepNotCompleteEntries(df))
-    rm(df)
-    #
-    # example for grepMultipleEntries()
-    # - with one column
-    print(head(grepMultipleEntries(crabs, "FL"), n=10))
-    #
-    # - with two columns
-    print(head(grepMultipleEntries(crabs, c("sex", "FL"))))
-    #
-    # example for grepColNegNum()
-    if(require("car"))
-    {
-      data(Mroz, package="car")
-      print(grepColNegNum(Mroz))
-    }
-    #
-    # example for grepColFactors()
-    if(require("car"))
-    {
-      data(Mroz, package="car")
-      Mroz$wc_ord <- as.ordered(Mroz$wc)
-      print(grepColFactors(Mroz))
-    }
-    #
 }
 }
 \references{
 none
 }
 \seealso{
-other utility-functions in this R-package
+grepColNames grepColNA grepObjNames grepNotCompleteEntries grepMultipleEntries grepRowNames grepColNegNum grepColFactors
 }
 \author{
 Roland Rapold

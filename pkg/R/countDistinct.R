@@ -46,7 +46,7 @@ countDistinct <- function(x, ...) {
     # - integer number of count and index of NA
     #
 {
-    naString <- ifelse(sum(is.na(x)) > 0, 1, 0)
+    naString <- ifelse(sum(is.na(x)) > 0, "yes", "no")
     if (is.null(dim(x))) {
         result <- c(length(unique(stats::na.omit(x))), naString)
     }

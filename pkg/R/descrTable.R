@@ -14,6 +14,13 @@
 #' @param d.data Data frame to report statistics from
 #' @param var.list A data frame for the mapping of the variable names to meaningful labels. The attribute 'var_name' for the variable names in d.data and 'var_label' for the labels.
 #' @return data.frame as input for 'descrTable'
+#' @return - measure_label: label text shown in resulting table (output from descrTable())
+#' @return - measure_name:  variable name
+#' @return - measure_1:  first statistics to be applied to date
+#' @return - measure_2:  second statistics to be applied to date
+#' @return - measure_ref_level:  for factors, specify the reference level
+#' @return - measure_prec_1:  precision - number of decimal places - for first statistics
+#' @return - measure_prec_2:  precision for second statistics
 #' @note under continuous developement
 #' @author Roland Rapold
 #' @seealso other utility-functions in this R-package
@@ -107,7 +114,16 @@ createDefMeasures <- function (d.data, var.list)
 
                 def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
                 def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "sd"
+                def.measures[i.row, "measure_1"] <- "mean"
+                def.measures[i.row, "measure_2"] <- "sd"
+                def.measures[i.row, "measure_ref_level"] <- NA
+                def.measures[i.row, "measure_prec_1"] <- 1
+                def.measures[i.row, "measure_prec_2"] <- 1
+                i.row <- i.row + 1
+
+                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
+                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
+                def.measures[i.row, "measure_1"] <- "median"
                 def.measures[i.row, "measure_2"] <- "IQR"
                 def.measures[i.row, "measure_ref_level"] <- NA
                 def.measures[i.row, "measure_prec_1"] <- 1
@@ -136,7 +152,16 @@ createDefMeasures <- function (d.data, var.list)
 
                 def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
                 def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "sd"
+                def.measures[i.row, "measure_1"] <- "mean"
+                def.measures[i.row, "measure_2"] <- "sd"
+                def.measures[i.row, "measure_ref_level"] <- NA
+                def.measures[i.row, "measure_prec_1"] <- 1
+                def.measures[i.row, "measure_prec_2"] <- 1
+                i.row <- i.row + 1
+
+                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
+                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
+                def.measures[i.row, "measure_1"] <- "median"
                 def.measures[i.row, "measure_2"] <- "IQR"
                 def.measures[i.row, "measure_ref_level"] <- NA
                 def.measures[i.row, "measure_prec_1"] <- 1
@@ -2524,13 +2549,14 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #' @param big.mark Thousand separator as used in format().
 #' @param verbose Verbose level between 0 and 2.
 #' @param only.first.label For multiple lines of a label, show label only in first line
-#' @return List with 1. descriptive table, 2. tests used, 3. attributes with NA's.
+#' @return List with:
+#' @return -- descriptive table according to scheme defined in 'def_measures' (usually created by #' 'createDefMeasures()' and potentially modified)
+#' @return -- indication of tests used
 #' @note under continuous developement
 #' @author Roland Rapold
 #' @seealso other utility-functions in this R-package
 #' @references none
 #' @examples
-#'
 #' if(require("car"))
 #' {
 #'     # load sample data 'Mroz' from package 'car'
