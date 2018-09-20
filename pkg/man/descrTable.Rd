@@ -70,8 +70,8 @@ under continuous developement
 \examples{
 if(require("car"))
 {
-    # load sample data 'Mroz' from package 'car'
-    data(Mroz, package="car")
+    # sample data 'Mroz' from package 'car'
+    require("car")
     str(Mroz)
 
     # insert attribute 'i' for population size

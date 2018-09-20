@@ -1,3 +1,13 @@
+rrMisc v0.32    (Release date: 2018-09-20)
+============
+
+Changes:
+
+* output from descrTable refined
+  - number of NA's now formatted with big.mark
+  - label1 removed in all cases except first one when using only.first.label=TRUE
+  - p-values removed in all cases except first one when using only.first.label=TRUE
+
 rrMisc v0.31    (Release date: 2017-12-30)
 ============
 

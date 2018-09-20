@@ -475,7 +475,8 @@ grepRowNames <- function(d.frame, part.name, ...) {
 #' @examples
 #' if(require("MASS"))
 #' {
-#'     data(Mroz, package="car")
+#'     require("car")
+#'     data(Mroz)
 #'     head(Mroz)
 #'     print(grepColNegNum(Mroz))
 #' }
@@ -559,7 +560,8 @@ grepColNegNum <- function(x) {
 #' @examples
 #' if(require("car"))
 #' {
-#'   data(Mroz, package="car")
+#'   require("car")
+#'   data(Mroz)
 #'   Mroz$wc_ord <- as.ordered(Mroz$wc)
 #'   print(grepColFactors(Mroz))
 #' }

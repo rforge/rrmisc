@@ -471,11 +471,11 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     # control -- only portion and count are valid for factors ......................................
     if(var.is.factor)
     {
-        not_m1 <- !measures[1]%in%c("portion", "count")
-        not_m2 <- ifelse(length(measures)>1, !measures[2]%in%c("portion", "count"), FALSE)
+        not_m1 <- !measures[1]%in%c("portion", "count", "count_distinct")
+        not_m2 <- ifelse(length(measures)>1, !measures[2]%in%c("portion", "count", "count_distinct"), FALSE)
         if(not_m1 || not_m2)
         {
-            return(paste("for factors only 'portion' or 'count' as measures are permitted!\n",
+            return(paste("for factors only 'portion' or 'count' or 'count_distinct' as measures are permitted!\n",
                          "class of the provided variable:", class(sub.data.1), "\n",
                          "selected measures:", measures))
         }
@@ -556,41 +556,41 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     {
         if(dim.data==1)
         {
-            measure.1 <- c(NA, countDistinct(sub.data.1))
+            measure.1 <- c(NA, as.integer(countDistinct(sub.data.1)[1]))
         }
 
         if(dim.data==2)
         {
             measure.1 <- c(NA
-                        , countDistinct(sub.data.1)
-                        , countDistinct(sub.data.2))
+                        , as.integer(countDistinct(sub.data.1)[1])
+                        , as.integer(countDistinct(sub.data.2)[1]))
         }
         if(dim.data==3)
         {
             measure.1 <- c(NA
-                        , countDistinct(sub.data.1)
-                        , countDistinct(sub.data.2)
-                        , countDistinct(sub.data.3))
+                        , as.integer(countDistinct(sub.data.1)[1])
+                        , as.integer(countDistinct(sub.data.2)[1])
+                        , as.integer(countDistinct(sub.data.3)[1]))
         }
         if(dim.data==4)
         {
             measure.1 <- c(NA
-                        , countDistinct(sub.data.1)
-                        , countDistinct(sub.data.2)
-                        , countDistinct(sub.data.3)
-                        , countDistinct(sub.data.4))
+                        , as.integer(countDistinct(sub.data.1)[1])
+                        , as.integer(countDistinct(sub.data.2)[1])
+                        , as.integer(countDistinct(sub.data.3)[1])
+                        , as.integer(countDistinct(sub.data.4)[1]))
         }
         if(dim.data==5)
         {
             measure.1 <- c(NA
-                        , countDistinct(sub.data.1)
-                        , countDistinct(sub.data.2)
-                        , countDistinct(sub.data.3)
-                        , countDistinct(sub.data.4)
-                        , countDistinct(sub.data.5))
+                        , as.integer(countDistinct(sub.data.1)[1])
+                        , as.integer(countDistinct(sub.data.2)[1])
+                        , as.integer(countDistinct(sub.data.3)[1])
+                        , as.integer(countDistinct(sub.data.4)[1])
+                        , as.integer(countDistinct(sub.data.5)[1]))
         }
 
-        label.1   <- ifelse(lang=="de", "N", "n")
+        label.1   <- ifelse(lang=="de", "N untersch.", "n dist.")
 
         if(verbose>1) print(paste("count_distinct - measure.1: -- :", measure.1))
         if(verbose>1) print(paste("count_distinct - label.1: -- :", label.1))
@@ -2420,13 +2420,13 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
     # Ev. NAs angeben ..............................................................................
     if(sum(res.na>0) & !var.measure.label%in%args.with.na)
     {
-        res.na.df <- data.frame(t(c(var.measure.label, ifelse(lang=="de", "N 'NA'", "n 'NA'"), res.na, "")))
-        if(verbose>1) print(paste("res.na: -- :", res.na))
+        res.na.df <- data.frame(t(c(var.measure.label, ifelse(lang=="de", "N 'NA'", "n 'NA'"), format(res.na, big.mark=big.mark), "")))
+        if(verbose>1) print(paste("res.na: -- :",    res.na))
         if(verbose>1) print(paste("res.na.df: -- :", res.na.df))
         if(verbose>1) print(paste("return.df: -- :", return.df))
         colnames(res.na.df) <- colnames(return.df)
-        args.with.na <- c(args.with.na, var.measure.label)
-        return.df <- rbind(res.na.df, return.df)
+        args.with.na        <- c(args.with.na, var.measure.label)
+        return.df           <- rbind(res.na.df, return.df)
     }
     #
     if(label.compact==TRUE) return.df$label2 <- NULL
@@ -2559,8 +2559,8 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #' @examples
 #' if(require("car"))
 #' {
-#'     # load sample data 'Mroz' from package 'car'
-#'     data(Mroz, package="car")
+#'     # sample data 'Mroz' from package 'car'
+#'     require("car")
 #'     str(Mroz)
 #'
 #'     # insert attribute 'i' for population size
@@ -2696,6 +2696,33 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                         , only.first.label=FALSE    # show only first lable of multiple lines
                         , verbose=0)                # 0 bis 2: Ausgabe Zwischenresultate
 {
+    # debug settings ...............................................................................
+    # str(Mroz)
+    # def.measures     <- def.measures.1
+    # def.measures[2, 3:4] <- c("count_distinct", NA)
+    # def.measures[6, 3:4] <- c("count_distinct", NA)
+    # # def.measures     <- rbind(def.measures, c("wchc", "wchc", "count_distinct", NA, NA, 0, NA))
+    # def.measures
+    # sub.d1           <- subset(Mroz, wchc=="no-no")
+    # sub.d2           <- subset(Mroz, wchc=="no-yes")
+    # sub.d3           <- subset(Mroz, wchc=="yes-no")
+    # sub.d4           <- subset(Mroz, wchc=="yes-yes")
+    # test.gr          <- c(1, 2 , 3, 4)
+    # only.first.label <-TRUE
+    # sub.d5           <- NULL
+    # weights.1        <- NULL
+    # weights.2        <- NULL
+    # weights.3        <- NULL
+    # weights.4        <- NULL
+    # weights.5        <- NULL
+    # label.compact    <- FALSE
+    # label.width      <- 48
+    # lang             <- "de"
+    # group.size.total <- 0
+    # big.mark         <- "'"
+    # verbose          <- 2
+    # rm(descr.table)
+    # # debug("descrMeasures")
     #
     # local options ................................................................................
     options(stringsAsFactors=FALSE)
@@ -2747,9 +2774,24 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
         descr.table  <- descr.measures[[1]]
         i.test       <- pmax(i.test, descr.measures[[2]])
         args.with.na <- descr.measures[[3]]
+
+        # add original variable name to output
+        l2 <- nrow(descr.table)
+        if(!exists("measure.names"))
+        {
+            l1 <- 0
+            measure.names <- rep(def.measures$measure_name[i], (l2-l1))
+        } else {
+            measure.names <- c(measure.names, rep(def.measures$measure_name[i], (l2-l1)))
+        }
+        l1 <- l2
     }
+    # browser()
     descr.table[, 1] <- trim.loc(descr.table[, 1])
     descr.table[, 2] <- trim.loc(descr.table[, 2])
+
+    # add original variable name to descr.table
+    descr.table$mm   <- measure.names
     #
     # ------------------------------------------------------------------------------------------- --
     if(lang=="de")
@@ -2792,7 +2834,36 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                 }
             }
         }
+        #browser()
+        if (length(args.with.na)>0)
+        {
+            i <- args.with.na[1]
+            for (i in args.with.na)
+            {
+                l.na.arg <- nchar(i)
+                for (j in 2:nrow(descr.table))
+                {
+                    if(substr(descr.table$label1[j-1], 1, l.na.arg)==i &
+                       substr(descr.table$label1[j],   1, l.na.arg)==i)
+                    {
+                        l.label1 <- nchar(descr.table$label1[j])
+                        descr.table$label1[j] <- trim.loc(substr(descr.table$label1[j],
+                                                                 l.na.arg+1, l.label1))
+                    }
+                }
+            }
+        }
+        # browser()
+        pcoln <- grep("p-value", colnames(descr.table))
+        pvals <- trim.loc(descr.table[, pcoln])
+        pdf   <- data.frame(id=as.numeric(rownames(descr.table)), pvals=pvals, mm=descr.table$mm)
+        pdf$i <- pdf$pvals!=""
+        pdf   <- subset(pdf, i==TRUE)
+        ppos  <- as.numeric(doBy::summaryBy(id~mm, data=pdf, FUN=min)[, 2])
+        ll    <- 1:nrow(descr.table)
+        descr.table[!ll%in%ppos, pcoln] <- ""
     }
+    descr.table$mm <- NULL
     #
     # ------------------------------------------------------------------------------------------- --
     return(list(descr.table, test.str))

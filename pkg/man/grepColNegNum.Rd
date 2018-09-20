@@ -26,7 +26,8 @@ under continuous developement
 \examples{
 if(require("MASS"))
 {
-    data(Mroz, package="car")
+    require("car")
+    data(Mroz)
     head(Mroz)
     print(grepColNegNum(Mroz))
 }

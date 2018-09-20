@@ -51,7 +51,7 @@ NULL
 #
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
-# rrMiscVers <- "0.31"
+# rrMiscVers <- "0.32"
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
 # getwd()
 # system(       "R --vanilla CMD build pkg")

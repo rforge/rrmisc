@@ -25,7 +25,8 @@ under continuous developement
 \examples{
 if(require("car"))
 {
-  data(Mroz, package="car")
+  require("car")
+  data(Mroz)
   Mroz$wc_ord <- as.ordered(Mroz$wc)
   print(grepColFactors(Mroz))
 }
