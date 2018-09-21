@@ -51,7 +51,7 @@ NULL
 #
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
-# rrMiscVers <- "0.32"
+# rrMiscVers <- "0.33"
 # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
 # getwd()
 # system(       "R --vanilla CMD build pkg")
@@ -69,7 +69,7 @@ NULL
 # remove.packages("rrMisc")
 #
 # -- install local copy of package
-# rrMiscVers <- "0.31"
+# rrMiscVers <- "0.33"
 # install.packages(paste0("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc_",
 #                         rrMiscVers, ".tar.gz"), repos=NULL)
 # library(rrMisc)
@@ -87,12 +87,11 @@ NULL
 # Send to r-forge.r-project.org via SVN ............................................................
 # --> change to promt
 # cd /home/roland/Statistik/R_rrMisc/rrmisc
-# svn add file ....
-# svn commit
+# svn commit            << pw: 'r-forge'
 #
 # svn log
 # svn status
-# svn add pkg/file.R
+# svn add pkg/file.R    << only to add new files to version control
 # svn update            (can help if problems occur)
 #
 # --------------------------------------------------------------------------------------------------

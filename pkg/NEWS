@@ -1,3 +1,10 @@
+rrMisc v0.33    (Release date: 2018-09-21)
+============
+
+Changes:
+
+* output from descrTable - bug fixed for cases where no tests are requested
+
 rrMisc v0.32    (Release date: 2018-09-20)
 ============
 

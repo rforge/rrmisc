@@ -185,6 +185,14 @@ if(require("car"))
                               test.gr=c(1, 2 , 3, 4), only.first.label=TRUE)
     print(descrTable6)
 
+    descrTable7 <- descrTable(def.measures = def.measures.2,
+                              sub.d1 = subset(Mroz, wchc=="no-no"),
+                              sub.d2 = subset(Mroz, wchc=="no-yes"),
+                              sub.d3 = subset(Mroz, wchc=="yes-no"),
+                              sub.d4 = subset(Mroz, wchc=="yes-yes"),
+                              only.first.label=TRUE)
+    print(descrTable7)
+
 } 
 }
 \references{

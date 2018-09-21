@@ -2674,6 +2674,14 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #'                               test.gr=c(1, 2 , 3, 4), only.first.label=TRUE)
 #'     print(descrTable6)
 #'
+#'     descrTable7 <- descrTable(def.measures = def.measures.2,
+#'                               sub.d1 = subset(Mroz, wchc=="no-no"),
+#'                               sub.d2 = subset(Mroz, wchc=="no-yes"),
+#'                               sub.d3 = subset(Mroz, wchc=="yes-no"),
+#'                               sub.d4 = subset(Mroz, wchc=="yes-yes"),
+#'                               only.first.label=TRUE)
+#'     print(descrTable7)
+#'
 #' } 
 #' @export
 descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefinitionen
@@ -2820,6 +2828,7 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
     # delete labels occurring multiple times (optional only.first.label=TRUE) ........................
     if (only.first.label)
     {
+        # numerische Werte: label1 immmer gleich
         valid.labels <- which(!is.na(descr.table$label1))
         if (length(valid.labels)>1)
         {
@@ -2834,6 +2843,7 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                 }
             }
         }
+        # Faktoren: Faktor-level als Teil von label1
         #browser()
         if (length(args.with.na)>0)
         {
@@ -2853,15 +2863,18 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
                 }
             }
         }
-        # browser()
-        pcoln <- grep("p-value", colnames(descr.table))
-        pvals <- trim.loc(descr.table[, pcoln])
-        pdf   <- data.frame(id=as.numeric(rownames(descr.table)), pvals=pvals, mm=descr.table$mm)
-        pdf$i <- pdf$pvals!=""
-        pdf   <- subset(pdf, i==TRUE)
-        ppos  <- as.numeric(doBy::summaryBy(id~mm, data=pdf, FUN=min)[, 2])
-        ll    <- 1:nrow(descr.table)
-        descr.table[!ll%in%ppos, pcoln] <- ""
+        # P-Werte
+        #browser()
+        if (class(test.gr)=="numeric") {
+            pcoln <- grep("p-value", colnames(descr.table))
+            pvals <- trim.loc(descr.table[, pcoln])
+            pdf   <- data.frame(id=as.numeric(rownames(descr.table)), pvals=pvals, mm=descr.table$mm)
+            pdf$i <- pdf$pvals!=""
+            pdf   <- subset(pdf, i==TRUE)
+            ppos  <- as.numeric(doBy::summaryBy(id~mm, data=pdf, FUN=min)[, 2])
+            ll    <- 1:nrow(descr.table)
+            descr.table[!ll%in%ppos, pcoln] <- ""
+        }
     }
     descr.table$mm <- NULL
     #
