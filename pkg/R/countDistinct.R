@@ -65,9 +65,9 @@ countDistinct <- function(x, ...) {
 # Manual          ------------------------------------------------------------------------------- --
 #
 #' @title Compare two numeric vectors
-#' 
+#'
 #' @description Compare two numeric vectors of same length for NAs and equals.
-#' 
+#'
 #' @param x vector one
 #' @param y vector of same length as x
 #' @param \dots arguments passed to further functions
@@ -150,7 +150,124 @@ compTwoVects <- function(x, y, ...)
     #
 }
 #
-# --------------- cite.by.name ------------------------------------------------------------------ --
+# --------------- compTwoVects ------------------------------------------------------------------ --
+# ENDE DER FUNKTION ----------------------------------------------------------------------------- --
+# # }}}
+# --------------- testGranularity                   Test granularity of attirbutes in data.frame  .. # {{{
+# RR 20200630     ------------------------------------------------------------------------------- --
+#
+# Manual          ------------------------------------------------------------------------------- --
+#
+#' @title test granularity of attributes in data.frame
+#'
+#' @description Compare granularity of whole data.frame and of provided attributes
+#'
+#' @param d.data, data.frame
+#' @param var, vector of attributes in d.data
+#' @param \dots arguments passed to further functions
+#' @return output describing the granularity
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @references none
+#' @examples
+#' d.data <- data.frame(a = 1:20,
+#'                      b = rep(1:10, 2),
+#'                      c = letters[1:20],
+#'                      d = rep(letters[1:10], 2))
+#' var <- c("a")
+#' testGranularity(d.data = d.data, var = var)
+#'
+#' var <- c("b")
+#' testGranularity(d.data = d.data, var = var)
+#'
+#' var <- c("a", "b")
+#' testGranularity(d.data = d.data, var = var)
+#'
+#' var <- c("a", "b", "c", "d")
+#' testGranularity(d.data = d.data, var = var)
+#' @export
+testGranularity <- function(d.data, var, ...)
+{
+  #
+  # ----------------------------------------------------------------------------------------------
+  # method
+  # - test granularity of attributes in data.frame
+  #
+  # input
+  # - d.data    = data.frame
+  # - var       = vector of attributes to test
+  #
+  # output
+  # - description of granularity of attributes in data.frame
+  # ----------------------------------------------------------------------------------------------
+  #
+  # data.frame Syntax wird angewandt, so muss ein data.frame Obejkt erstellt werden
+  if ("data.table" %in% class(d.data)) {
+    class(d.data) <- "data.frame"
+  }
+  #
+  # Eindeutigkeit ueberpruefen
+  # t1 <- length(unique(d.data[, var[1]])) # erstes Attribut
+  t1 <- nrow(d.data) # Dimension Datensatz
+  t2 <- unique(d.data[, var]) # Kombinationen alle Attribute
+  # unique(c(2, 3, 4, NA, 2, 3, 4, NA, NA)) # NA als ein Wert
+  # [1] 2 3 4 NA
+  if (is.null(dim(t2))) {
+    t2 <- length(t2)
+  } else {
+    t2 <- nrow(t2)
+  }
+  if (t1 == t2) {
+    print(paste("eindeutig in den Attributen --", paste(var, collapse = ", ")))
+  } else {
+    print(paste("nicht eindeutig in den Attributen --", paste(var, collapse = ", ")))
+    print(paste("Dimension Datensatz --",
+                formatC(t1, big.mark = "'", width = 10, format = "d")))
+    #
+    # NAs weggelassen
+    print(paste("Kombinationen Attribute ohne NAs --",
+                formatC(as.numeric(countDistinct(d.data[, var])[1]),
+                        big.mark = "'", width = 10, format = "d")))
+    #
+    # NAs als ein Wert mitgezaehlt
+    print(paste("Kombinationen Attribute mit NAs --",
+                formatC(t2, big.mark = "'", width = 10, format = "d")))
+    #
+    # NAs weggelassen wenn ein anderer Wert vorhanden, NAs als Wert mitgezaehlt wenn kein anderer
+    # Wert vorhanden
+    if (length(var) == 2) {
+      v1All <- unique(d.data[, var])
+      v1 <- unique(d.data[, var[1]])
+      # zweite Spalte hat nicht nur NAs
+      # - NAs in zweiter Spalte weglassen und Kombinationen zaehlen
+      v1NotOnlyNA <- unique(v1All[!is.na(v1All[, 2]), ][, 1])
+      c1NotOnlyNA <- as.numeric(countDistinct(d.data[d.data[, var[1]] %in% v1NotOnlyNA, var])[1])
+      # zweite Spalte hat nur NAs
+      # - das sind schon alle Kombinationen
+      v1OnlyNA <- v1[!v1 %in% v1NotOnlyNA]
+      c1OnlyNA <- length(v1OnlyNA)
+      print(paste("Kombinationen Attribute NAs selektiv --",
+                  formatC(c1NotOnlyNA + c1OnlyNA, big.mark = "'", width = 10, format = "d")))
+    }
+
+    for (v in var)
+    {
+      # countDistinct(c(2, 3, 4, NA, 2, 3, 4, NA, NA)) # NA _nicht_ als ein Wert
+      # count NAs
+      # "3" "yes"
+      cD <- countDistinct(d.data[, v])
+      print(paste(sprintf("%-40s", paste("Kombinationen Attribut", v)), "--",
+                  formatC(as.numeric(cD[1]), big.mark = "'", width = 10, format = "d"),
+                  "-- NAs present --", cD[2]))
+    }
+  }
+  # print(res)
+  # return(res)
+}
+
+
+#
+# --------------- testGranularity --------------------------------------------------------------- --
 # ENDE DER FUNKTION ----------------------------------------------------------------------------- --
 # # }}}
 # ==================================================================================================

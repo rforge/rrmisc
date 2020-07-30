@@ -4,12 +4,27 @@
 \alias{descrTable}
 \title{Create descritive table}
 \usage{
-descrTable(def.measures, sub.d1, sub.d2 = NULL, sub.d3 = NULL,
-  sub.d4 = NULL, sub.d5 = NULL, weights.1 = NULL, weights.2 = NULL,
-  weights.3 = NULL, weights.4 = NULL, weights.5 = NULL,
-  label.compact = FALSE, label.width = 48, test.gr = NULL, lang = "de",
-  group.size.total = 0, big.mark = "'", only.first.label = FALSE,
-  verbose = 0)
+descrTable(
+  def.measures,
+  sub.d1,
+  sub.d2 = NULL,
+  sub.d3 = NULL,
+  sub.d4 = NULL,
+  sub.d5 = NULL,
+  weights.1 = NULL,
+  weights.2 = NULL,
+  weights.3 = NULL,
+  weights.4 = NULL,
+  weights.5 = NULL,
+  label.compact = FALSE,
+  label.width = 48,
+  test.gr = NULL,
+  lang = "de",
+  group.size.total = 0,
+  big.mark = "'",
+  only.first.label = FALSE,
+  verbose = 0
+)
 }
 \arguments{
 \item{def.measures}{description scheme with measures, e.g. from createDefMeasures()}

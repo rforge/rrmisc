@@ -230,8 +230,8 @@ createDefMeasures <- function (d.data, var.list)
 
         # get default labels when missing from reference list
         missing_label <- which(is.na(def.measures$var_label) | def.measures$var_label=="")
-        def.measures[missing_label, "var_label"] <- 
-        def.measures[missing_label, "measure_name"]
+        def.measures[missing_label, "var_label"] <-
+          def.measures[missing_label, "measure_name"]
         # def.measures[is.na(def.measures$var_label), "var_label"] <-
         # def.measures[is.na(def.measures$var_label), "measure_name"]
         # def.measures[def.measures$var_label=="", "var_label"] <-
@@ -2682,7 +2682,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #'                               only.first.label=TRUE)
 #'     print(descrTable7)
 #'
-#' } 
+#' }
 #' @export
 descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefinitionen
                         , sub.d1                    # Daten Spalte 1
@@ -2819,7 +2819,7 @@ descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefi
     {
         descr.table[, "p-value"] <- NULL
     } else {
-        colnames(descr.table)[which(colnames(descr.table)=="p-value")] <- 
+        colnames(descr.table)[which(colnames(descr.table)=="p-value")] <-
             paste0("p-value(", paste(test.gr, collapse="-"), ")")
     }
     # descr.table <- unique(descr.table)

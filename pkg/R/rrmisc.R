@@ -41,10 +41,20 @@ NULL
 # Use Roxygen to create/update the documentation files .............................................
 #
 # -->> delete help-files so that they can be rebuilt by roxygen2
-# setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
-# getwd()
-# library(roxygen2)
-# roxygen2::roxygenise()
+if (0 == 1) {
+  # set path to Code
+  setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
+  getwd()
+  #
+  # delete help-files so that they can be rebuilt by roxygen2
+  unlink("./man/*.Rd")
+  # .libPaths()
+  # getOption("repos")
+  # install.packages("roxygen2", dependencies = TRUE)
+  #
+  library(roxygen2)
+  roxygen2::roxygenise()
+}
 #
 # --------------------------------------------------------------------------------------------------
 # Compile package ..................................................................................
@@ -90,6 +100,7 @@ NULL
 # svn commit            << pw: 'r-forge'
 #
 # svn log
+# svn log -v -r HEAD:40 << commit 40 to last commit
 # svn status
 # svn add pkg/file.R    << only to add new files to version control
 # svn update            (can help if problems occur)

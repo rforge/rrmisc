@@ -6,10 +6,10 @@
 # Manual          ------------------------------------------------------------------------------- --
 #
 #' @title Custom color schemes for lattict graphics
-#' 
+#'
 #' @description Lattice color schemes with sequences of colors from light to dark 'seq..', from one
 #' color to another color 'div..' and some qualitative colors 'qual..'.
-#' 
+#'
 #' @aliases cols3.theme cols4.theme cols7.theme seq01.theme seq02.theme seq03.theme seq04.theme div01.theme div02.theme div03.theme qual01.theme qual02.theme
 #' @export  cols3.theme cols4.theme cols7.theme seq01.theme seq02.theme seq03.theme seq04.theme div01.theme div02.theme div03.theme qual01.theme qual02.theme
 #' @param \dots arguments passed to further functions
