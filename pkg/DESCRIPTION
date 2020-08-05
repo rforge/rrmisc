@@ -8,9 +8,9 @@ Suggests:
     Hmisc,
     DescTools,
     MASS,
+    doBy,
     car
 Imports:
-    doBy,
     lattice,
     latticeExtra
 Depends:

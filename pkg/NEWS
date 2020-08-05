@@ -5,6 +5,7 @@ Changes:
 
 * new function testGranularity()
 * start using 'data.table'
+* drop function descrTable()
 
 rrMisc v0.33    (Release date: 2018-09-21)
 ============
