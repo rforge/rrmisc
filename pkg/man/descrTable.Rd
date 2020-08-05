@@ -51,7 +51,7 @@ descrTable(
 
 \item{label.compact}{If to compact result columns label and measure or make two columns.}
 
-\item{label.width}{Width of first column if label.compact==TRUE.}
+\item{label.width}{Width of first column if label.compact == TRUE.}
 
 \item{test.gr}{Index of columns to compare.}
 
@@ -83,132 +83,136 @@ utility function for formating
 under continuous developement
 }
 \examples{
-if(require("car"))
+if(require("carData") & require("data.table"))
 {
-    # sample data 'Mroz' from package 'car'
-    require("car")
-    str(Mroz)
+  # sample data 'Mroz' from package 'car'
+  require("carData")
+  require("data.table")
 
-    # insert attribute 'i' for population size
-    Mroz <- merge(data.frame(i=as.factor(1)), Mroz)
-    str(Mroz)
+  data(Mroz, package = "carData")
+  MrozDT <- as.data.table(Mroz)
+  str(MrozDT)
 
-    # reference list for variable labels
-    var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
-                           var_label=c("population",
+  # insert attribute 'i' for population size
+  MrozDT[, i := as.factor(1)]
+  str(MrozDT)
+
+  # reference list for variable labels
+  var.list <- data.frame(var_name = c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
+                         var_label = c("population",
                                        "employed",
                                        "# children to 5", "# children 6-18",
                                        "wife college",
                                        "log expected wage",
                                        "family income excl. wife"))
 
-    # create definition-table without variable for groups
-    Mroz_hc      <- Mroz[ , -which(colnames(Mroz)=="hc")]
+  # create definition-table without variable for groups
+  MrozDT_hc <- MrozDT[, -c("hc")]
 
-    # variation 1: default, no adjustments
-    def.measures.1 <- createDefMeasures(d.data=Mroz_hc)
-    print(def.measures.1)
+  # variation 1: default, no adjustments
+  def.measures.1 <- createDefMeasures(d.data = MrozDT_hc)
+  print(def.measures.1)
 
-    # variation 2: apply variable labels
-    def.measures.2 <- createDefMeasures(d.data=Mroz_hc, var.list=var.list)
-    def.measures.2[2, 6] <- -2
-    def.measures.2[9, 6] <- -1
-    print(def.measures.2)
+  # variation 2: apply variable labels
+  def.measures.2 <- createDefMeasures(d.data = MrozDT_hc, var.list = var.list)
+  def.measures.2[2, 6] <- -2
+  def.measures.2[9, 6] <- -1
+  print(def.measures.2)
 
-    # run different scenarios with modified data
-    #  - variation 1: default, no adjustments
-    descrTable1 <- NULL
-    descrTable1 <- descrTable(def.measures = def.measures.1,
-                              sub.d1 = subset(Mroz, hc=="no"),
-                              sub.d2 = subset(Mroz, hc=="yes"),
-                              sub.d3 = Mroz,
-                              group.size.total = 3,
-                              test.gr = c(1, 2))
-    print(descrTable1)
+  # run different scenarios with modified data
+  #  - variation 1: default, no adjustments
+  descrTable1 <- NULL
+  descrTable1 <- descrTable(def.measures = def.measures.1          ,
+                            sub.d1 = subset(MrozDT, hc == "no")    ,
+                            sub.d2 = subset(MrozDT, hc == "yes")   ,
+                            sub.d3 = MrozDT                        ,
+                            group.size.total = 3                   ,
+                            test.gr = c(1, 2)                      )
+  print(descrTable1)
 
 
-    descrTable2 <- descrTable(def.measures = def.measures.2,
-                              sub.d1 = subset(Mroz, hc=="no"),
-                              sub.d2 = subset(Mroz, hc=="yes"),
-                              sub.d3 = Mroz,
-                              test.gr = c(1, 2),
-                              lang="en")
-    print(descrTable2)
+  descrTable2 <- descrTable(def.measures = def.measures.2,
+                            sub.d1 = subset(MrozDT, hc == "no"),
+                            sub.d2 = subset(MrozDT, hc == "yes"),
+                            sub.d3 = MrozDT,
+                            test.gr = c(1, 2),
+                            lang="en")
+  print(descrTable2)
 
-    if(require("doBy"))
-    {
-        #  - variation 1: verify statistics
-        print(doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median, sum)))
-        print(table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc")))
-        print(table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc")))
-    }
+  if(require("doBy"))
+  {
+    #  - variation 1: verify statistics
+    print(doBy::summaryBy(k5+k618+age+lwg+inc~hc, data = MrozDT, FUN = c(mean, median, sum)))
+    print(table(MrozDT$lfp, MrozDT$hc, dnn = c("lfp", "hc")))
+    print(table(MrozDT$wc, MrozDT$hc, dnn = c("lfp", "hc")))
+  }
 
-    # - variation 2: insert some missing values for 'lfp'
-    #                   3 at Mroz$lfp where hc='no'
-    n1 <- sample(1:length(Mroz[Mroz$hc=="no", "lfp"]), 3)
-    Mroz[Mroz$hc=="no", "lfp"][n1] <- NA
-    #                   2 at Mroz$lfp where hc='yes'
-    n2 <- sample(1:length(Mroz[Mroz$hc=="yes", "lfp"]), 2)
-    Mroz[Mroz$hc=="yes", "lfp"][n2] <- NA
+  # - variation 2: insert some missing values for 'lfp'
+  #                   3 at MrozDT$lfp where hc = 'no'
+  n1 <- sample(which(MrozDT$hc == "no"), 3)
+  MrozDT[n1, "lfp"] <- NA
+  #                   2 at MrozDT$lfp where hc = 'yes'
+  n2 <- sample(which(MrozDT$hc == "yes"), 2)
+  MrozDT[n2, "lfp"] <- NA
 
-    descrTable3 <- descrTable(def.measures = def.measures.2,
-                              sub.d1 = subset(Mroz, hc=="no"),
-                              sub.d2 = subset(Mroz, hc=="yes"),
-                              sub.d3 = Mroz,
-                              test.gr = c(1, 2),
-                              lang="en")
-    print(descrTable3)
+  descrTable3 <- descrTable(def.measures = def.measures.2,
+                            sub.d1 = subset(MrozDT, hc == "no"),
+                            sub.d2 = subset(MrozDT, hc == "yes"),
+                            sub.d3 = MrozDT,
+                            test.gr = c(1, 2),
+                            lang = "en")
+  print(descrTable3)
 
-    # - variation 3: insert some missing values for 'age'
-    #                   1 at Mroz$lfp where hc='no'
-    n3 <- sample(1:length(Mroz[Mroz$hc=="no", "age"]), 1)
-    Mroz[Mroz$hc=="no", "age"][n3] <- NA
-    #                   5 at Mroz$lfp where hc='no'
-    n4 <- sample(1:length(Mroz[Mroz$hc=="yes", "age"]), 5)
-    Mroz[Mroz$hc=="yes", "age"][n4] <- NA
+  # - variation 3: insert some missing values for 'age'
+  #                   1 at MrozDT$lfp where hc = 'no'
+  n3 <- sample(which(MrozDT$hc == "no"), 1)
+  MrozDT[n3, "age"] <- NA
+  #                   5 at MrozDT$lfp where hc='no'
+  n4 <- sample(which(MrozDT$hc == "yes"), 5)
+  MrozDT[n4, "age"] <- NA
 
-    descrTable4 <- descrTable(def.measures = def.measures.2,
-                              sub.d1 = subset(Mroz, hc=="no"),
-                              sub.d2 = subset(Mroz, hc=="yes"),
-                              sub.d3 = Mroz,
-                              test.gr = c(1, 2),
-                              lang="en")
-    print(descrTable4)
+  descrTable4 <- descrTable(def.measures = def.measures.2,
+                            sub.d1 = subset(MrozDT, hc == "no"),
+                            sub.d2 = subset(MrozDT, hc == "yes"),
+                            sub.d3 = MrozDT,
+                            test.gr = c(1, 2),
+                            lang = "en")
+  print(descrTable4)
 
-    # - variation 4: provoke warnings for small sample size
-    Mroz_ <- Mroz[1:15, ]
+  # - variation 4: provoke warnings for small sample size
+  MrozDT_ <- MrozDT[1:15, ]
 
-    descrTable5 <- descrTable(def.measures = def.measures.2,
-                              sub.d1 = subset(Mroz_, hc=="no"),
-                              sub.d2 = subset(Mroz_, hc=="yes"),
-                              sub.d3 = Mroz_,
-                              test.gr = c(1, 2),
-                              lang="en", only.first.label=TRUE)
-    print(descrTable5)
+  descrTable5 <- descrTable(def.measures = def.measures.2,
+                            sub.d1 = subset(MrozDT_, hc == "no"),
+                            sub.d2 = subset(MrozDT_, hc == "yes"),
+                            sub.d3 = MrozDT_,
+                            test.gr = c(1, 2),
+                            lang = "en", only.first.label=TRUE)
+  print(descrTable5)
 
-    # - variation 5: compare 4 groups
-    Mroz[Mroz$wc=="no" & Mroz$hc=="no", "wchc"] <- "no-no"
-    Mroz[Mroz$wc=="yes" & Mroz$hc=="no", "wchc"] <- "yes-no"
-    Mroz[Mroz$wc=="no" & Mroz$hc=="yes", "wchc"] <- "no-yes"
-    Mroz[Mroz$wc=="yes" & Mroz$hc=="yes", "wchc"] <- "yes-yes"
+  # - variation 5: compare 4 groups
+  MrozDT[MrozDT$wc == "no"  & MrozDT$hc == "no",  "wchc"] <- "no-no"
+  MrozDT[MrozDT$wc == "yes" & MrozDT$hc == "no",  "wchc"] <- "yes-no"
+  MrozDT[MrozDT$wc == "no"  & MrozDT$hc == "yes", "wchc"] <- "no-yes"
+  MrozDT[MrozDT$wc == "yes" & MrozDT$hc == "yes", "wchc"] <- "yes-yes"
 
-    descrTable6 <- descrTable(def.measures = def.measures.2,
-                              sub.d1 = subset(Mroz, wchc=="no-no"),
-                              sub.d2 = subset(Mroz, wchc=="no-yes"),
-                              sub.d3 = subset(Mroz, wchc=="yes-no"),
-                              sub.d4 = subset(Mroz, wchc=="yes-yes"),
-                              test.gr=c(1, 2 , 3, 4), only.first.label=TRUE)
-    print(descrTable6)
+  descrTable6 <- descrTable(def.measures = def.measures.2,
+                            sub.d1 = subset(MrozDT, wchc == "no-no"),
+                            sub.d2 = subset(MrozDT, wchc == "no-yes"),
+                            sub.d3 = subset(MrozDT, wchc == "yes-no"),
+                            sub.d4 = subset(MrozDT, wchc == "yes-yes"),
+                            test.gr = c(1, 2 , 3, 4), only.first.label = TRUE)
+  print(descrTable6)
 
-    descrTable7 <- descrTable(def.measures = def.measures.2,
-                              sub.d1 = subset(Mroz, wchc=="no-no"),
-                              sub.d2 = subset(Mroz, wchc=="no-yes"),
-                              sub.d3 = subset(Mroz, wchc=="yes-no"),
-                              sub.d4 = subset(Mroz, wchc=="yes-yes"),
-                              only.first.label=TRUE)
-    print(descrTable7)
+  descrTable7 <- descrTable(def.measures = def.measures.2,
+                            sub.d1 = subset(MrozDT, wchc == "no-no"),
+                            sub.d2 = subset(MrozDT, wchc == "no-yes"),
+                            sub.d3 = subset(MrozDT, wchc == "yes-no"),
+                            sub.d4 = subset(MrozDT, wchc == "yes-yes"),
+                            only.first.label = TRUE)
+  print(descrTable7)
 
-} 
+}
 }
 \references{
 none

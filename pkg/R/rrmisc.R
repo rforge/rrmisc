@@ -25,6 +25,7 @@ NULL
 #' objects and the descrTable() function to generate descriptive statistics of a data object.
 #' @name rrMisc-package
 #' @import latticeExtra
+#' @import data.table
 # #' @aliases rrMisc-package rrMisc
 # #' @docType package
 # #' @author Author and Maintainer: roland.rapold@@alumni.ethz.ch
@@ -61,28 +62,46 @@ if (0 == 1) {
 #
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
-# rrMiscVers <- "0.33"
-# setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
-# getwd()
-# system(       "R --vanilla CMD build pkg")
-# system(paste0("R --vanilla CMD check rrMisc_", rrMiscVers, ".tar.gz"))
-# system("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc.Rcheck/00check.log &")
-# system("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc.Rcheck/00install.out &")
-#
-# system("gv /home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc.Rcheck/rrMisc-manual.pdf &")
+if (0 == 1) {
+  rrMiscVers <- "0.34"
+  setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
+  getwd()
+  system(       "R --vanilla CMD build pkg")
+  system(paste0("R --vanilla CMD check rrMisc_", rrMiscVers, ".tar.gz"))
+
+  list.files("rrMisc.Rcheck")
+  system(paste0("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/",
+                "R_rrMisc/rrmisc/rrMisc.Rcheck/00check.log &"))
+  system(paste0("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/",
+                "R_rrMisc/rrmisc/rrMisc.Rcheck/00install.out &"))
+
+  system(paste0("gv /home/roland/Desktop/Dokumente_verteilt/Statistik/",
+                 "R_rrMisc/rrmisc/rrMisc.Rcheck/rrMisc-manual.pdf &"))
+}
 #
 # --------------------------------------------------------------------------------------------------
 # Remove old version and install new package .......................................................
 #
-# detach("package:rrMisc", character.only=TRUE)
-# unloadNamespace("rrMisc")
-# remove.packages("rrMisc")
-#
-# -- install local copy of package
-# rrMiscVers <- "0.33"
-# install.packages(paste0("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/rrMisc_",
-#                         rrMiscVers, ".tar.gz"), repos=NULL)
-# library(rrMisc)
+if (0 == 1) {
+  setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
+  getwd()
+  #
+  # test if new version is available
+  list.files()
+  #
+  # remove old version
+  detach("package:rrMisc", character.only=TRUE)
+  unloadNamespace("rrMisc")
+  remove.packages("rrMisc")
+  #
+  # install local copy of package
+  rrMiscVers <- "0.34"
+  install.packages(paste0("/home/roland/Desktop/Dokumente_verteilt/Statistik/",
+                          "R_rrMisc/rrmisc/rrMisc_", rrMiscVers, ".tar.gz"),
+                   repos=NULL)
+  library(rrMisc)
+  # example(testGranularity)
+}
 #
 # -- install copy from r-forge
 # install.packages("rrMisc", repos="http://R-Forge.R-project.org")
@@ -95,7 +114,7 @@ if (0 == 1) {
 #
 # --------------------------------------------------------------------------------------------------
 # Send to r-forge.r-project.org via SVN ............................................................
-# --> change to promt
+# --> change to shell promt <--
 # cd /home/roland/Statistik/R_rrMisc/rrmisc
 # svn commit            << pw: 'r-forge'
 #
@@ -104,5 +123,8 @@ if (0 == 1) {
 # svn status
 # svn add pkg/file.R    << only to add new files to version control
 # svn update            (can help if problems occur)
+#
+# svn delete descrTable.R
+# svn commit            << pw: 'r-forge'
 #
 # --------------------------------------------------------------------------------------------------

@@ -40,37 +40,41 @@ utility function for formating
 under continuous developement
 }
 \examples{
-if(require("car")) {
-    # load sample data 'Mroz' from package 'car'
-    data(Mroz)
-    str(Mroz)
+if(require("carData") & require(data.table)) {
 
-    # insert attribute 'i' for population size
-    Mroz <- merge(data.frame(i=as.factor(1)), Mroz)
-    str(Mroz)
+  require("carData")
+  require("data.table")
 
-    # reference list for variable labels
-    var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
-                           var_label=c("population",
+  # load sample data 'Mroz' from package 'car'
+  data(Mroz, package = "carData")
+  MrozDT <- as.data.table(Mroz)
+  str(MrozDT)
+
+  # insert attribute 'i' for population size
+  MrozDT[, i := as.factor(1)]
+  str(MrozDT)
+
+  # reference list for variable labels
+  var.list <- data.frame(var_name = c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
+                         var_label = c("population",
                                        "employed",
                                        "# children to 5", "# children 6-18",
                                        "wife college",
                                        "log expected wage",
                                        "family income excl. wife"))
 
-    # create definition-table without variable for groups
-    Mroz_hc      <- Mroz[ , -which(colnames(Mroz)=="hc")]
+  # create definition-table without variable for groups
+  MrozDT_hc <- MrozDT[, -c("hc")]
 
-    # variation 1: default, no adjustments
-    def.measures.1 <- createDefMeasures(d.data=Mroz_hc)
-    print(def.measures.1)
+  # variation 1: default, no adjustments
+  def.measures.1 <- createDefMeasures(d.data = MrozDT_hc)
+  print(def.measures.1)
 
-    # variation 2: apply variable labels
-    def.measures.2 <- createDefMeasures(d.data=Mroz_hc, var.list=var.list)
-    def.measures.2[2, 6] <- -2
-    def.measures.2[9, 6] <- -1
-    print(def.measures.2)
-
+  # variation 2: apply variable labels
+  def.measures.2 <- createDefMeasures(d.data = MrozDT_hc, var.list = var.list)
+  def.measures.2[2, 6] <- -2
+  def.measures.2[9, 6] <- -1
+  print(def.measures.2)
 }
 }
 \references{

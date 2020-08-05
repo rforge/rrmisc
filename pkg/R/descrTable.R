@@ -26,228 +26,151 @@
 #' @seealso other utility-functions in this R-package
 #' @references none
 #' @examples
-#' if(require("car")) {
-#'     # load sample data 'Mroz' from package 'car'
-#'     data(Mroz)
-#'     str(Mroz)
+#' if(require("carData") & require(data.table)) {
 #'
-#'     # insert attribute 'i' for population size
-#'     Mroz <- merge(data.frame(i=as.factor(1)), Mroz)
-#'     str(Mroz)
+#'   require("carData")
+#'   require("data.table")
 #'
-#'     # reference list for variable labels
-#'     var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
-#'                            var_label=c("population",
+#'   # load sample data 'Mroz' from package 'car'
+#'   data(Mroz, package = "carData")
+#'   MrozDT <- as.data.table(Mroz)
+#'   str(MrozDT)
+#'
+#'   # insert attribute 'i' for population size
+#'   MrozDT[, i := as.factor(1)]
+#'   str(MrozDT)
+#'
+#'   # reference list for variable labels
+#'   var.list <- data.frame(var_name = c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
+#'                          var_label = c("population",
 #'                                        "employed",
 #'                                        "# children to 5", "# children 6-18",
 #'                                        "wife college",
 #'                                        "log expected wage",
 #'                                        "family income excl. wife"))
 #'
-#'     # create definition-table without variable for groups
-#'     Mroz_hc      <- Mroz[ , -which(colnames(Mroz)=="hc")]
+#'   # create definition-table without variable for groups
+#'   MrozDT_hc <- MrozDT[, -c("hc")]
 #'
-#'     # variation 1: default, no adjustments
-#'     def.measures.1 <- createDefMeasures(d.data=Mroz_hc)
-#'     print(def.measures.1)
+#'   # variation 1: default, no adjustments
+#'   def.measures.1 <- createDefMeasures(d.data = MrozDT_hc)
+#'   print(def.measures.1)
 #'
-#'     # variation 2: apply variable labels
-#'     def.measures.2 <- createDefMeasures(d.data=Mroz_hc, var.list=var.list)
-#'     def.measures.2[2, 6] <- -2
-#'     def.measures.2[9, 6] <- -1
-#'     print(def.measures.2)
-#'
+#'   # variation 2: apply variable labels
+#'   def.measures.2 <- createDefMeasures(d.data = MrozDT_hc, var.list = var.list)
+#'   def.measures.2[2, 6] <- -2
+#'   def.measures.2[9, 6] <- -1
+#'   print(def.measures.2)
 #' }
 #' @export
 createDefMeasures <- function (d.data, var.list)
 {
-    #
-    # d.data       = input-data for 'descrMeasures' and 'descrTable'
-    # var.list     = list with variable names and labels
-    #                var.list$var_name      ->  def.measures$measure_name
-    #                var.list$var_label     ->  def.measures$measure_label
-    # def.measures = result: input-parameter table for 'descrMeasures' and 'descrTable'
-    #
-    # local options ................................................................................
-    options(stringsAsFactors=FALSE)
-    #
-    # pasteClass local function ....................................................................
-    pasteClass <- function(x)
-    {
-        class.x <- class(x)
-        if(length(class.x)>1)
-        {
-            class.x <- paste(class.x, collapse=" ")
-        }
-        return(class.x)
-    }
-    #
-    # check input data                                  ............................................
-    if (missing(d.data) || !is.data.frame(d.data))
-    {
-        return("please provide data.frame as 'd.data'")
-    }
-    #
-    # create generic definition-table if none is provided ..........................................
+  #
+  # d.data       = input-data for 'descrMeasures' and 'descrTable'
+  # var.list     = list with variable names and labels
+  #                var.list$var_name      ->  def.measures$measure_name
+  #                var.list$var_label     ->  def.measures$measure_label
+  # def.measures = result: input-parameter table for 'descrMeasures' and 'descrTable'
+  #
+  # local options ................................................................................
+  # options(stringsAsFactors = FALSE)
+  #
+  # check input data                                  ............................................
+  if (missing(d.data) || !is.data.table(d.data))
+  {
+    return("please provide data.table as 'd.data'")
+  }
+  #
+  # create generic definition-table if none is provided ..........................................
   # if (missing(def.measures) || is.null(def.measures))
   # {
-        def.measures <- data.frame(measure_label="a", measure_name="a"
-                                 , measure_1="a"
-                                 , measure_2="a"
-                                 , measure_ref_level=NA
-                                 , measure_prec_1=1
-                                 , measure_prec_2=1)
-        i.row        <- 1
+  NewEntry <- function(attribute, measure_1, measure_2, measure_ref_level = NA, measure_prec_1, measure_prec_2) {
+    entry <- data.table(measure_label = attribute,
+                        measure_name =  attribute,
+                        measure_1 = measure_1,
+                        measure_2 = measure_2,
+                        measure_ref_level = measure_ref_level,
+                        measure_prec_1 = measure_prec_1,
+                        measure_prec_2 = measure_prec_2)
+    return(entry)
+  }
 
-        for(i in 1:ncol(d.data))
-        {
-            if(pasteClass(d.data[, i])=="numeric")
-            {
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "mean"
-                def.measures[i.row, "measure_2"] <- "median"
-                def.measures[i.row, "measure_ref_level"] <- NA
-                def.measures[i.row, "measure_prec_1"] <- 1
-                def.measures[i.row, "measure_prec_2"] <- 1
-                i.row <- i.row + 1
-
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "mean"
-                def.measures[i.row, "measure_2"] <- "sd"
-                def.measures[i.row, "measure_ref_level"] <- NA
-                def.measures[i.row, "measure_prec_1"] <- 1
-                def.measures[i.row, "measure_prec_2"] <- 1
-                i.row <- i.row + 1
-
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "median"
-                def.measures[i.row, "measure_2"] <- "IQR"
-                def.measures[i.row, "measure_ref_level"] <- NA
-                def.measures[i.row, "measure_prec_1"] <- 1
-                def.measures[i.row, "measure_prec_2"] <- 1
-                i.row <- i.row + 1
-
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "sum"
-                def.measures[i.row, "measure_2"] <- NA
-                def.measures[i.row, "measure_ref_level"] <- NA
-                def.measures[i.row, "measure_prec_1"] <- 1
-                def.measures[i.row, "measure_prec_2"] <- NA
-                i.row <- i.row + 1
-            }
-            if(pasteClass(d.data[, i])=="integer")
-            {
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "mean"
-                def.measures[i.row, "measure_2"] <- "median"
-                def.measures[i.row, "measure_ref_level"] <- NA
-                def.measures[i.row, "measure_prec_1"] <- 1
-                def.measures[i.row, "measure_prec_2"] <- 1
-                i.row <- i.row + 1
-
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "mean"
-                def.measures[i.row, "measure_2"] <- "sd"
-                def.measures[i.row, "measure_ref_level"] <- NA
-                def.measures[i.row, "measure_prec_1"] <- 1
-                def.measures[i.row, "measure_prec_2"] <- 1
-                i.row <- i.row + 1
-
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "median"
-                def.measures[i.row, "measure_2"] <- "IQR"
-                def.measures[i.row, "measure_ref_level"] <- NA
-                def.measures[i.row, "measure_prec_1"] <- 1
-                def.measures[i.row, "measure_prec_2"] <- 1
-                i.row <- i.row + 1
-
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "sum"
-                def.measures[i.row, "measure_2"] <- NA
-                def.measures[i.row, "measure_ref_level"] <- NA
-                def.measures[i.row, "measure_prec_1"] <- 1
-                def.measures[i.row, "measure_prec_2"] <- NA
-                i.row <- i.row + 1
-            }
-            if(pasteClass(d.data[, i])=="factor")
-            {
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "count"
-                def.measures[i.row, "measure_2"] <- "portion"
-                def.measures[i.row, "measure_ref_level"] <- NA
-                def.measures[i.row, "measure_prec_1"] <- 0
-                def.measures[i.row, "measure_prec_2"] <- 1
-                i.row <- i.row + 1
-            }
-            if(pasteClass(d.data[, i])=="ordered factor")
-            {
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "count"
-                def.measures[i.row, "measure_2"] <- "portion"
-                def.measures[i.row, "measure_prec_1"] <- 0
-                def.measures[i.row, "measure_prec_2"] <- 1
-                i.row <- i.row + 1
-            }
-            if(pasteClass(d.data[, i])=="ordered")
-            {
-                def.measures[i.row, "measure_label"] <- colnames(d.data)[i]
-                def.measures[i.row, "measure_name"]  <- colnames(d.data)[i]
-                def.measures[i.row, "measure_1"] <- "count"
-                def.measures[i.row, "measure_2"] <- "portion"
-                def.measures[i.row, "measure_ref_level"] <- NA
-                def.measures[i.row, "measure_prec_1"] <- 0
-                def.measures[i.row, "measure_prec_2"] <- 1
-                i.row <- i.row + 1
-            }
-        }
+  def.measures <- data.table(measure_label = "a", measure_name = "a"
+                             , measure_1 = "a"
+                             , measure_2 = "a"
+                             , measure_ref_level = NA
+                             , measure_prec_1 = 1
+                             , measure_prec_2 = 1)
+  i     <- 1
+  i.row <- 1
+  for(i in 1:ncol(d.data))
+  {
+    if(sapply(d.data, class)[i] == "numeric")
+    {
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "mean", "median", NA_character_, 1, 1))
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "mean", "sd", NA, 1, 1))
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "median", "IQR", NA, 1, 1))
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "sum", NA, NA, 1, NA))
+    }
+    if(sapply(d.data, class)[i] == "integer")
+    {
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "mean", "median", NA, 1, 1))
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "mean", "sd", NA, 1, 1))
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "median", "IQR", NA, 1, 1))
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "sum", NA, NA, 1, NA))
+    }
+    if(sapply(d.data, class)[i] == "factor")
+    {
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "count", "portion", NA, 0, 1))
+    }
+    if(sapply(d.data, class)[i] == "ordered factor")
+    {
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "count", "portion", NA, 0, 1))
+    }
+    if(sapply(d.data, class)[i] == "ordered")
+    {
+      def.measures <- rbind(def.measures, NewEntry(colnames(d.data)[i], "count", "portion", NA, 0, 1))
+    }
+  }
+  def.measures <- def.measures[-1, ]
   # }
   # else {
   #     return(def.measures)
   # }
-    #
-    # substitute variable labels from reference list    ............................................
-    if (!missing(var.list) && !is.null(var.list))
-    {
-        # order of rows
-        def.measures$nr <- 1:nrow(def.measures)
+  #
+  # substitute variable labels from reference list    ............................................
+  if (!missing(var.list) && !is.null(var.list))
+  {
+    # order of rows
+    def.measures$nr <- 1:nrow(def.measures)
 
-        # merge reference list for measure_label's
-        def.measures <- merge(def.measures[, -which(colnames(def.measures) == "measure_label")]
-                              , var.list[, c("var_label", "var_name")]
-                              , by.x = "measure_name"
-                              , by.y = "var_name"
-                              , all.x = TRUE)
+    # merge reference list for measure_label's
+    def.measures <- merge(def.measures[, -c("measure_label")]
+                          , var.list[, c("var_label", "var_name")]
+                          , by.x = "measure_name"
+                          , by.y = "var_name"
+                          , all.x = TRUE)
 
-        # get default labels when missing from reference list
-        missing_label <- which(is.na(def.measures$var_label) | def.measures$var_label=="")
-        def.measures[missing_label, "var_label"] <-
-          def.measures[missing_label, "measure_name"]
-        # def.measures[is.na(def.measures$var_label), "var_label"] <-
-        # def.measures[is.na(def.measures$var_label), "measure_name"]
-        # def.measures[def.measures$var_label=="", "var_label"] <-
-        # def.measures[def.measures$var_label=="", "measure_name"]
+    # get default labels when missing from reference list
+    missing_label <- which(is.na(def.measures$var_label) | def.measures$var_label == "")
+    def.measures[missing_label, "var_label"] <-
+      def.measures[missing_label, "measure_name"]
+    # def.measures[is.na(def.measures$var_label), "var_label"] <-
+    # def.measures[is.na(def.measures$var_label), "measure_name"]
+    # def.measures[def.measures$var_label == "", "var_label"] <-
+    # def.measures[def.measures$var_label == "", "measure_name"]
 
-        # apply original order of rows
-        def.measures <- def.measures[order(def.measures$nr), ]
-        def.measures$nr <- NULL
+    # apply original order of rows
+    def.measures <- def.measures[order(def.measures$nr), ]
+    def.measures$nr <- NULL
 
-        # apply and name original column order
-        def.measures <- def.measures[, c("var_label", "measure_name", "measure_1", "measure_2",
-                                         "measure_ref_level", "measure_prec_1", "measure_prec_2")]
-        colnames(def.measures)[1] <- "measure_label"
-    }
-    #
-    return(def.measures)
+    # apply and name original column order
+    def.measures <- def.measures[, c("var_label", "measure_name", "measure_1", "measure_2",
+                                     "measure_ref_level", "measure_prec_1", "measure_prec_2")]
+    colnames(def.measures)[1] <- "measure_label"
+  }
+  #
+  return(def.measures)
 }
 # --------------- createDefMeasures -------------------------------------------------------------- --
 # END OF FUNCTION ------------------------------------------------------------------------------- --
@@ -2520,7 +2443,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 # Special case: Variable 'i' --> is seen as indicator (record unit)' and shown as
 #                                'group size' (Kollektivgroesse)
 #
-# descrTable  <- function(descr.table=NULL          # Resultattabelle (vorformatiert)
+# descrTable  <- function(descr.table = NULL          # Resultattabelle (vorformatiert)
 #
 # Manual          ------------------------------------------------------------------------------- --
 #' @title Create descritive table
@@ -2542,7 +2465,7 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #' @param weights.4 vectors of weights of data column 4
 #' @param weights.5 vectors of weights of data column 5
 #' @param label.compact If to compact result columns label and measure or make two columns.
-#' @param label.width Width of first column if label.compact==TRUE.
+#' @param label.width Width of first column if label.compact == TRUE.
 #' @param test.gr Index of columns to compare.
 #' @param lang Language for certain key words german 'de' or english 'en'.
 #' @param group.size.total Column for group size total (if 'portion' is requested).
@@ -2557,330 +2480,351 @@ descrMeasures  <- function(descr.table=NULL             # result table to append
 #' @seealso other utility-functions in this R-package
 #' @references none
 #' @examples
-#' if(require("car"))
+#' if(require("carData") & require("data.table"))
 #' {
-#'     # sample data 'Mroz' from package 'car'
-#'     require("car")
-#'     str(Mroz)
+#'   # sample data 'Mroz' from package 'car'
+#'   require("carData")
+#'   require("data.table")
 #'
-#'     # insert attribute 'i' for population size
-#'     Mroz <- merge(data.frame(i=as.factor(1)), Mroz)
-#'     str(Mroz)
+#'   data(Mroz, package = "carData")
+#'   MrozDT <- as.data.table(Mroz)
+#'   str(MrozDT)
 #'
-#'     # reference list for variable labels
-#'     var.list <- data.frame(var_name=c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
-#'                            var_label=c("population",
+#'   # insert attribute 'i' for population size
+#'   MrozDT[, i := as.factor(1)]
+#'   str(MrozDT)
+#'
+#'   # reference list for variable labels
+#'   var.list <- data.frame(var_name = c("i", "lfp", "k5", "k618", "wc", "lwg", "inc"),
+#'                          var_label = c("population",
 #'                                        "employed",
 #'                                        "# children to 5", "# children 6-18",
 #'                                        "wife college",
 #'                                        "log expected wage",
 #'                                        "family income excl. wife"))
 #'
-#'     # create definition-table without variable for groups
-#'     Mroz_hc      <- Mroz[ , -which(colnames(Mroz)=="hc")]
+#'   # create definition-table without variable for groups
+#'   MrozDT_hc <- MrozDT[, -c("hc")]
 #'
-#'     # variation 1: default, no adjustments
-#'     def.measures.1 <- createDefMeasures(d.data=Mroz_hc)
-#'     print(def.measures.1)
+#'   # variation 1: default, no adjustments
+#'   def.measures.1 <- createDefMeasures(d.data = MrozDT_hc)
+#'   print(def.measures.1)
 #'
-#'     # variation 2: apply variable labels
-#'     def.measures.2 <- createDefMeasures(d.data=Mroz_hc, var.list=var.list)
-#'     def.measures.2[2, 6] <- -2
-#'     def.measures.2[9, 6] <- -1
-#'     print(def.measures.2)
+#'   # variation 2: apply variable labels
+#'   def.measures.2 <- createDefMeasures(d.data = MrozDT_hc, var.list = var.list)
+#'   def.measures.2[2, 6] <- -2
+#'   def.measures.2[9, 6] <- -1
+#'   print(def.measures.2)
 #'
-#'     # run different scenarios with modified data
-#'     #  - variation 1: default, no adjustments
-#'     descrTable1 <- NULL
-#'     descrTable1 <- descrTable(def.measures = def.measures.1,
-#'                               sub.d1 = subset(Mroz, hc=="no"),
-#'                               sub.d2 = subset(Mroz, hc=="yes"),
-#'                               sub.d3 = Mroz,
-#'                               group.size.total = 3,
-#'                               test.gr = c(1, 2))
-#'     print(descrTable1)
+#'   # run different scenarios with modified data
+#'   #  - variation 1: default, no adjustments
+#'   descrTable1 <- NULL
+#'   descrTable1 <- descrTable(def.measures = def.measures.1          ,
+#'                             sub.d1 = subset(MrozDT, hc == "no")    ,
+#'                             sub.d2 = subset(MrozDT, hc == "yes")   ,
+#'                             sub.d3 = MrozDT                        ,
+#'                             group.size.total = 3                   ,
+#'                             test.gr = c(1, 2)                      )
+#'   print(descrTable1)
 #'
 #'
-#'     descrTable2 <- descrTable(def.measures = def.measures.2,
-#'                               sub.d1 = subset(Mroz, hc=="no"),
-#'                               sub.d2 = subset(Mroz, hc=="yes"),
-#'                               sub.d3 = Mroz,
-#'                               test.gr = c(1, 2),
-#'                               lang="en")
-#'     print(descrTable2)
+#'   descrTable2 <- descrTable(def.measures = def.measures.2,
+#'                             sub.d1 = subset(MrozDT, hc == "no"),
+#'                             sub.d2 = subset(MrozDT, hc == "yes"),
+#'                             sub.d3 = MrozDT,
+#'                             test.gr = c(1, 2),
+#'                             lang="en")
+#'   print(descrTable2)
 #'
-#'     if(require("doBy"))
-#'     {
-#'         #  - variation 1: verify statistics
-#'         print(doBy::summaryBy(k5+k618+age+lwg+inc~hc, data=Mroz, FUN=c(mean, median, sum)))
-#'         print(table(Mroz$lfp, Mroz$hc, dnn=c("lfp", "hc")))
-#'         print(table(Mroz$wc, Mroz$hc, dnn=c("lfp", "hc")))
-#'     }
+#'   if(require("doBy"))
+#'   {
+#'     #  - variation 1: verify statistics
+#'     print(doBy::summaryBy(k5+k618+age+lwg+inc~hc, data = MrozDT, FUN = c(mean, median, sum)))
+#'     print(table(MrozDT$lfp, MrozDT$hc, dnn = c("lfp", "hc")))
+#'     print(table(MrozDT$wc, MrozDT$hc, dnn = c("lfp", "hc")))
+#'   }
 #'
-#'     # - variation 2: insert some missing values for 'lfp'
-#'     #                   3 at Mroz$lfp where hc='no'
-#'     n1 <- sample(1:length(Mroz[Mroz$hc=="no", "lfp"]), 3)
-#'     Mroz[Mroz$hc=="no", "lfp"][n1] <- NA
-#'     #                   2 at Mroz$lfp where hc='yes'
-#'     n2 <- sample(1:length(Mroz[Mroz$hc=="yes", "lfp"]), 2)
-#'     Mroz[Mroz$hc=="yes", "lfp"][n2] <- NA
+#'   # - variation 2: insert some missing values for 'lfp'
+#'   #                   3 at MrozDT$lfp where hc = 'no'
+#'   n1 <- sample(which(MrozDT$hc == "no"), 3)
+#'   MrozDT[n1, "lfp"] <- NA
+#'   #                   2 at MrozDT$lfp where hc = 'yes'
+#'   n2 <- sample(which(MrozDT$hc == "yes"), 2)
+#'   MrozDT[n2, "lfp"] <- NA
 #'
-#'     descrTable3 <- descrTable(def.measures = def.measures.2,
-#'                               sub.d1 = subset(Mroz, hc=="no"),
-#'                               sub.d2 = subset(Mroz, hc=="yes"),
-#'                               sub.d3 = Mroz,
-#'                               test.gr = c(1, 2),
-#'                               lang="en")
-#'     print(descrTable3)
+#'   descrTable3 <- descrTable(def.measures = def.measures.2,
+#'                             sub.d1 = subset(MrozDT, hc == "no"),
+#'                             sub.d2 = subset(MrozDT, hc == "yes"),
+#'                             sub.d3 = MrozDT,
+#'                             test.gr = c(1, 2),
+#'                             lang = "en")
+#'   print(descrTable3)
 #'
-#'     # - variation 3: insert some missing values for 'age'
-#'     #                   1 at Mroz$lfp where hc='no'
-#'     n3 <- sample(1:length(Mroz[Mroz$hc=="no", "age"]), 1)
-#'     Mroz[Mroz$hc=="no", "age"][n3] <- NA
-#'     #                   5 at Mroz$lfp where hc='no'
-#'     n4 <- sample(1:length(Mroz[Mroz$hc=="yes", "age"]), 5)
-#'     Mroz[Mroz$hc=="yes", "age"][n4] <- NA
+#'   # - variation 3: insert some missing values for 'age'
+#'   #                   1 at MrozDT$lfp where hc = 'no'
+#'   n3 <- sample(which(MrozDT$hc == "no"), 1)
+#'   MrozDT[n3, "age"] <- NA
+#'   #                   5 at MrozDT$lfp where hc='no'
+#'   n4 <- sample(which(MrozDT$hc == "yes"), 5)
+#'   MrozDT[n4, "age"] <- NA
 #'
-#'     descrTable4 <- descrTable(def.measures = def.measures.2,
-#'                               sub.d1 = subset(Mroz, hc=="no"),
-#'                               sub.d2 = subset(Mroz, hc=="yes"),
-#'                               sub.d3 = Mroz,
-#'                               test.gr = c(1, 2),
-#'                               lang="en")
-#'     print(descrTable4)
+#'   descrTable4 <- descrTable(def.measures = def.measures.2,
+#'                             sub.d1 = subset(MrozDT, hc == "no"),
+#'                             sub.d2 = subset(MrozDT, hc == "yes"),
+#'                             sub.d3 = MrozDT,
+#'                             test.gr = c(1, 2),
+#'                             lang = "en")
+#'   print(descrTable4)
 #'
-#'     # - variation 4: provoke warnings for small sample size
-#'     Mroz_ <- Mroz[1:15, ]
+#'   # - variation 4: provoke warnings for small sample size
+#'   MrozDT_ <- MrozDT[1:15, ]
 #'
-#'     descrTable5 <- descrTable(def.measures = def.measures.2,
-#'                               sub.d1 = subset(Mroz_, hc=="no"),
-#'                               sub.d2 = subset(Mroz_, hc=="yes"),
-#'                               sub.d3 = Mroz_,
-#'                               test.gr = c(1, 2),
-#'                               lang="en", only.first.label=TRUE)
-#'     print(descrTable5)
+#'   descrTable5 <- descrTable(def.measures = def.measures.2,
+#'                             sub.d1 = subset(MrozDT_, hc == "no"),
+#'                             sub.d2 = subset(MrozDT_, hc == "yes"),
+#'                             sub.d3 = MrozDT_,
+#'                             test.gr = c(1, 2),
+#'                             lang = "en", only.first.label=TRUE)
+#'   print(descrTable5)
 #'
-#'     # - variation 5: compare 4 groups
-#'     Mroz[Mroz$wc=="no" & Mroz$hc=="no", "wchc"] <- "no-no"
-#'     Mroz[Mroz$wc=="yes" & Mroz$hc=="no", "wchc"] <- "yes-no"
-#'     Mroz[Mroz$wc=="no" & Mroz$hc=="yes", "wchc"] <- "no-yes"
-#'     Mroz[Mroz$wc=="yes" & Mroz$hc=="yes", "wchc"] <- "yes-yes"
+#'   # - variation 5: compare 4 groups
+#'   MrozDT[MrozDT$wc == "no"  & MrozDT$hc == "no",  "wchc"] <- "no-no"
+#'   MrozDT[MrozDT$wc == "yes" & MrozDT$hc == "no",  "wchc"] <- "yes-no"
+#'   MrozDT[MrozDT$wc == "no"  & MrozDT$hc == "yes", "wchc"] <- "no-yes"
+#'   MrozDT[MrozDT$wc == "yes" & MrozDT$hc == "yes", "wchc"] <- "yes-yes"
 #'
-#'     descrTable6 <- descrTable(def.measures = def.measures.2,
-#'                               sub.d1 = subset(Mroz, wchc=="no-no"),
-#'                               sub.d2 = subset(Mroz, wchc=="no-yes"),
-#'                               sub.d3 = subset(Mroz, wchc=="yes-no"),
-#'                               sub.d4 = subset(Mroz, wchc=="yes-yes"),
-#'                               test.gr=c(1, 2 , 3, 4), only.first.label=TRUE)
-#'     print(descrTable6)
+#'   descrTable6 <- descrTable(def.measures = def.measures.2,
+#'                             sub.d1 = subset(MrozDT, wchc == "no-no"),
+#'                             sub.d2 = subset(MrozDT, wchc == "no-yes"),
+#'                             sub.d3 = subset(MrozDT, wchc == "yes-no"),
+#'                             sub.d4 = subset(MrozDT, wchc == "yes-yes"),
+#'                             test.gr = c(1, 2 , 3, 4), only.first.label = TRUE)
+#'   print(descrTable6)
 #'
-#'     descrTable7 <- descrTable(def.measures = def.measures.2,
-#'                               sub.d1 = subset(Mroz, wchc=="no-no"),
-#'                               sub.d2 = subset(Mroz, wchc=="no-yes"),
-#'                               sub.d3 = subset(Mroz, wchc=="yes-no"),
-#'                               sub.d4 = subset(Mroz, wchc=="yes-yes"),
-#'                               only.first.label=TRUE)
-#'     print(descrTable7)
+#'   descrTable7 <- descrTable(def.measures = def.measures.2,
+#'                             sub.d1 = subset(MrozDT, wchc == "no-no"),
+#'                             sub.d2 = subset(MrozDT, wchc == "no-yes"),
+#'                             sub.d3 = subset(MrozDT, wchc == "yes-no"),
+#'                             sub.d4 = subset(MrozDT, wchc == "yes-yes"),
+#'                             only.first.label = TRUE)
+#'   print(descrTable7)
 #'
 #' }
 #' @export
-descrTable  <- function(def.measures                # Tabelle mit Kennzahlendefinitionen
-                        , sub.d1                    # Daten Spalte 1
-                        , sub.d2=NULL               # Daten Spalte 2
-                        , sub.d3=NULL               # Daten Spalte 3
-                        , sub.d4=NULL               # Daten Spalte 4
-                        , sub.d5=NULL               # Daten Spalte 5
-                        , weights.1=NULL            # Gewichte (Daten Spalte 1)
-                        , weights.2=NULL            # Gewichte (Daten Spalte 2)
-                        , weights.3=NULL            # Gewichte (Daten Spalte 3)
-                        , weights.4=NULL            # Gewichte (Daten Spalte 4)
-                        , weights.5=NULL            # Gewichte (Daten Spalte 5)
-                        , label.compact=FALSE       # Variablenliste und Messgroessen zusammen
-                        , label.width=48            # Breite der ersten Spalte
-                        , test.gr=NULL              # Welche Datenspalten sollten verglichen (getestet) werden?
-                        , lang="de"                 # Sprache, 'de' oder 'en'
-                        , group.size.total=0        # Spalte mit Total der Kollektivgroesse
-                        , big.mark="'"
-                        , only.first.label=FALSE    # show only first lable of multiple lines
-                        , verbose=0)                # 0 bis 2: Ausgabe Zwischenresultate
+descrTable  <- function(def.measures                  # Tabelle mit Kennzahlendefinitionen
+                        , sub.d1                      # Daten Spalte 1
+                        , sub.d2 = NULL               # Daten Spalte 2
+                        , sub.d3 = NULL               # Daten Spalte 3
+                        , sub.d4 = NULL               # Daten Spalte 4
+                        , sub.d5 = NULL               # Daten Spalte 5
+                        , weights.1 = NULL            # Gewichte (Daten Spalte 1)
+                        , weights.2 = NULL            # Gewichte (Daten Spalte 2)
+                        , weights.3 = NULL            # Gewichte (Daten Spalte 3)
+                        , weights.4 = NULL            # Gewichte (Daten Spalte 4)
+                        , weights.5 = NULL            # Gewichte (Daten Spalte 5)
+                        , label.compact = FALSE       # Variablenliste und Messgroessen zusammen
+                        , label.width = 48            # Breite der ersten Spalte
+                        , test.gr = NULL              # Welche Datenspalten sollten verglichen (getestet) werden?
+                        , lang = "de"                 # Sprache, 'de' oder 'en'
+                        , group.size.total = 0        # Spalte mit Total der Kollektivgroesse
+                        , big.mark = "'"
+                        , only.first.label = FALSE    # show only first lable of multiple lines
+                        , verbose = 0              )  # 0 bis 2: Ausgabe Zwischenresultate
 {
-    # debug settings ...............................................................................
-    # str(Mroz)
-    # def.measures     <- def.measures.1
-    # def.measures[2, 3:4] <- c("count_distinct", NA)
-    # def.measures[6, 3:4] <- c("count_distinct", NA)
-    # # def.measures     <- rbind(def.measures, c("wchc", "wchc", "count_distinct", NA, NA, 0, NA))
-    # def.measures
-    # sub.d1           <- subset(Mroz, wchc=="no-no")
-    # sub.d2           <- subset(Mroz, wchc=="no-yes")
-    # sub.d3           <- subset(Mroz, wchc=="yes-no")
-    # sub.d4           <- subset(Mroz, wchc=="yes-yes")
-    # test.gr          <- c(1, 2 , 3, 4)
-    # only.first.label <-TRUE
-    # sub.d5           <- NULL
-    # weights.1        <- NULL
-    # weights.2        <- NULL
-    # weights.3        <- NULL
-    # weights.4        <- NULL
-    # weights.5        <- NULL
-    # label.compact    <- FALSE
-    # label.width      <- 48
-    # lang             <- "de"
-    # group.size.total <- 0
-    # big.mark         <- "'"
-    # verbose          <- 2
-    # rm(descr.table)
-    # # debug("descrMeasures")
-    #
-    # local options ................................................................................
-    options(stringsAsFactors=FALSE)
-    #
-    # ------------------------------------------------------------------------------------------- --
-    #  Definition lokaler Funktionen                                                              ..
-    trim.loc <- function (x) gsub("^\\s+|\\s+$", "", x)
-    #
-    # ------------------------------------------------------------------------------------------- --
-    #  Resultattabelle erstellen                    -  descr.table <- descrMeasures(...)          ..
-    #
-    if(missing(def.measures) || is.null(def.measures))
-    {
-        # def.measures <- createDefMeasures(d.data=sub.d1)
-        stop("please supply 'def.measures' for characteristics of description table")
+  # debug settings ...............................................................................
+  # str(Mroz)
+  # def.measures     <- def.measures.1
+  # def.measures[2, 3:4] <- c("count_distinct", NA)
+  # def.measures[6, 3:4] <- c("count_distinct", NA)
+  # # def.measures     <- rbind(def.measures, c("wchc", "wchc", "count_distinct", NA, NA, 0, NA))
+  # def.measures
+  # sub.d1           <- subset(Mroz, wchc == "no-no")
+  # sub.d2           <- subset(Mroz, wchc == "no-yes")
+  # sub.d3           <- subset(Mroz, wchc == "yes-no")
+  # sub.d4           <- subset(Mroz, wchc == "yes-yes")
+  # test.gr          <- c(1, 2 , 3, 4)
+  # only.first.label <-TRUE
+  # sub.d5           <- NULL
+  # weights.1        <- NULL
+  # weights.2        <- NULL
+  # weights.3        <- NULL
+  # weights.4        <- NULL
+  # weights.5        <- NULL
+  # label.compact    <- FALSE
+  # label.width      <- 48
+  # lang             <- "de"
+  # group.size.total <- 0
+  # big.mark         <- "'"
+  # verbose          <- 2
+  # rm(descr.table)
+  # # debug("descrMeasures")
+  #
+  # descrMeasures ist nicht 'data.table' - tauglich ..............................................
+  if (                   "data.table" %in% class(def.measures)) class(def.measures) <- "data.frame"
+  if (                   "data.table" %in% class(sub.d1))       class(sub.d1)       <- "data.frame"
+  if (!is.null(sub.d2) & "data.table" %in% class(sub.d2))       class(sub.d2)       <- "data.frame"
+  if (!is.null(sub.d3) & "data.table" %in% class(sub.d3))       class(sub.d3)       <- "data.frame"
+  if (!is.null(sub.d4) & "data.table" %in% class(sub.d4))       class(sub.d4)       <- "data.frame"
+  if (!is.null(sub.d5) & "data.table" %in% class(sub.d5))       class(sub.d5)       <- "data.frame"
+  #
+  # local options ................................................................................
+  options(stringsAsFactors = FALSE)
+  #
+  # ------------------------------------------------------------------------------------------- --
+  #  Definition lokaler Funktionen                                                              ..
+  trim.loc <- function (x) gsub("^\\s+|\\s+$", "", x)
+  #
+  # ------------------------------------------------------------------------------------------- --
+  #  Resultattabelle erstellen                    -  descr.table <- descrMeasures(...)          ..
+  #
+  if(missing(def.measures) || is.null(def.measures))
+  {
+    # def.measures <- createDefMeasures(d.data = sub.d1)
+    stop("please supply 'def.measures' for characteristics of description table")
+  }
+  #
+  args.with.na <- NULL
+  i.test <- c(0, 0, 0, 0)
+  i      <- 1
+  for(i in 1:nrow(def.measures))
+  {
+    if(!exists("descr.table")) descr.table <- NULL
+    descr.measures <- descrMeasures(descr.table = descr.table
+                                  , var.measure.label = def.measures$measure_label[i]
+                                  , var.measure.name = def.measures$measure_name[i]
+                                  , measures = c(def.measures$measure_1[i], def.measures$measure_2[i])
+                                  , measure.ref.level = def.measures$measure_ref_level[i]
+                                  , prec.digit = c(def.measures$measure_prec_1[i], def.measures$measure_prec_2[i])
+                                  , sub.d1 = sub.d1
+                                  , sub.d2 = sub.d2
+                                  , sub.d3 = sub.d3
+                                  , sub.d4 = sub.d4
+                                  , sub.d5 = sub.d5
+                                  , weights.1 = weights.1
+                                  , weights.2 = weights.2
+                                  , weights.3 = weights.3
+                                  , weights.4 = weights.4
+                                  , weights.5 = weights.5
+                                  , label.compact = label.compact
+                                  , label.width = label.width
+                                  , test.gr = test.gr
+                                  , lang = lang
+                                  , group.size.total = group.size.total
+                                  , big.mark = big.mark
+                                  , only.first.label = only.first.label
+                                  , args.with.na = args.with.na
+                                  , verbose = verbose
+                                  )
+    # descr.measures
+    descr.table  <- descr.measures[[1]]
+    i.test       <- pmax(i.test, descr.measures[[2]])
+    if (length(descr.measures) > 2) {
+      args.with.na <- descr.measures[[3]]
+    } else {
+      args.with.na <- ""
     }
-    #
-    args.with.na <- NULL
-    i.test <- c(0, 0, 0, 0)
-    for(i in 1:nrow(def.measures))
-    {
-        if(!exists("descr.table")) descr.table <- NULL
-        descr.measures <- descrMeasures(descr.table=descr.table
-                                        , var.measure.label=def.measures$measure_label[i]
-                                        , var.measure.name=def.measures$measure_name[i]
-                                        , measures=c(def.measures$measure_1[i], def.measures$measure_2[i])
-                                        , measure.ref.level=def.measures$measure_ref_level[i]
-                                        , prec.digit=c(def.measures$measure_prec_1[i], def.measures$measure_prec_2[i])
-                                        , sub.d1=sub.d1
-                                        , sub.d2=sub.d2
-                                        , sub.d3=sub.d3
-                                        , sub.d4=sub.d4
-                                        , sub.d5=sub.d5
-                                        , weights.1=weights.1
-                                        , weights.2=weights.2
-                                        , weights.3=weights.3
-                                        , weights.4=weights.4
-                                        , weights.5=weights.5
-                                        , label.compact=label.compact
-                                        , label.width=label.width
-                                        , test.gr=test.gr
-                                        , lang=lang
-                                        , group.size.total=group.size.total
-                                        , big.mark=big.mark
-                                        , only.first.label=only.first.label
-                                        , args.with.na=args.with.na
-                                        , verbose=verbose)
-        # descr.measures
-        descr.table  <- descr.measures[[1]]
-        i.test       <- pmax(i.test, descr.measures[[2]])
-        args.with.na <- descr.measures[[3]]
 
-        # add original variable name to output
-        l2 <- nrow(descr.table)
-        if(!exists("measure.names"))
+    # add original variable name to output
+    l2 <- nrow(descr.table)
+    if(!exists("l1")) l1 <- 0
+    l3 <- l2 - l1
+    if (l3 < 1) l3 <- 1
+    print(c(l1, l2, l3))
+    if(!exists("measure.names"))
+    {
+      measure.names <- rep(def.measures$measure_name[i], l3)
+    } else {
+      measure.names <- c(measure.names, rep(def.measures$measure_name[i], l3))
+    }
+    l1 <- l2
+  }
+  # browser()
+  descr.table[, 1] <- trim.loc(descr.table[, 1])
+  descr.table[, 2] <- trim.loc(descr.table[, 2])
+
+  # add original variable name to descr.table
+  descr.table$mm   <- measure.names
+  #
+  # ------------------------------------------------------------------------------------------- --
+  if(lang == "de")
+  {
+    test.str <- c("(c) = Chi-Quadrat-Test", "(w) = Wilcoxon-Rangsummentest"
+                  , "(k) = Kruskal-Wallis-Test", "'*' Test ergab Warnungen")
+    test.str <- test.str[as.logical(i.test)]
+    test.str <- paste(test.str, collapse = ", ")
+  } else {
+    test.str <- c("(c) = Chi-squared test", "(w) = Wilcoxon rank-sum test"
+                  , "(k) = Kruskal-Wallis test", "'*' test resulted warnings")
+    test.str <- test.str[as.logical(i.test)]
+    test.str <- paste(test.str, collapse=", ")
+  }
+  # ------------------------------------------------------------------------------------------- --
+  if(missing(test.gr) || is.null(test.gr))
+  {
+    descr.table[, "p-value"] <- NULL
+  } else {
+    colnames(descr.table)[which(colnames(descr.table) == "p-value")] <-
+      paste0("p-value(", paste(test.gr, collapse = "-"), ")")
+  }
+  # descr.table <- unique(descr.table)
+  #
+  # ------------------------------------------------------------------------------------------- --
+  # delete labels occurring multiple times (optional only.first.label = TRUE) ........................
+  if (only.first.label)
+  {
+    # numerische Werte: label1 immmer gleich
+    valid.labels <- which(!is.na(descr.table$label1))
+    if (length(valid.labels)>1)
+    {
+      label_a <- descr.table$label1[valid.labels[1]]
+      for (ii in 2:length(valid.labels))
+      {
+        if(descr.table$label1[valid.labels[ii]] == label_a)
         {
-            l1 <- 0
-            measure.names <- rep(def.measures$measure_name[i], (l2-l1))
+          descr.table$label1[ii] <- ""
         } else {
-            measure.names <- c(measure.names, rep(def.measures$measure_name[i], (l2-l1)))
+          label_a <- descr.table$label1[valid.labels[ii]]
         }
-        l1 <- l2
+      }
     }
-    # browser()
-    descr.table[, 1] <- trim.loc(descr.table[, 1])
-    descr.table[, 2] <- trim.loc(descr.table[, 2])
-
-    # add original variable name to descr.table
-    descr.table$mm   <- measure.names
-    #
-    # ------------------------------------------------------------------------------------------- --
-    if(lang=="de")
+    # Faktoren: Faktor-level als Teil von label1
+    #browser()
+    if (length(args.with.na)>0)
     {
-        test.str <- c("(c) = Chi-Quadrat-Test", "(w) = Wilcoxon-Rangsummentest"
-                      , "(k) = Kruskal-Wallis-Test", "'*' Test ergab Warnungen")
-        test.str <- test.str[as.logical(i.test)]
-        test.str <- paste(test.str, collapse=", ")
-    } else {
-        test.str <- c("(c) = Chi-squared test", "(w) = Wilcoxon rank-sum test"
-                      , "(k) = Kruskal-Wallis test", "'*' test resulted warnings")
-        test.str <- test.str[as.logical(i.test)]
-        test.str <- paste(test.str, collapse=", ")
-    }
-    # ------------------------------------------------------------------------------------------- --
-    if(missing(test.gr) || is.null(test.gr))
-    {
-        descr.table[, "p-value"] <- NULL
-    } else {
-        colnames(descr.table)[which(colnames(descr.table)=="p-value")] <-
-            paste0("p-value(", paste(test.gr, collapse="-"), ")")
-    }
-    # descr.table <- unique(descr.table)
-    #
-    # ------------------------------------------------------------------------------------------- --
-    # delete labels occurring multiple times (optional only.first.label=TRUE) ........................
-    if (only.first.label)
-    {
-        # numerische Werte: label1 immmer gleich
-        valid.labels <- which(!is.na(descr.table$label1))
-        if (length(valid.labels)>1)
+      i <- args.with.na[1]
+      for (i in args.with.na)
+      {
+        l.na.arg <- nchar(i)
+        for (j in 2:nrow(descr.table))
         {
-            label_a <- descr.table$label1[valid.labels[1]]
-            for (ii in 2:length(valid.labels))
-            {
-                if(descr.table$label1[valid.labels[ii]]==label_a)
-                {
-                    descr.table$label1[ii] <- ""
-                } else {
-                    label_a <- descr.table$label1[valid.labels[ii]]
-                }
-            }
+          if(substr(descr.table$label1[j-1], 1, l.na.arg) == i &
+             substr(descr.table$label1[j],   1, l.na.arg) == i)
+          {
+            l.label1 <- nchar(descr.table$label1[j])
+            descr.table$label1[j] <- trim.loc(substr(descr.table$label1[j],
+                                                     l.na.arg+1, l.label1))
+          }
         }
-        # Faktoren: Faktor-level als Teil von label1
-        #browser()
-        if (length(args.with.na)>0)
-        {
-            i <- args.with.na[1]
-            for (i in args.with.na)
-            {
-                l.na.arg <- nchar(i)
-                for (j in 2:nrow(descr.table))
-                {
-                    if(substr(descr.table$label1[j-1], 1, l.na.arg)==i &
-                       substr(descr.table$label1[j],   1, l.na.arg)==i)
-                    {
-                        l.label1 <- nchar(descr.table$label1[j])
-                        descr.table$label1[j] <- trim.loc(substr(descr.table$label1[j],
-                                                                 l.na.arg+1, l.label1))
-                    }
-                }
-            }
-        }
-        # P-Werte
-        #browser()
-        if (class(test.gr)=="numeric") {
-            pcoln <- grep("p-value", colnames(descr.table))
-            pvals <- trim.loc(descr.table[, pcoln])
-            pdf   <- data.frame(id=as.numeric(rownames(descr.table)), pvals=pvals, mm=descr.table$mm)
-            pdf$i <- pdf$pvals!=""
-            pdf   <- subset(pdf, i==TRUE)
-            ppos  <- as.numeric(doBy::summaryBy(id~mm, data=pdf, FUN=min)[, 2])
-            ll    <- 1:nrow(descr.table)
-            descr.table[!ll%in%ppos, pcoln] <- ""
-        }
+      }
     }
-    descr.table$mm <- NULL
-    #
-    # ------------------------------------------------------------------------------------------- --
-    return(list(descr.table, test.str))
-    # ------------------------------------------------------------------------------------------- --
+    # P-Werte
+    #browser()
+    if (class(test.gr) == "numeric") {
+      pcoln <- grep("p-value", colnames(descr.table))
+      pvals <- trim.loc(descr.table[, pcoln])
+      pdf   <- data.frame(id = as.numeric(rownames(descr.table)), pvals = pvals, mm = descr.table$mm)
+      pdf$i <- pdf$pvals!=""
+      pdf   <- subset(pdf, i == TRUE)
+      ppos  <- as.numeric(doBy::summaryBy(id~mm, data = pdf, FUN = min)[, 2])
+      ll    <- 1:nrow(descr.table)
+      descr.table[!ll%in%ppos, pcoln] <- ""
+    }
+  }
+  descr.table$mm <- NULL
+  #
+  # ------------------------------------------------------------------------------------------- --
+  return(list(descr.table, test.str))
+  # ------------------------------------------------------------------------------------------- --
 }
 #
 # --------------- descrTable -------------------------------------------------------------------- --

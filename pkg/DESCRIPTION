@@ -1,6 +1,6 @@
 Package: rrMisc
 Version: 0.34
-Date: 2020-06-30
+Date: 2020-08-03
 Title: Little Helpers
 Author: Roland Rapold
 Maintainer: Roland Rapold <roland.rapold@alumni.ethz.ch>
@@ -8,13 +8,16 @@ Suggests:
     Hmisc,
     DescTools,
     MASS,
-    doBy,
     car
 Imports:
+    doBy,
     lattice,
     latticeExtra
+Depends:
+    data.table
 Description: Little helpers for the daily work with R.
 License: GPL (>=2)
 LazyData: no
+Encoding: UTF-8
 NeedsCompilation: no
 RoxygenNote: 7.1.1
