@@ -29,6 +29,7 @@ if(require("MASS"))
     require("car")
     data(Mroz)
     head(Mroz)
+    x <- Mroz
     print(grepColNegNum(Mroz))
 }
 }
