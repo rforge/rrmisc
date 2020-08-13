@@ -4,12 +4,12 @@
 #
 # Manual          ------------------------------------------------------------------------------- --
 #' @title List of percent values, e.g. for axis displays.
-#' 
+#'
 #' @description List of percent values, e.g. for axis displays.
-#' 
+#'
 #' @details data.frame of number and corresponding representation as percentage values. E.g. for use
 #' as axix label in graphics.
-#' 
+#'
 #' @param perc.dist interval steps of percent list
 #' @param min.perc minimum percent value
 #' @param max.perc maximum percent value

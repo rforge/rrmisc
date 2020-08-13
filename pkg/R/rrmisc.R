@@ -63,7 +63,7 @@ if (0 == 1) {
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
 if (0 == 1) {
-  rrMiscVers <- "0.34"
+  rrMiscVers <- "0.35"
   setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
   getwd()
   system(       "R --vanilla CMD build pkg")
@@ -121,10 +121,13 @@ if (0 == 1) {
 # svn log
 # svn log -v -r HEAD:40 << commit 40 to last commit
 # svn status
-# svn add pkg/file.R    << only to add new files to version control
+# cd /home/roland/Statistik/R_rrMisc/rrmisc/pkg/R
+# svn add file.R        << only to add new files to version control
 # svn update            (can help if problems occur)
 #
+# cd /home/roland/Statistik/R_rrMisc/rrmisc/pkg/man
 # svn delete descrTable.R
+# svn delete descrTable.Rd
 # svn commit            << pw: 'r-forge'
 #
 # --------------------------------------------------------------------------------------------------

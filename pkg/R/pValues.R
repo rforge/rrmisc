@@ -17,7 +17,7 @@
 #'         pFromT(t_value=1.96, df=100)
 #'         pFromT(t_value=1.96, df=1000)
 #'         pFromT(t_value=1.96, df=1000, two.sided = TRUE)
-#' 
+#'
 #'         x <- c(seq(0.0001, 0.6, 0.01), NA, seq(0.6001, 1.0, 0.01))
 #'         p_value <- pFromT(t_value=x, df=100)
 #'         p_value
