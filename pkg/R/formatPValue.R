@@ -30,7 +30,7 @@
 #'     x <- c(seq(0.0001, 0.6, 0.01), NA, seq(0.6001, 1.0, 0.01))
 #'     formatPValue(x, digits=3)
 #' @export
-formatPValue <- function(x, digits=3, ...) {
+formatPValue <- function(x, digits = 3, ...) {
     #
     # method                                        ............................................. ..
     # -
@@ -79,7 +79,7 @@ formatPValue <- function(x, digits=3, ...) {
 #'
 #' @details utility function for formating
 #'
-#' @param df = data.frame or character vector
+#' @param df data.frame or character vector
 #' @param \dots arguments passed to further functions
 #' @return formatted object
 #' @note maybe of most use under Windows-Environment
@@ -136,8 +136,8 @@ encodeUTF8 <- function(df, ...) {
 #'
 #' @details utility function for analyzing contingency tables
 #'
-#' @param d.crosstab = contincency table in class 'table
-#' @param switchPosNeg = switching positive and negative classes
+#' @param d.crosstab contincency table in class 'table
+#' @param switchPosNeg switching positive and negative classes
 #' @param \dots arguments passed to further functions
 #' @return statistics of contingency table
 #' @note to be refined

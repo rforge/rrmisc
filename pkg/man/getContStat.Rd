@@ -4,12 +4,12 @@
 \alias{getContStat}
 \title{Get statistics of contingency table}
 \usage{
-getContStat(d.crosstab, switchPosNeg = FALSE)
+getContStat(d.crosstab, switchPosNeg = FALSE, ...)
 }
 \arguments{
-\item{d.crosstab}{= contincency table in class 'table}
+\item{d.crosstab}{contincency table in class 'table}
 
-\item{switchPosNeg}{= switching positive and negative classes}
+\item{switchPosNeg}{switching positive and negative classes}
 
 \item{\dots}{arguments passed to further functions}
 }

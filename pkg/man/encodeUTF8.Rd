@@ -4,10 +4,10 @@
 \alias{encodeUTF8}
 \title{Encode text to UTF-8}
 \usage{
-encodeUTF8(df)
+encodeUTF8(df, ...)
 }
 \arguments{
-\item{df}{= data.frame or character vector}
+\item{df}{data.frame or character vector}
 
 \item{\dots}{arguments passed to further functions}
 }
