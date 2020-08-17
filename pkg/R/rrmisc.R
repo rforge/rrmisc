@@ -22,7 +22,7 @@ NULL
 #' @title Some R-helpers
 #' @description Some helpers of R to process data smoothly
 #' @details The main function are the 'grep' functions for quickly accessing information of data
-#' objects and the descrTable() function to generate descriptive statistics of a data object.
+#' objects.
 #' @name rrMisc-package
 #' @import latticeExtra
 #' @import data.table
@@ -63,11 +63,15 @@ if (0 == 1) {
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
 if (0 == 1) {
-  rrMiscVers <- "0.35"
+  rrMiscVers <- "0.36"
   setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
   getwd()
   system(       "R --vanilla CMD build pkg")
   system(paste0("R --vanilla CMD check rrMisc_", rrMiscVers, ".tar.gz"))
+
+  # wenn Probleme mit Erstellung von PDF-Datei, ev.
+  # apt install texinfo
+  # apt install texlive-fonts-extra
 
   list.files("rrMisc.Rcheck")
   system(paste0("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/",
@@ -90,7 +94,7 @@ if (0 == 1) {
   list.files()
   #
   # remove old version
-  detach("package:rrMisc", character.only=TRUE)
+  detach("package:rrMisc", character.only = TRUE)
   unloadNamespace("rrMisc")
   remove.packages("rrMisc")
   #
@@ -98,19 +102,22 @@ if (0 == 1) {
   rrMiscVers <- "0.35"
   install.packages(paste0("/home/roland/Desktop/Dokumente_verteilt/Statistik/",
                           "R_rrMisc/rrmisc/rrMisc_", rrMiscVers, ".tar.gz"),
-                   repos=NULL)
+                   repos = NULL)
   library(rrMisc)
-  # example(testGranularity)
+  example(testGranularity)
 }
 #
-# -- install copy from r-forge
-# install.packages("rrMisc", repos="http://R-Forge.R-project.org")
-#
-# -- test installation
-# library(rrMisc)
-# ??rrMisc
-# ?cols7.theme
-# ?div01.theme
+if (0 == 1) {
+  # -- install copy from r-forge
+  install.packages("rrMisc", repos = "http://R-Forge.R-project.org")
+
+  # -- test installation
+  library(rrMisc)
+  ??rrMisc
+  example(getContStat)
+  ?cols7.theme
+  ?div01.theme
+}
 #
 # --------------------------------------------------------------------------------------------------
 # Send to r-forge.r-project.org via SVN ............................................................
