@@ -93,7 +93,7 @@ formatPValue <- function(x, digits=3, ...) {
 #' d.test
 #' encodeUTF8(d.test)
 #' @export
-encodeUTF8 <- function(df) {
+encodeUTF8 <- function(df, ...) {
   #
   if ("data.frame" %in% class(df)) {  # Behandlung von 'data.frame' -- auch 'data.table' -----------
     #
@@ -152,7 +152,7 @@ encodeUTF8 <- function(df) {
 #' getContStat(d.cont)
 #' @export
 #
-getContStat <- function(d.crosstab, switchPosNeg = FALSE) {
+getContStat <- function(d.crosstab, switchPosNeg = FALSE, ...) {
   # Fawcett_2003, Sing 2005 (and ROCR documentation)
   # siehe auch Wikipedia
   #

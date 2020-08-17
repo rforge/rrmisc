@@ -115,9 +115,18 @@ if (0 == 1) {
 # --------------------------------------------------------------------------------------------------
 # Send to r-forge.r-project.org via SVN ............................................................
 #
-# --> Im Terminal <--
-# cd /home/roland/Statistik/R_rrMisc/rrmisc
-# svn commit            << pw: 'r-forge'
+# --> Im Terminal                                     <--
+#
+# --> bei neuen Funktionen die Hilfe-Datei hinzufügen <--
+# cd /home/roland/Statistik/R_rrMisc/rrmisc/pkg/man   <- Achtung korrektes Verzeichnis
+# svn add encodeUTF8.Rd
+#
+# --> Änderungen commiten       << pw: 'r-forge'      <--
+# cd /home/roland/Statistik/R_rrMisc/rrmisc           <- Achtung korrektes Verzeichnis
+# svn commit
+#
+#
+#
 #
 # svn log
 # svn log -v -r HEAD:40 << commit 40 to last commit
