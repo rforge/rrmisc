@@ -114,7 +114,8 @@ if (0 == 1) {
 #
 # --------------------------------------------------------------------------------------------------
 # Send to r-forge.r-project.org via SVN ............................................................
-# --> change to shell promt <--
+#
+# --> Im Terminal <--
 # cd /home/roland/Statistik/R_rrMisc/rrmisc
 # svn commit            << pw: 'r-forge'
 #
