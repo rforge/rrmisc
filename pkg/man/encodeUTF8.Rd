@@ -29,6 +29,10 @@ d.test <- data.frame(a = 1:10,
                      c = c("ä", "ö", "ü", "è", "à", "\%", "&", "¢", "@", "¬"))
 d.test
 encodeUTF8(d.test)
+
+d.test <- c("ä", "ö", "ü", "è", "à", "\%", "&", "¢", "@", "¬", "#")
+d.test
+encodeUTF8(d.test)
 }
 \references{
 none

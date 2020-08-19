@@ -92,6 +92,10 @@ formatPValue <- function(x, digits = 3, ...) {
 #'                      c = c("ä", "ö", "ü", "è", "à", "%", "&", "¢", "@", "¬"))
 #' d.test
 #' encodeUTF8(d.test)
+#'
+#' d.test <- c("ä", "ö", "ü", "è", "à", "%", "&", "¢", "@", "¬", "#")
+#' d.test
+#' encodeUTF8(d.test)
 #' @export
 encodeUTF8 <- function(df, ...) {
   #
@@ -114,7 +118,6 @@ encodeUTF8 <- function(df, ...) {
     }
   #
   } else {  # Behandlung von Text-Vektoren ---------------------------------------------------------
-    df <- 1:20
     if (class(df) == "character") {
       Encoding(df) <- "UTF-8"
     }
