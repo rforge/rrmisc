@@ -117,6 +117,7 @@ if (0 == 1) {
   library(rrMisc)
   ??rrMisc
   example(getContStat)
+  example(encodeUTF8)
   ?cols7.theme
   ?div01.theme
 }
