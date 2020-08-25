@@ -1,5 +1,75 @@
 # ==================================================================================================
-# --------------- pFromT                         p-value from t-value                             .. # {{{
+# --------------- formatPValaue                     format p-values                               --{{{
+# RR 20130920     ------------------------------------------------------------------------------- --
+#
+# Manual          ------------------------------------------------------------------------------- --
+#' @title Format p-values
+#'
+#' @description Format p-values
+#'
+#' @details utility function for formating
+#'
+#' @param x p-value
+#' @param digits number of decimal-digits
+#' @param \dots arguments passed to further functions
+#' @return formatted string
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @seealso other utility-functions in this R-package
+#' @references none
+#' @examples
+#'     formatPValue(0.23478,     digits=3)
+#'     formatPValue(0.023478,    digits=3)
+#'     formatPValue(0.0023478,   digits=3)
+#'     formatPValue(0.00023478,  digits=3)
+#'     formatPValue(0.000023478, digits=3)
+#'     formatPValue(0.000023478, digits=4)
+#'     formatPValue(0.000023478, digits=5)
+#'     formatPValue(0.000023478, digits=6)
+#'
+#'     x <- c(seq(0.0001, 0.6, 0.01), NA, seq(0.6001, 1.0, 0.01))
+#'     formatPValue(x, digits=3)
+#' @export
+formatPValue <- function(x, digits = 3, ...) {
+    #
+    # method                                        ............................................. ..
+    # -
+    #
+    # input                                         ............................................. ..
+    # - numeric p-value
+    # - number of digits to format to
+    #
+    # output                                        ............................................. ..
+    # - formatted character string
+    #
+    # digits <- 3
+    #
+    if(length(x)==0)
+    {
+        return("--")
+    } else {
+        if (is.numeric(x))
+        {
+            lev_min <- 10^(-digits)
+            i_small <- x < lev_min          # index for small values
+            i_na    <- is.na(x)             # index for NAs
+            pValue  <- sprintf(paste("%.", digits, "f", sep = ""), x)
+
+            pValue[i_small] <- paste("<", lev_min)
+            pValue[i_na]    <- "NA"
+
+            return(pValue)
+        }
+        else {
+            return("--")
+        }
+    }
+    #
+}
+# END OF FUNCTION  ----------------------------------------------------------------------------- --
+# --------------- formatPValue  ----------------------------------------------------------------- --
+## }}}
+# --------------- pFromT                            p-value from t-value                          ..{{{
 # RR 20150109     ------------------------------------------------------------------------------- --
 # Manual          ------------------------------------------------------------------------------- --
 #' @title       Calculate p-values from t-statistics.
@@ -38,7 +108,7 @@ pFromT <- function(t_value=1.96, df=10, two.sided=FALSE)
 # --------------- pFromT --------------------------------------------
 # ENDE DER FUNKTION -------------------------------------------------
 # # }}}
-# --------------- pFromZ                         p-value from z-value (normal distribution)       .. # {{{
+# --------------- pFromZ                            p-value from z-value (normal distribution)    ..{{{
 # RR 20150109     ------------------------------------------------------------------------------- --
 # Manual          ------------------------------------------------------------------------------- --
 #' @title       Calculate p-values from z-statistics.
@@ -74,7 +144,7 @@ pFromZ <- function(z_value=1.96, two.sided=FALSE)
 # --------------- pFromT --------------------------------------------
 # ENDE DER FUNKTION -------------------------------------------------
 # # }}}
-# --------------- pFromF                         p-value from F-value                             .. # {{{
+# --------------- pFromF                            p-value from F-value                          ..{{{
 # RR 20150109     ------------------------------------------------------------------------------- --
 # Manual          ------------------------------------------------------------------------------- --
 #' @title       Calculate p-values from F-statistics.
@@ -116,93 +186,64 @@ pFromF <- function(f_value=1.96, df1=10, df2=10, two.sided=FALSE)
 # --------------- pFromF --------------------------------------------
 # ENDE DER FUNKTION -------------------------------------------------
 # # }}}
-# --------------- naToZero                       Ersetzen von NAs                                 .. # {{{
-# RR 20150109     ------------------------------------------------------------------------------- --
+# --------------- encodeUTF8                        encode text to UTF-8                          ..{{{
+# RR 20200813     ------------------------------------------------------------------------------- --
+#
 # Manual          ------------------------------------------------------------------------------- --
-#' @title       Substitution of NAs in data.frame or vector
-#' @description Substitution of NAs in a data.frame or a vector. NAs in numeric fields (integer,
-#' numeric) are substituted by 0, NAs in caracter fields are substituted by '-'.
-#' @details utility function for treating NAs
-#' @param dataf data.frame or vector
-#' @param substit_numeric shall numeric fields (integer, numerical) be substituted?
-#' @param substit_character shall character fields be substituted?
-#' @param \dots arguments passed to further functions
-#' @return corresponding data.frame or vector with substituted NAs
-#' @author Roland Rapold
-#' @keywords NA
-#' @examples
-#'         (x <- c(pi, NA, 4.000000, 5.000000, 5, 6, 5, 6))
-#'         naToZero(x)
-#'         naToZero(x, substit_numeric=TRUE)
-#'         naToZero(x, substit_numeric=FALSE)
+#' @title Encode text to UTF-8
 #'
-#'         (x <- c("pi", NA, "4.000000", "5.000000", "5", "6", "5", "6"))
-#'         naToZero(x)
-#'         naToZero(x, substit_character=TRUE)
-#'         naToZero(x, substit_character=FALSE)
+#' @description Encode text to UTF-8
+#'
+#' @details utility function for formating
+#'
+#' @param df data.frame or character vector
+#' @param \dots arguments passed to further functions
+#' @return formatted object
+#' @note maybe of most use under Windows-Environment
+#' @author Roland Rapold
+#' @seealso other utility-functions in this R-package
+#' @references none
+#' @examples
+#' d.test <- data.frame(a = 1:10,
+#'                      b = letters[1:10],
+#'                      c = c("ä", "ö", "ü", "è", "à", "%", "&", "¢", "@", "¬"))
+#' d.test
+#' encodeUTF8(d.test)
+#'
+#' d.test <- c("ä", "ö", "ü", "è", "à", "%", "&", "¢", "@", "¬", "#")
+#' d.test
+#' encodeUTF8(d.test)
 #' @export
-naToZero <- function(dataf, substit_numeric=TRUE, substit_character=FALSE, ...)
-{
-    if(is.data.frame(dataf))
+encodeUTF8 <- function(df, ...) {
+  #
+  if ("data.frame" %in% class(df)) {  # Behandlung von 'data.frame' -- auch 'data.table' -----------
+    #
+    # Lokale Kopie erstellen und als 'data.frame' klassieren (nicht 'data.table') ..................
+    ME <- df
+    class(ME) <- "data.frame"
+    #
+    # Liste aller Textspalten auslesen .............................................................
+    ColClasses <- sapply(ME, class)
+    CharCols   <- which(ColClasses == "character")
+    #
+    # Codierung aller Textspalten und einfüllen in ursprüngliches Objekt ...........................
+    for (CharCol.loc in CharCols)
     {
-        for(i in 1:ncol(dataf))
-        {
-            dataf_i    <- dataf[, i]
-            dataf_i_cl <- class(dataf_i)
-            switch(dataf_i_cl
-                 , "integer"= {
-                        if(substit_numeric==TRUE)
-                        {
-                            dataf_i[is.na(dataf_i)] <- 0
-                            dataf[, i] <- dataf_i
-                        }
-                    }
-                 , "numeric"= {
-                        if(substit_numeric==TRUE)
-                        {
-                            dataf_i[is.na(dataf_i)] <- 0
-                            dataf[, i] <- dataf_i
-                        }
-                    }
-                 , "character"= {
-                        if(substit_character==TRUE)
-                        {
-                            dataf_i[is.na(dataf_i)] <- "-"
-                            dataf[, i] <- dataf_i
-                        }
-                    })
-            rm(dataf_i)
-        }
-        return(dataf)
-    } else {
-        dataf_cl <- class(dataf)
-        switch(dataf_cl
-             , "integer"= {
-                    if(substit_numeric==TRUE)
-                    {
-                        dataf[is.na(dataf)] <- 0
-                    }
-                    return(dataf)
-                }
-             , "numeric"= {
-                    if(substit_numeric==TRUE)
-                    {
-                        dataf[is.na(dataf)] <- 0
-                    }
-                    return(dataf)
-                }
-             , "character"= {
-                    if(substit_character==TRUE)
-                    {
-                        dataf[is.na(dataf)] <- "-"
-                    }
-                    return(dataf)
-                })
-        warning("naToZero: please input a data.frame or a numeric vector")
-        return(dataf)
+      x <- ME[, CharCol.loc]
+      Encoding(x) <- "UTF-8"
+      df[, CharCol.loc] <- x
     }
+  #
+  } else {  # Behandlung von Text-Vektoren ---------------------------------------------------------
+    if (class(df) == "character") {
+      Encoding(df) <- "UTF-8"
+    }
+  }
+  #
+  # Rückgabe ---------------------------------------------------------------------------------------
+  return(df)
 }
-# --------------- naToZero ------------------------------------------
-# ENDE DER FUNKTION -------------------------------------------------
-# # }}}
+# END OF FUNCTION  ------------------------------------------------------------------------------ --
+# --------------- encodeUTF8    ----------------------------------------------------------------- --
+## }}}
 # ==================================================================================================

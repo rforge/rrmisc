@@ -63,7 +63,7 @@ if (0 == 1) {
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
 if (0 == 1) {
-  rrMiscVers <- "0.36"
+  rrMiscVers <- "0.38"
   setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
   getwd()
   system(       "R --vanilla CMD build pkg")
@@ -99,7 +99,7 @@ if (0 == 1) {
   remove.packages("rrMisc")
   #
   # install local copy of package
-  rrMiscVers <- "0.36"
+  rrMiscVers <- "0.38"
   install.packages(paste0("/home/roland/Desktop/Dokumente_verteilt/Statistik/",
                           "R_rrMisc/rrmisc/rrMisc_", rrMiscVers, ".tar.gz"),
                    repos = NULL)
@@ -107,6 +107,14 @@ if (0 == 1) {
   example(testGranularity)
   example(getContStat)
   example(encodeUTF8)
+  ?encodeUTF8
+
+  news(package = "rrMisc")
+  # library(commonmark)
+  # library(xml2)
+
+  # news(package = "callr")
+  # news(package = "Hmisc")
 }
 #
 if (0 == 1) {
@@ -120,6 +128,7 @@ if (0 == 1) {
   example(encodeUTF8)
   ?cols7.theme
   ?div01.theme
+  news(package = "rrMisc")
 }
 #
 # --------------------------------------------------------------------------------------------------
@@ -143,7 +152,7 @@ if (0 == 1) {
 # svn status
 # cd /home/roland/Statistik/R_rrMisc/rrmisc/pkg/R
 # svn add file.R        << only to add new files to version control
-# svn update            (can help if problems occur)
+# svn update            << git pull
 #
 # cd /home/roland/Statistik/R_rrMisc/rrmisc/pkg/man
 # svn delete descrTable.R

@@ -1,7 +1,6 @@
-# --------------- color themes for lattice graphics                                               --
-# RR 20160825     ------------------------------------------------------------------------------- --
-#
-# cols3.theme                                                                                     ..# {{{
+# ==================================================================================================
+# --------------- color themes for lattice graphics                                               --{{{
+# cols3.theme                                                                                     ..{{{
 #
 # Manual          ------------------------------------------------------------------------------- --
 #
@@ -100,7 +99,7 @@ cols3.theme <- function (...) {
     return(colA.theme)
 }
 ## }}}
-# cols4.theme                                                                                     ..# {{{
+# cols4.theme                                                                                     ..{{{
 cols4.theme <- function (...) {
     # 7 Colors from palette 'H'
     # colors <- hc(nr=c(1:7), alpha=100)
@@ -136,7 +135,7 @@ cols4.theme <- function (...) {
     return(colA.theme)
 }
 ## }}}
-# cols7.theme                                                                                     ..# {{{
+# cols7.theme                                                                                     ..{{{
 cols7.theme <- function (...) {
     # 7 Colors from palette 'H'
     # colors <- hc(nr=c(1:7), alpha=100)
@@ -173,14 +172,11 @@ cols7.theme <- function (...) {
 }
 ## }}}
 #
-# ----------------------------------------------------------------------------------
-# Colors from:
-# https://datavisualization.ch/inside/how-we-created-color-scales/
-# ----------------------------------------------------------------------------------
+# Colors from: https://datavisualization.ch/inside/how-we-created-color-scales/
 #
 # SEQxx The Sequential Color Scheme ................................................................
+# seq01.theme                                                                                     ..{{{
 # seq01 -- 9 Colors blue from dark to light
-# seq01.theme                                                                                     .. # {{{
 seq01.theme <- function (...) {
     #
     seq01.rgb <- c(c( 54,  62,  73), c( 53,  77, 103), c( 54,  90, 129),
@@ -217,10 +213,8 @@ seq01.theme <- function (...) {
     return(seq01.theme)
 }
 ## }}}
-# show.settings(seq01.theme())
-#
+# seq02.theme                                                                                     ..{{{
 # seq02 -- 9 Colors red from dark to light
-# seq02.theme                                                                                     .. # {{{
 seq02.theme <- function (...) {
     #
     seq02.rgb <- c(c( 78,  53,  57), c(109,  64,  71), c(140,  73,  84),
@@ -257,10 +251,8 @@ seq02.theme <- function (...) {
     return(seq02.theme)
 }
 ## }}}
-# show.settings(seq02.theme())
-#
+# seq03.theme                                                                                     ..{{{
 # seq03 -- 9 Colors green from dark to light
-# seq03.theme                                                                                     .. # {{{
 seq03.theme <- function (...) {
     #
     seq03.rgb <- c(c( 44,  59,  62), c( 51,  77,  78), c( 57,  94,  94),
@@ -297,10 +289,8 @@ seq03.theme <- function (...) {
     return(seq03.theme)
 }
 ## }}}
-# show.settings(seq03.theme())
-#
+# seq04.theme                                                                                     ..{{{
 # seq04 -- 9 Colors brown from dark to light
-# seq04.theme                                                                                     .. # {{{
 seq04.theme <- function (...) {
     #
     seq04.rgb <- c(c( 75,  55,  53), c( 98,  72,  60), c(122,  90,  69),
@@ -337,12 +327,10 @@ seq04.theme <- function (...) {
     return(seq04.theme)
 }
 ## }}}
-# show.settings(seq04.theme())
-#
 #
 # DIVxx The Diverging Color Scheme .................................................................
+# div01.theme                                                                                     ..{{{
 # div01 -- 9 Farben blau - weiss - rot
-# div01.theme                                                                                     .. # {{{
 div01.theme <- function (...) {
     #
     div01.rgb <- c(c( 55, 117, 179), c(103, 146, 196), c(148, 178, 211),
@@ -379,10 +367,8 @@ div01.theme <- function (...) {
     return(div01.theme)
 }
 ## }}}
-# show.settings(div01.theme())
-#
-# div01 -- 6 Colors from blue to white to red
-# div02.theme                                                                                     .. # {{{
+# div02.theme                                                                                     ..{{{
+# div02 -- 6 Colors from blue to white to red
 div02.theme <- function (...) {
     #
     div01.rgb <- c(c( 55, 117, 179), c(103, 146, 196), c(148, 178, 211),
@@ -428,10 +414,8 @@ div02.theme <- function (...) {
     return(div02.theme)
 }
 ## }}}
-# show.settings(div02.theme())
-#
+# div03.theme                                                                                     ..{{{
 # div03 -- 9 Colrs from green to white to brown
-# div03.theme                                                                                     .. # {{{
 div03.theme <- function (...) {
     #
     div03.rgb <- c(c( 71, 128, 123), c(115, 156, 153), c(157, 184, 183),
@@ -477,11 +461,9 @@ div03.theme <- function (...) {
     return(div03.theme)
 }
 ## }}}
-# show.settings(div03.theme())
-#
 #
 # qualxx The Qualitative Color Scheme ..............................................................
-# qual01.theme                                                                                    .. # {{{
+# qual01.theme                                                                                    ..{{{
 qual01.theme <- function (...) {
     #
     qual01.rgb <- c(c( 88, 132, 179), c(182, 206, 229),
@@ -530,9 +512,7 @@ qual01.theme <- function (...) {
     return(qual01.theme)
 }
 ## }}}
-# show.settings(qual01.theme())
-#
-# qual02.theme                                                                                    .. # {{{
+# qual02.theme                                                                                    ..{{{
 qual02.theme <- function (...) {
     #
     qual02a.rgb <- c(c( 88, 132, 179), c(182, 206, 229),
@@ -581,8 +561,67 @@ qual02.theme <- function (...) {
     return(qual02.theme)
 }
 ## }}}
-# show.settings(qual02.theme())
+#}}}
+# --------------- percentLabel                      create percentage labels for plots            ..{{{
+# RR 20130920     ------------------------------------------------------------------------------- --
 #
+# Manual          ------------------------------------------------------------------------------- --
+#' @title List of percent values, e.g. for axis displays.
+#'
+#' @description List of percent values, e.g. for axis displays.
+#'
+#' @details data.frame of number and corresponding representation as percentage values. E.g. for use
+#' as axix label in graphics.
+#'
+#' @param perc.dist interval steps of percent list
+#' @param min.perc minimum percent value
+#' @param max.perc maximum percent value
+#' @param \dots arguments passed to further functions
+#' @return data-frame with percentage as number and character string
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @seealso see other functions in this R-package
+#' @references none
+#' @examples
+#'      # list from 0 to 1 in 5 - steps
+#'      percentLabel(perc.dist=5, min.perc=0)
+#'      #
+#'      # example for usage in plot()
+#'      p.lab <- percentLabel(perc.dist=20, min.perc=-100, max.perc=200)
+#'      x.sam <- rnorm(40, 0.4, 0.4)
+#'      y.sam <- rnorm(40, 0.4, 0.4)
+#'      par(mfrow=c(1, 2))
+#'      plot(x=x.sam, y=y.sam, yaxt="n", xlim=c(-0.5, 1.5), ylim=c(-0.5, 1.5))
+#'      axis(2, at=p.lab$position ,labels=p.lab$text)
+#'      plot(x=x.sam, y=y.sam, yaxt="n", xlim=c(-0.5, 1.5), ylim=c(-0.5, 1.5))
+#'      axis(2, at=p.lab$position ,labels=p.lab$text, las=1, cex.axis=0.8)
+#' @export
+percentLabel <- function (perc.dist = 1, min.perc = -100, max.perc = 100, ...) {
+    #
+    # method                                        ............................................. ..
+    # -
+    #
+    # input                                         ............................................. ..
+    # -
+    #
+    # output                                        ............................................. ..
+    # -
+    #
+    pos <- seq(min.perc/100, max.perc/100, perc.dist/100)
+    txt <- seq(min.perc, max.perc, perc.dist)
+    sig_pos <- -floor(log10(perc.dist)) + 2
+    sig_txt <- -floor(log10(perc.dist))
+    if ((round(perc.dist, 0) != perc.dist) & (perc.dist > 1))
+        sig_pos <- sig_pos + 1
+    if ((round(perc.dist, 0) != perc.dist) & (perc.dist > 1))
+        sig_txt <- sig_txt + 1
+    txt <- format(txt, nsmall = max(0, sig_txt), trim = TRUE)
+    percentLabel <- data.frame(position = pos, text = paste(txt,"%", sep = "")
+                             , stringsAsFactors = FALSE)
+    return(percentLabel)
+    #
+}
 # END OF FUNCTION  ----------------------------------------------------------------------------- --
-# --------------- color themes for lattice graphics                                               --
-#
+# --------------- percentLabel ------------------------------------------------------------------ --
+## }}}
+# ==================================================================================================

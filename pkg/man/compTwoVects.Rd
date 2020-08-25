@@ -24,7 +24,7 @@ under continuous developement
 }
 \examples{
 if(base::require("car")) {
-   data(Mroz, package="car")
+   data(Mroz, package="carData")
    str(Mroz)
    dim(Mroz)
    table(Mroz$wc, useNA="always")
