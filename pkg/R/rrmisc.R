@@ -23,9 +23,11 @@ NULL
 #' @description Some helpers of R to process data smoothly
 #' @details The main function are the 'grep' functions for quickly accessing information of data
 #' objects.
+#' @import stats
+#' @import graphics
+#' @import grDevices
+#' @import lattice
 #' @name rrMisc-package
-#' @import latticeExtra
-#' @import data.table
 # #' @aliases rrMisc-package rrMisc
 # #' @docType package
 # #' @author Author and Maintainer: roland.rapold@@alumni.ethz.ch
@@ -63,7 +65,7 @@ if (0 == 1) {
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
 if (0 == 1) {
-  rrMiscVers <- "0.38"
+  rrMiscVers <- "0.4.0"
   setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
   getwd()
   system(       "R --vanilla CMD build pkg")

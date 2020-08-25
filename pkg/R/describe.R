@@ -202,7 +202,6 @@ getContStat <- function(d.crosstab, switchPosNeg = FALSE, ...) {
 # RR 20200630     ------------------------------------------------------------------------------- --
 #
 # Manual          ------------------------------------------------------------------------------- --
-#
 #' @title test granularity of attributes in data.frame
 #'
 #' @description Compare granularity of whole data.frame and of provided attributes
@@ -315,4 +314,667 @@ testGranularity <- function(d.data, var, ...)
 # --------------- testGranularity --------------------------------------------------------------- --
 # ENDE DER FUNKTION ----------------------------------------------------------------------------- --
 # # }}}
+# --------------- tableCountPart                    Table with counts and parts                   ..{{{
+# Manual          ------------------------------------------------------------------------------- --
+#' @title Generate table with counts, parts and cumulative parts
+#'
+#' @description Generate table with counts, parts and cumulative parts. Allow to cut table after
+#' predefined length
+#'
+#' @param x data.frame
+#' @param varName name of attribute to list
+#' @param anzName column name for counts
+#' @param antName column name for parts
+#' @param csumName column name for cumulative parts
+#' @param ordCol number of column to sort
+#' @param ordDir sort order ('asc' for ascending or 'desc' for descending)
+#' @param rowLimit number of rows with detailed counts and parts
+#' @param \dots arguments passed to further functions
+#' @return data.frame with computed statistics
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @references none
+#' @examples
+#'    data(mtcars, package = "datasets")
+#'    str(mtcars)
+#'    table(mtcars$gear)
+#'    tableCountPart(x = mtcars$gear
+#'            , varName = "Gänge"
+#'            , anzName = "Anzahl"
+#'            , antName = "Anteil"
+#'            , csumName = "Anteil kumuliert"
+#'            , ordCol = 1
+#'            , ordDir = "desc"
+#'            , rowLimit = 20
+#'            )
+#'    tableCountPart(x = mtcars$carb
+#'            , varName = "Vergaser"
+#'            , anzName = "Anzahl"
+#'            , antName = "Anteil"
+#'            , csumName = "Anteil kumuliert"
+#'            , ordCol = 1
+#'            , ordDir = "asc"
+#'            , rowLimit = 20
+#'            )
+#'    tableCountPart(x = mtcars$carb
+#'            , varName = "Vergaser"
+#'            , anzName = "Anzahl"
+#'            , antName = "Anteil"
+#'            , csumName = "Anteil kumuliert"
+#'            , ordCol = 1
+#'            , ordDir = "asc"
+#'            , rowLimit = 4
+#'            )
+#'    tableCountPart(x = mtcars$carb
+#'            , varName = "Vergaser"
+#'            , anzName = "Anzahl"
+#'            , antName = "Anteil"
+#'            )
+#' @export
+tableCountPart <- function(x, varName = "var", anzName = "anz", antName = "ant", csumName = FALSE,
+                           ordCol = 1, ordDir = "asc", rowLimit = FALSE, ...)
+{
+  # run <- 0
+    run <- 1
+  # if(run != 1)
+  # {
+  #     x        <- sample_data_med$kanton
+  #     varName  <- "Kanton"
+  #     anzName  <- "Anzahl Personen"
+  #     antName  <- "Anteil Personen"
+  #     csumName <- FALSE
+  #     csumName <- "Anteil Personen kumuliert"
+  #     ordCol   <- FALSE
+  #     ordCol   <- 1
+  #     ordCol   <- 2
+  #     ordDir   <- "asc"
+  #     rowLimit <- 20
+  # }
+
+    n_NA <- sum(is.na(x))
+    x    <- x[!is.na(x)]
+
+    tt <- table(x)
+    pt <- prop.table(x = tt)
+    if(!run == 1) tt
+    if(!run == 1) pt
+
+    tt <- data.frame(tt)
+#   tt$ord <- 1:nrow(tt)
+    pt <- data.frame(pt)
+    if(!run == 1) tt
+    if(!run == 1) pt
+
+#   colnames(tt) <- c(varName, anzName, "ord")
+    colnames(tt) <- c(varName, anzName)
+    colnames(pt) <- c(varName, antName)
+    tt           <- merge(tt, pt)
+    if(!run == 1) tt
+
+    # sortieren                                  ---------------------------------------------------
+#   if(ordCol==FALSE) {
+#       tt <- tt[order(tt$ord), ]
+#   } else {
+    if(ordDir == "asc") {
+        tt <- tt[order(tt[, ordCol], decreasing = FALSE), ]
+    } else {
+        tt <- tt[order(tt[, ordCol], decreasing = TRUE), ]
+    }
+#   }
+#   tt$ord <- NULL
+    if(!run == 1) tt
+
+    rownames(tt) <- NULL
+    tt[, 1]      <- as.character(tt[, 1])
+    tt[, 2]      <- as.integer(tt[, 2])
+
+    # Rest berechnen für eingeschränkte Sicht    ---------------------------------------------------
+    if(rowLimit!=FALSE & rowLimit<nrow(tt)) {
+        tta <- tt[c(1:rowLimit), ]
+        restAnz <- length(x)-sum(tta[c(1:rowLimit), 2])
+        restAnt <- sprintf("%.1f%%", (restAnz * 100) / length(x))
+        if(!run==1) sum(tta[ , 2])
+        if(!run==1) length(x)
+        if(!run==1) tta
+        if(!run==1) restAnz
+        if(!run==1) restAnt
+    }
+
+    # Zahlen formatieren                         ---------------------------------------------------
+    if(csumName != FALSE) tt[, csumName] <- cumsum(tt[, antName])
+                          tt[, antName]  <- sprintf("%.1f%%", tt[, antName] * 100)
+    if(csumName != FALSE) tt[, csumName] <- sprintf("%.1f%%", tt[, csumName] * 100)
+    if(run != 1) tt
+
+    # Totalangaben                               ---------------------------------------------------
+    if(rowLimit == FALSE) {
+        if(csumName == FALSE)          tt[nrow(tt) + 1, ] <- c("Total:", length(x), "")
+        if(csumName != FALSE)          tt[nrow(tt) + 1, ] <- c("Total:", length(x), "", "")
+        if(csumName == FALSE & n_NA>0) tt[nrow(tt) + 1, ] <- c("Anzahl NA:", n_NA, "")
+        if(csumName != FALSE & n_NA>0) tt[nrow(tt) + 1, ] <- c("Anzahl NA:", n_NA, "", "")
+        return(tt)
+    }
+    if(rowLimit >= nrow(tt)) {
+        if(csumName == FALSE)          tt[nrow(tt) + 1, ] <- c("Total:", length(x), "")
+        if(csumName != FALSE)          tt[nrow(tt) + 1, ] <- c("Total:", length(x), "", "")
+        if(csumName == FALSE & n_NA>0) tt[nrow(tt) + 1, ] <- c("Anzahl NA:", n_NA, "")
+        if(csumName != FALSE & n_NA>0) tt[nrow(tt) + 1, ] <- c("Anzahl NA:", n_NA, "", "")
+        return(tt)
+    }
+    if(!run == 1) tt
+
+    # Zeile mit Restangaben bei eingeschr. Sicht ---------------------------------------------------
+    tt <- tt[c(1:rowLimit), ]
+    if(csumName == FALSE)            tt[nrow(tt) + 1, ] <- c("Rest:", restAnz, restAnt)
+    if(csumName != FALSE)            tt[nrow(tt) + 1, ] <- c("Rest:", restAnz, restAnt, "")
+    if(csumName == FALSE)            tt[nrow(tt) + 1, ] <- c("Total:", length(x), "")
+    if(csumName != FALSE)            tt[nrow(tt) + 1, ] <- c("Total:", length(x), "", "")
+    if(csumName == FALSE & n_NA > 0) tt[nrow(tt) + 1, ] <- c("Anzahl NA:", n_NA, "")
+    if(csumName != FALSE & n_NA > 0) tt[nrow(tt) + 1, ] <- c("Anzahl NA:", n_NA, "", "")
+    if(run != 1) tt
+    return(tt)
+}
+#
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+##}}}
+# --------------- tableCountPart_2d()               Table with parts in various representations   ..{{{
+# Manual          ------------------------------------------------------------------------------- --
+#' @title Generate table with counts an parts in various different representations.
+#'
+#' @description Generate table with counts and parts in various different representations. The
+#' differen representations are also du to marginal totals in the different directions.
+#'
+#' @param x data vector together with y as alternative to z
+#' @param y data vector together with x as alternative to z
+#' @param z data.frame as alternative to x and y
+#' @param precDigit number of digits for result
+#' @param x_prefix prefix for label in x-axis
+#' @param y_prefix prefix for label in y-axis
+#' @param debug not relevant
+#' @param big.mark = thousand separator
+#' @param \dots arguments passed to further functions
+#' @return data.frame with computed statistics
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @references none
+#' @examples
+#'    str(mtcars)
+#'    table(mtcars$gear)
+#'    table(mtcars$carb)
+#'    precDigit  <- 1
+#'
+#'    x <- mtcars$gear               # Auspraegungen in Resultat in Reihen
+#'    y <- mtcars$carb               # Auspraegungen in Resultat in Spalten
+#'    z <- as.data.frame.matrix(table(x, y))
+#'
+#'    tableCountPart_2d(x = x, y = y, precDigit = 3) [[4]]
+#'    tableCountPart_2d(z = z, precDigit = 3)[[4]]
+#'
+#'    tableCountPart_2d(z = z, precDigit = 1)[[5]]
+#'    tableCountPart_2d(z = z, precDigit = 1)[[6]]
+#'    tableCountPart_2d(z = z, precDigit = 1)[[7]]
+#'    tableCountPart_2d(z = z, precDigit = 0)$abs
+#'    tableCountPart_2d(z = z, precDigit = 0)$abs_ant_col
+#'    tableCountPart_2d(z = z, precDigit = 1)
+#' @export
+tableCountPart_2d <- function(x = 1, y = 1, z = 1, precDigit = 1, x_prefix = "", y_prefix = "",
+                              debug = 0, big.mark = FALSE, ...)
+{
+    # precDigit -->> precDigit
+    if(precDigit != 0) precDigit <- precDigit
+    #
+    #
+    # Funktion Beginn                       ===================================================== ==
+    # absolute Zahlen                       ----------------------------------------------------- --
+    # absolute Zahlen und Chi^2-Test        -- abs -- p.value_raw -- p.value -------------------- -- {{{
+    abs <- z
+    if(!is.null(dim(abs)))
+    {
+        abs <- round(abs, 0)
+        if(!is.data.frame(abs)) abs <- as.data.frame.matrix(abs)
+    }
+    if(is.null(dim(abs)))  abs <- as.data.frame.matrix(table(x, y))
+    if(x_prefix != "") rownames(abs) <- paste(x_prefix, rownames(abs))
+    if(y_prefix != "") colnames(abs) <- paste(y_prefix, colnames(abs))
+
+    chitest     <- chisq.test(abs)
+    p.value_raw <- chitest$p.value
+    p.value     <- chitest$p.value
+    if(!is.na(p.value)) {
+        ifelse(chitest$p.value<0.001,
+               p.value <- "< 0.001",
+               p.value <- sprintf("%.3f", chitest$p.value))
+    }
+    # abs=pim_sd_1
+    # abs <- cbind(data.frame(rownames(abs)), abs)
+    # rownames(abs) <- c(1:nrow(abs))
+    # colnames(abs)[1] <- " "
+    #
+    abs_form <- cbind(rownames(abs), abs)
+    rownames(abs_form)    <- as.character(c(1:nrow(abs_form)))
+    colnames(abs_form)[1] <- " "
+    #
+    if(debug==1) print("abs")
+    if(debug==1) print(abs)
+    if(debug==1) print("abs_form")
+    if(debug==1) print(abs_form)
+    if(debug==1) print("p.value_raw")
+    if(debug==1) print(p.value_raw)
+    if(debug==1) print("p.value")
+    if(debug==1) if(!is.na(p.value)) print(p.value)
+    # # }}}
+    #
+    # absolute Zahlen mit Randsummen        -- abs_margin_1..3 ---------------------------------- --{{{
+    x_tot <- apply(abs, MARGIN = 1, FUN = sum)    # Zeilensummen
+    y_tot <- apply(abs, MARGIN = 2, FUN = sum)    # Spaltensummen
+    #
+    abs_margin_1 <- cbind(abs, x_tot)
+    colnames(abs_margin_1)[ncol(abs_margin_1)] <- "total"
+
+    abs_margin_2 <- rbind(abs, y_tot)
+    rownames(abs_margin_2)[nrow(abs_margin_2)] <- "total"
+
+    abs_margin_3 <- rbind(abs_margin_1, c(y_tot, sum(abs)))
+    rownames(abs_margin_3)[nrow(abs_margin_3)] <- "total"
+    #
+    abs_margin_form_1 <- cbind(rownames(abs_margin_1), abs_margin_1)
+    rownames(abs_margin_form_1)    <- as.character(c(1:nrow(abs_margin_form_1)))
+    colnames(abs_margin_form_1)[1] <- " "
+    #
+    abs_margin_form_2 <- cbind(rownames(abs_margin_2), abs_margin_2)
+    rownames(abs_margin_form_2)    <- as.character(c(1:nrow(abs_margin_form_2)))
+    colnames(abs_margin_form_2)[1] <- " "
+    #
+    abs_margin_form_3 <- cbind(rownames(abs_margin_3), abs_margin_3)
+    rownames(abs_margin_form_3)    <- as.character(c(1:nrow(abs_margin_form_3)))
+    colnames(abs_margin_form_3)[1] <- " "
+    #
+    if(debug==1) print("abs_margin_1")
+    if(debug==1) print(abs_margin_1)
+    if(debug==1) print("abs_margin_2")
+    if(debug==1) print(abs_margin_2)
+    if(debug==1) print("abs_margin_3")
+    if(debug==1) print(abs_margin_3)
+    if(debug==1) print("abs_margin_form_1")
+    if(debug==1) print(abs_margin_form_1)
+    if(debug==1) print("abs_margin_form_2")
+    if(debug==1) print(abs_margin_form_2)
+    if(debug==1) print("abs_margin_form_3")
+    if(debug==1) print(abs_margin_form_3)
+    # # }}}
+    #
+    # relative Zahlen                       ----------------------------------------------------- --
+    # Anteile nach Total                    -- ant_tot -- ant_tot_margin_1..3 ------------------- --{{{
+    ant_tot <- abs / sum(abs)
+    #
+    margin_row <- apply(ant_tot, MARGIN=1, FUN=sum)
+    margin_col <- apply(ant_tot, MARGIN=2, FUN=sum)
+
+    ant_tot_margin_1 <- cbind(ant_tot, margin_row)
+    colnames(ant_tot_margin_1)[ncol(ant_tot_margin_1)] <- "total"
+
+    ant_tot_margin_2 <- rbind(ant_tot, c(margin_col, sum(margin_row)))
+    rownames(ant_tot_margin_2)[nrow(ant_tot_margin_2)] <- "total"
+
+    ant_tot_margin_3 <- rbind(ant_tot_margin_1, c(margin_col, sum(margin_row)))
+    rownames(ant_tot_margin_3)[nrow(ant_tot_margin_3)] <- "total"
+    #
+    for(i in 1:ncol(ant_tot))
+    {
+        ant_tot[, i] <- sprintf(paste("%.", precDigit, "f%%", sep=""), ant_tot[, i]*100)
+    }
+    for(i in 1:ncol(ant_tot_margin_1))
+    {
+        ant_tot_margin_1[, i] <- sprintf(paste("%.", precDigit, "f%%", sep=""), ant_tot_margin_1[, i]*100)
+        ant_tot_margin_3[, i] <- sprintf(paste("%.", precDigit, "f%%", sep=""), ant_tot_margin_3[, i]*100)
+    }
+    for(i in 1:ncol(ant_tot_margin_2))
+    {
+        ant_tot_margin_2[, i] <- sprintf(paste("%.", precDigit, "f%%", sep=""), ant_tot_margin_2[, i]*100)
+    }
+    #
+    ant_tot_form <- cbind(rownames(ant_tot), ant_tot)
+    rownames(ant_tot_form)    <- as.character(c(1:nrow(ant_tot_form)))
+    colnames(ant_tot_form)[1] <- " "
+    if(debug==1) print("ant_tot")
+    if(debug==1) print(ant_tot)
+    if(debug==1) print("ant_tot_form")
+    if(debug==1) print(ant_tot_form)
+    #
+    ant_tot_margin_form_1 <- cbind(rownames(ant_tot_margin_1), ant_tot_margin_1)
+    rownames(ant_tot_margin_form_1)    <- as.character(c(1:nrow(ant_tot_margin_form_1)))
+    colnames(ant_tot_margin_form_1)[1] <- " "
+    ant_tot_margin_form_2 <- cbind(rownames(ant_tot_margin_2), ant_tot_margin_2)
+    rownames(ant_tot_margin_form_2)    <- as.character(c(1:nrow(ant_tot_margin_form_2)))
+    colnames(ant_tot_margin_form_2)[1] <- " "
+    ant_tot_margin_form_3 <- cbind(rownames(ant_tot_margin_3), ant_tot_margin_3)
+    rownames(ant_tot_margin_form_3)    <- as.character(c(1:nrow(ant_tot_margin_form_3)))
+    colnames(ant_tot_margin_form_3)[1] <- " "
+    if(debug==1) print("ant_tot_margin_1")
+    if(debug==1) print(ant_tot_margin_1)
+    if(debug==1) print("ant_tot_margin_2")
+    if(debug==1) print(ant_tot_margin_2)
+    if(debug==1) print("ant_tot_margin_3")
+    if(debug==1) print(ant_tot_margin_3)
+    if(debug==1) print("ant_tot_margin_form_1")
+    if(debug==1) print(ant_tot_margin_form_1)
+    if(debug==1) print("ant_tot_margin_form_2")
+    if(debug==1) print(ant_tot_margin_form_2)
+    if(debug==1) print("ant_tot_margin_form_3")
+    if(debug==1) print(ant_tot_margin_form_3)
+    # # }}}
+    # Anteile nach Zeilen                   -- ant_row -- ant_row_margin ------------------------ --{{{
+    ant_row <- abs
+    for(i in 1:ncol(abs))
+    {
+        ant_row[, i] <- abs[, i] / x_tot
+    }
+    #
+    margin_row <- apply(ant_row, MARGIN=1, FUN=sum)
+    margin_col <- apply(ant_row, MARGIN=2, FUN=sum)
+    ant_row_margin <- cbind(ant_row, margin_row)
+    colnames(ant_row_margin)[ncol(ant_row_margin)] <- "total"
+    #
+    for(i in 1:ncol(ant_row))
+    {
+        ant_row[, i] <- sprintf(paste("%.", precDigit, "f%%", sep=""), ant_row[, i]*100)
+    }
+    for(i in 1:ncol(ant_row_margin))
+    {
+        ant_row_margin[, i] <- sprintf(paste("%.", precDigit, "f%%", sep=""), ant_row_margin[, i]*100)
+    }
+    #
+    ant_row_form <- cbind(rownames(ant_row), ant_row)
+    rownames(ant_row_form)    <- as.character(c(1:nrow(ant_row_form)))
+    colnames(ant_row_form)[1] <- " "
+    #
+    if(debug==1) print("ant_row")
+    if(debug==1) print(ant_row)
+    if(debug==1) print("ant_row_form")
+    if(debug==1) print(ant_row_form)
+    #
+    ant_row_margin_form <- cbind(rownames(ant_row_margin), ant_row_margin)
+    rownames(ant_row_margin_form)    <- as.character(c(1:nrow(ant_row_margin_form)))
+    colnames(ant_row_margin_form)[1] <- " "
+    #
+    if(debug==1) print("ant_row_margin")
+    if(debug==1) print(ant_row_margin)
+    if(debug==1) print("ant_row_margin_form")
+    if(debug==1) print(ant_row_margin_form)
+    #
+    # # }}}
+    # Anteile nach Spalten                  -- ant_col -- ant_col_margin ------------------------ --{{{
+    ant_col <- abs
+    for(i in 1:nrow(abs))
+    {
+        ant_col[i, ] <- abs[i, ] / y_tot
+    }
+    #
+    margin_row <- apply(ant_col, MARGIN=1, FUN=sum)
+    margin_col <- apply(ant_col, MARGIN=2, FUN=sum)
+    ant_col_margin <- rbind(ant_col, margin_col)
+    rownames(ant_col_margin)[nrow(ant_col_margin)] <- "total"
+    #
+    for(i in 1:ncol(ant_col))
+    {
+        ant_col[, i] <- sprintf(paste("%.", precDigit, "f%%", sep=""), ant_col[, i]*100)
+    }
+    for(i in 1:ncol(ant_col_margin))
+    {
+        ant_col_margin[, i] <- sprintf(paste("%.", precDigit, "f%%", sep=""), ant_col_margin[, i]*100)
+    }
+    #
+    ant_col_form <- cbind(rownames(ant_col), ant_col)
+    rownames(ant_col_form)    <- as.character(c(1:nrow(ant_col_form)))
+    colnames(ant_col_form)[1] <- " "
+    if(debug==1) print("ant_col")
+    if(debug==1) print(ant_col)
+    if(debug==1) print("ant_col_form")
+    if(debug==1) print(ant_col_form)
+    #
+    ant_col_margin_form <- cbind(rownames(ant_col_margin), ant_col_margin)
+    rownames(ant_col_margin_form)    <- as.character(c(1:nrow(ant_col_margin_form)))
+    colnames(ant_col_margin_form)[1] <- " "
+    if(debug==1) print("ant_col_margin")
+    if(debug==1) print(ant_col_margin)
+    if(debug==1) print("ant_col_margin_form")
+    if(debug==1) print(ant_col_margin_form)
+    # # }}}
+    #
+    # Absole und relative Zahlen mischen    ----------------------------------------------------- --
+    # Anteile nach Total                    -- abs_ant_tot -------------------------------------- --{{{
+
+    # Obsolete Fassung                      ..................................................... ..
+    if (0==1) {
+        abs_ant_tot      <- abs[1, ]
+        abs_ant_tot[2, ] <- ant_tot[1, ]
+        if(nrow(abs)>1)
+        {
+            for(i in 2:nrow(abs))
+            {
+                abs_ant_tot[2*i-1, ] <- abs[i, ]
+                abs_ant_tot[2*i  , ] <- ant_tot[i, ]
+            }
+        }
+    }
+
+    # Leerzeilen hinzufÃ¼gen                 ..................................................... ..
+    abs_temp <- abs
+    abs_ant_tot <- rbind(abs_temp[1, ], c(rep(" ", ncol(abs_temp))))
+    abs_ant_tot <- as.data.frame(abs_ant_tot)
+    for(i in 2:nrow(abs_temp)) {
+        abs_ant_tot <- rbind(abs_ant_tot, abs_temp[i, ])
+        abs_ant_tot <- rbind(abs_ant_tot, c(rep(" ", ncol(abs_temp))))
+    }
+    # Leerspalten hinzufÃ¼gen                 .................................................... ..
+    abs_temp <- abs_ant_tot
+    abs_ant_tot <- as.data.frame(cbind(abs_temp[, 1], c(rep(" ", nrow(abs_temp)))))
+    for(i in 2:ncol(abs_temp)) {
+        abs_ant_tot <- cbind(abs_ant_tot, abs_temp[, i])
+        abs_ant_tot <- cbind(abs_ant_tot, c(rep(" ", nrow(abs_temp))))
+    }
+    rm(abs_temp)
+    # Anteilwerte hinzufÃ¼gen                 .................................................... ..
+    for(i in 1:nrow(ant_tot)) {
+        for(j in 1:ncol(ant_tot)) {
+            abs_ant_tot[2*i, 2*j] <- ant_tot[i, j]
+        }
+    }
+    #
+    # Spaltennamen hinzufÃ¼gen                            ........................................ ..
+    colnames(abs_ant_tot) <- c(1:ncol(abs_ant_tot))
+    colnames(abs_ant_tot)[c(seq(1, (ncol(abs_ant_tot)-1), 2))] <- colnames(abs)
+    colnames(abs_ant_tot)[seq(2, (ncol(abs_ant_tot)),   2)] <- " "
+    #
+    # Formatierte Variante erstellen                     ........................................ ..
+    abs_ant_tot_form <- cbind(rownames(abs_ant_tot), abs_ant_tot)
+    colnames(abs_ant_tot_form)[1] <- " "
+    #
+    abs_ant_tot_form[seq(1, (nrow(abs_ant_tot_form)-1), 2), 1] <- rownames(abs)
+    abs_ant_tot_form[seq(2, (nrow(abs_ant_tot_form)),   2), 1] <- " "
+    #
+    if(debug==1) print("abs_ant_tot")
+    if(debug==1) print(abs_ant_tot)
+    if(debug==1) print("abs_ant_tot_form")
+    if(debug==1) print(abs_ant_tot_form)
+    #
+    # # }}}
+
+    # Anteile nach Total pl. Zeilen/Spalten -- abs_ant_tot_col/row/row_col----------------------- -- {{{
+    abs_ant_tot
+    ant_col
+    ant_row
+
+    abs_ant_tot_col <- abs_ant_tot
+    for(i in 1:nrow(ant_col)) {
+        for(j in 1:ncol(ant_col)) {
+            abs_ant_tot_col[2*i, 2*j-1] <- ant_col[i, j]
+        }
+    }
+    # abs_ant_tot_col
+
+    abs_ant_tot_row <- abs_ant_tot
+    for(i in 1:nrow(ant_row)) {
+        for(j in 1:ncol(ant_row)) {
+            abs_ant_tot_row[2*i-1, 2*j] <- ant_row[i, j]
+        }
+    }
+    # abs_ant_tot_row
+
+    abs_ant_tot_row_col <- abs_ant_tot_row
+    for(i in 1:nrow(ant_col)) {
+        for(j in 1:ncol(ant_col)) {
+            abs_ant_tot_row_col[2*i, 2*j-1] <- ant_col[i, j]
+        }
+    }
+    # abs_ant_tot_row_col
+
+    abs_ant_tot_col_form <- cbind(rownames(abs_ant_tot_col), abs_ant_tot_col)
+    rownames(abs_ant_tot_col_form)    <- as.character(c(1:nrow(abs_ant_tot_col_form)))
+    colnames(abs_ant_tot_col_form)[1] <- " "
+    if(debug==1) print("abs_ant_tot_col")
+    if(debug==1) print(abs_ant_tot_col)
+    if(debug==1) print("abs_ant_tot_col_form")
+    if(debug==1) print(abs_ant_tot_col_form)
+
+    abs_ant_tot_row_form <- cbind(rownames(abs_ant_tot_row), abs_ant_tot_row)
+    rownames(abs_ant_tot_row_form)    <- as.character(c(1:nrow(abs_ant_tot_row_form)))
+    colnames(abs_ant_tot_row_form)[1] <- " "
+    if(debug==1) print("abs_ant_tot_row")
+    if(debug==1) print(abs_ant_tot_row)
+    if(debug==1) print("abs_ant_tot_row_form")
+    if(debug==1) print(abs_ant_tot_row_form)
+
+    abs_ant_tot_row_col_form <- cbind(rownames(abs_ant_tot_row_col), abs_ant_tot_row_col)
+    rownames(abs_ant_tot_row_col_form)    <- as.character(c(1:nrow(abs_ant_tot_row_col_form)))
+    colnames(abs_ant_tot_row_col_form)[1] <- " "
+    if(debug==1) print("abs_ant_tot_row_col")
+    if(debug==1) print(abs_ant_tot_row_col)
+    if(debug==1) print("abs_ant_tot_row_col_form")
+    if(debug==1) print(abs_ant_tot_row_col_form)
+# }}}
+#
+    # Anteile nach Zeilen                   -- abs_ant_row -- abs_ant_row_margin ---------------- --{{{
+    margin_row_abs <- apply(abs, MARGIN=1, FUN=sum)
+    margin_row_ant <- rep("100%", length(margin_row_abs))
+
+    abs_ant_row      <- as.data.frame(cbind(abs[, 1], ant_row[, 1]))
+    rownames(abs_ant_row)    <- rownames(abs)
+    colnames(abs_ant_row)[1] <- colnames(abs)[1]
+    colnames(abs_ant_row)[2] <- " "
+    if(ncol(abs)>1)
+    {
+        for(i in 2:ncol(abs)){
+            abs_ant_row <- cbind(abs_ant_row, abs[, i])
+            colnames(abs_ant_row)[ncol(abs_ant_row)] <- colnames(abs)[i]
+            abs_ant_row <- cbind(abs_ant_row, ant_row[, i])
+            colnames(abs_ant_row)[ncol(abs_ant_row)] <- " "
+        }
+    }
+    #
+    abs_ant_row_form <- cbind(rownames(abs_ant_row), abs_ant_row)
+    rownames(abs_ant_row_form)    <- as.character(c(1:nrow(abs_ant_row_form)))
+    colnames(abs_ant_row_form)[1] <- " "
+    #
+    abs_ant_row_margin <- cbind(abs_ant_row, margin_row_abs)
+    colnames(abs_ant_row_margin)[ncol(abs_ant_row_margin)] <- "total"
+    abs_ant_row_margin <- cbind(abs_ant_row_margin, margin_row_ant)
+    colnames(abs_ant_row_margin)[ncol(abs_ant_row_margin)] <- "total"
+    #
+    abs_ant_row_margin_form <- cbind(rownames(abs_ant_row_margin), abs_ant_row_margin)
+    rownames(abs_ant_row_margin_form)    <- as.character(c(1:nrow(abs_ant_row_margin_form)))
+    colnames(abs_ant_row_margin_form)[1] <- " "
+    #
+    if(debug==1) print("abs_ant_row")
+    if(debug==1) print(abs_ant_row)
+    if(debug==1) print("abs_ant_row_form")
+    if(debug==1) print(abs_ant_row_form)
+    if(debug==1) print("abs_ant_row_margin")
+    if(debug==1) print(abs_ant_row_margin)
+    if(debug==1) print("abs_ant_row_margin_form")
+    if(debug==1) print(abs_ant_row_margin_form)
+    # # }}}
+    # Anteile nach Spalten                  -- abs_ant_col -------------------------------------- --{{{
+    abs_ant_col      <- abs[1, ]
+    abs_ant_col[2, ] <- ant_col[1, ]
+    if(nrow(abs)>1)
+    {
+        for(i in 2:nrow(abs)){
+            abs_ant_col[2*i-1, ] <- abs[i, ]
+            abs_ant_col[2*i  , ] <- ant_col[i, ]
+        }
+    }
+
+    abs_ant_col_form <- cbind(rownames(abs_ant_col), abs_ant_col)
+    rownames(abs_ant_col_form)    <- as.character(c(1:nrow(abs_ant_col_form)))
+    abs_ant_col_form[seq(2, nrow(abs_ant_col_form), 2), 1] <- " "
+    colnames(abs_ant_col_form)[1] <- " "
+    if(debug==1) print("abs_ant_col")
+    if(debug==1) print(abs_ant_col)
+    if(debug==1) print("abs_ant_col_form")
+    if(debug==1) print(abs_ant_col_form)
+    # # }}}
+    #
+    # Nomenklatur Resultat                  ----------------------------------------------------- --
+    # abs       Absolutwerte ( Summen, Anzahlen )
+    # ant_tot   Anteile ueber ganze Matrix
+    # ant_row   Anteile ueber Zeilen
+    # ant_col   Anteile ueber Spalten
+    # margin_1  Randsummen von Zeilen
+    # margin_2  Randsummen von Spalten
+    # margin_3  Randsummen von Zeilen und Spalten und Total
+    #
+    obj_list <-c("abs_margin_form_2", "abs_margin_form_3")
+    obj_list <-c("abs_ant_row_margin_form")
+    # obj_list <-c("abs_form", "p.value", "p.value_raw", ...)
+    obj_list <-c("abs_form",
+                 "abs_margin_form_1", "abs_margin_form_2", "abs_margin_form_3",
+                 "ant_tot_form",
+                 "ant_tot_margin_form_1", "ant_tot_margin_form_2", "ant_tot_margin_form_3",
+                 "ant_row_form", "ant_col_form",
+                 "abs_ant_tot_form", "abs_ant_tot_col_form", "abs_ant_tot_row_form",
+                 "abs_ant_tot_row_col_form", "abs_ant_row_form", "abs_ant_row_margin_form", "abs_ant_col_form")
+    #
+    # big.mark <- "'"
+    # browser()
+    if(big.mark!=FALSE & is.character(big.mark)) {
+        for(o in obj_list)
+        {
+            # t <- abs_ant_row_margin_form
+            # i <- 16
+            t <- get(o)
+            for(i in 1:ncol(t))
+            {
+                if(class(t[, i])=="integer") t[, i] <- format(t[, i], big.mark=big.mark)
+            }
+            assign(o, t)
+        }
+    }
+    #
+    return(list(abs                         = abs_form
+              , p.value                     = ifelse(is.na(p.value), NA, p.value)
+              , p.value_raw                 = p.value_raw
+              , abs_margin_1                = abs_margin_form_1
+              , abs_margin_2                = abs_margin_form_2
+              , abs_margin_3                = abs_margin_form_3
+              , ant_tot                     = ant_tot_form
+              , ant_tot_margin_1            = ant_tot_margin_form_1
+              , ant_tot_margin_2            = ant_tot_margin_form_2
+              , ant_tot_margin_3            = ant_tot_margin_form_3
+              , ant_row                     = ant_row_form
+              , ant_col                     = ant_col_form
+              , abs_ant_tot                 = abs_ant_tot_form
+              , abs_ant_tot_col             = abs_ant_tot_col_form
+              , abs_ant_tot_row             = abs_ant_tot_row_form
+              , abs_ant_tot_row_col         = abs_ant_tot_row_col_form
+              , abs_ant_row                 = abs_ant_row_form
+              , abs_ant_row_margin          = abs_ant_row_margin_form
+              , abs_ant_col                 = abs_ant_col_form
+                ))
+
+    # Funktion Ende                         ===================================================== ==
+}
+#
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+# }}}
 # ==================================================================================================

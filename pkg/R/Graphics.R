@@ -18,7 +18,7 @@
 #' @references For seq0x.theme(), qal0x.theme, and div0x.theme() see https://datavisualization.ch/inside/how-we-created-color-scales/
 #' @keywords graphics
 #' @examples
-#' if(!require(lattice)&require(latticeExtra))
+#' if(!requireNamespace("latticeExtra", quietly = TRUE))
 #' {
 #'     print("please install packages 'lattice' and 'latticeExtra' for this example to work!")
 #' } else {
@@ -32,7 +32,7 @@
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="cols4.theme()", cex.main=2)
 #'     image(x=c(1:7), y=1, z=matrix(1:7, ncol=1), col=cols7.theme()$superpose.polygon$col,
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="cols7.theme()", cex.main=2)
-#'     image(x=c(1:5), y=1, z=matrix(1:5, ncol=1), col=theEconomist.theme()$superpose.polygon$col,
+#'     image(x=c(1:5), y=1, z=matrix(1:5, ncol=1), col=latticeExtra::theEconomist.theme()$superpose.polygon$col,
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="theEconomist.theme()", cex.main=2)
 #'
 #'     par(mfrow=c(4, 1),          # following parameters go c(bottom, left, top, right)
@@ -562,7 +562,7 @@ qual02.theme <- function (...) {
 }
 ## }}}
 #}}}
-# --------------- percentLabel                      create percentage labels for plots            ..{{{
+# --------------- percentLabel                create percentage labels for plots                  ..{{{
 # RR 20130920     ------------------------------------------------------------------------------- --
 #
 # Manual          ------------------------------------------------------------------------------- --
@@ -624,4 +624,197 @@ percentLabel <- function (perc.dist = 1, min.perc = -100, max.perc = 100, ...) {
 # END OF FUNCTION  ----------------------------------------------------------------------------- --
 # --------------- percentLabel ------------------------------------------------------------------ --
 ## }}}
+# --------------- univarModDataCont           dependent variable vs. independent variables        ..{{{
+# RR 20130807     ------------------------------------------------------------------------------- --
+# Manual          ------------------------------------------------------------------------------- --
+#' @title Graph dependent variable vs. list of independent variables
+#'
+#' @description Graph dependent variable vs. list of independent variables
+#'
+#' @details Creates xyplots for all combinations
+#'
+#' @param d_data data.frame
+#' @param var_dep name of dependent variable
+#' @param label_dep label of dependent variable
+#' @param var_indep name of independent variable(s)
+#' @param label_indep label of independent variable(s)
+#' @param \dots arguments passed to further functions
+#' @return data-frame with percentage as number and character string
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @seealso see other functions in this R-package
+#' @references none
+#' @examples
+#'  data(mtcars, package = "datasets")
+#'  str(mtcars)
+#'  univarModDataCont(d_data = mtcars
+#'                    , var_dep = "mpg"
+#'                    , label_dep = "Miles per Gallon"
+#'                    , var_indep = c("cyl", "disp", "hp", "wt")
+#'                    , label_indep = c("Zylinder", "disp", "PS", "Gewicht"))
+#'  univarModDataCont(d_data = mtcars
+#'                    , var_dep = "mpg"
+#'                    , label_dep = "Miles per Gallon"
+#'                    , var_indep = c("cyl", "hp")
+#'                    , label_indep = c("Zylinder", "PS"))
+#' @export
+univarModDataCont <- function( d_data, var_dep, var_indep, label_dep, label_indep, ...)
+{
+    # lattice is reqired for 'rrMisc'
+    # tt <- require(lattice)
+    # if(!tt)
+    # {
+    #     print("This function requires 'lattice'!")
+    #     return()
+    # }
+    #
+    mean_dep <- mean(d_data[, var_dep])
+    #
+    if (length(var_indep) == 1)  n_cols <- 1
+    if (length(var_indep)  > 1)  n_cols <- 2
+    #
+    if (length(var_indep) %% 2 == 0) n_rows <- length(var_indep)/2
+    if (length(var_indep) %% 2 == 1) n_rows <- (length(var_indep) + 1)/2
+    #
+    this.settings <- trellis.par.get()
+    this.settings$plot.line$col <- "black"
+    # show.settings(this.settings)
+    i     <- 1
+    i_col <- 1
+    i_row <- 1
+    for (i in c(1:length(var_indep))) {
+        var_i   <- var_indep[i]
+        label_i <- label_indep[i]
+        ttf     <- formula(paste(var_dep, "~", var_i))
+        # xyp     <- xyplot(x = ttf, data = d_data
+        xyp     <- lattice::xyplot(x = ttf, data = d_data[!is.na(d_data[, var_i]), ]
+                      # , type=c("g", "smooth", "p")
+                        , xlab = label_i
+                        , ylab = label_dep
+                        , par.settings = this.settings
+                          , panel = function(x, y, ...) {
+                              panel.xyplot(x, y, ref=TRUE, type = c("p", "r"), ...)
+                              panel.lmline(x, y, col=4, lwd=2)
+                              # panel.loess(x, y, col=2, lwd=2)
+                              panel.abline(h=0, col="grey", alpha=0.5, lwd=1)
+                          }
+                        )
+        if (i_col == 1 & i_row == 1) {
+            plot(xyp, split = c(i_col, i_row, n_cols, n_rows))
+        }
+        else {
+            plot(xyp, split = c(i_col, i_row, n_cols, n_rows), newpage = FALSE)
+        }
+        if (i_row == n_rows) {
+            i_col <- i_col + 1
+            i_row <- 0
+        }
+        i_row <- i_row + 1
+    }
+}
+# --------------- univarModDataCont-------------------------------------------------------------- --
+# ENDE DER FUNKTION ----------------------------------------------------------------------------- --
+# }}}
+# --------------- univarModDataFact           influence of factors on numeric variable            ..{{{
+# RR 20130807     ------------------------------------------------------------------------------- --
+# Manual          ------------------------------------------------------------------------------- --
+#' @title Graph influence of factors on numeric variable
+#'
+#' @description Graph influence of factors on numeric variable
+#'
+#' @details Creates plot.design for all combinations
+#'
+#' @param d_data data.frame
+#' @param var_dep_n name of dependent variable (numeric)
+#' @param label_dep_n label of dependent variable
+#' @param var_indep_f name of independent variable(s) (factor)
+#' @param label_indep_f label of independent variable(s)
+#' @param split allow for split into new graphics
+#' @param split_nr upper limit of factors per graphic
+#' @param ylimits y limits
+#' @param plot_dims plot dimensions
+#' @param \dots arguments passed to further functions
+#' @return data-frame with percentage as number and character string
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @seealso see other functions in this R-package
+#' @references none
+#' @examples
+#'  data(npk, package = "datasets")
+#'  str(npk)
+#'  univarModDataFact(d_data = npk,
+#'                    var_dep_n = "yield",
+#'                    var_indep_f = c("N", "P", "K", "block"),
+#'                    label_dep_n = "yield",
+#'                    label_indep_f = c("N", "P", "K", "block"))
+#'
+#'  data(Mroz, package = "carData")
+#'  str(Mroz)
+#'  univarModDataFact(d_data = Mroz,
+#'                    var_dep_n = "age",
+#'                    var_indep_f = c("wc", "hc"),
+#'                    label_dep_n = "Alter",
+#'                    label_indep_f = c("WC", "HC"))
+#'  # , split=TRUE
+#'  # , split_nr=9, ylim=c(0, 0.55)
+#'  # , plot_dims=c(28, 24))
+#' @export
+univarModDataFact <- function(d_data, var_dep_n, var_indep_f, label_dep_n, label_indep_f
+                            , split = TRUE, split_nr = 4, ylimits = NULL
+                            , plot_dims = c(15, 20), ...)
+{
+    if (!class(d_data[, var_dep_n]) %in% c("numeric", "integer"))
+        return("Variable 'var_dep_n' is nicht numerisch!")
+    for (ii in 1:length(var_indep_f)) {
+        if (class(d_data[, var_indep_f[ii]]) != "factor")
+            return("Variable 'var_indep_f' is kein Faktor!")
+    }
+    if (!is.null(dev.list())) dev.off()
+    lbl_main <- encodeUTF8(paste("Einfl\u00fcsse auf", label_dep_n))
+    lbl_x    <- "Faktoren"
+    lbl_y    <- paste("Durchschnitt", label_dep_n)
+    if (split == TRUE) {
+      if (.Platform$OS.type == "windows") {
+        windows(width = plot_dims[1], height = plot_dims[2])
+      } else {
+        x11(width = plot_dims[1], height = plot_dims[2])
+      }
+        index <- (c(1:length(var_indep_f)) - 1)%/%split_nr + 1
+        # index
+        # max(index)
+        # which(index == 1)
+        par(mfrow = c(max(index), 1))
+        for (i in c(1:max(index))) {
+            plot.design(x = formula(paste(var_dep_n, "~", paste(var_indep_f[which(index == i)], collapse = " + ")))
+                  , data = d_data
+                  , ylim = ylimits
+                  , main = lbl_main
+                  , xlab = lbl_x
+                  , ylab = lbl_y
+                  , xaxt = "n")
+            axis(1, at = c(1:length(label_indep_f[which(index == i)]))
+                  , labels = label_indep_f[which(index == i)]
+                  , las = 1, cex.axis = 0.7)
+        }
+    }
+    else {
+        windows(width = plot_dims[2], height = plot_dims[1])
+        form <- formula(paste(var_dep_n, "~", paste(var_indep_f, collapse = " + ")))
+        # form
+        plot.design(x = form
+                  , data = d_data
+                  , ylim = ylimits
+                  , main = lbl_main
+                  , xlab = lbl_x
+                  , ylab = lbl_y
+                  , xaxt = "n")
+        axis(1, at = c(1:length(label_indep_f))
+              , labels = label_indep_f
+              , las = 1
+              , cex.axis = 0.7)
+    }
+}
+# --------------- univarModDataFact-------------------------------------------------------------- --
+# ENDE DER FUNKTION ----------------------------------------------------------------------------- --
+# }}}
 # ==================================================================================================
