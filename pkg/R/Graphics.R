@@ -32,7 +32,8 @@
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="cols4.theme()", cex.main=2)
 #'     image(x=c(1:7), y=1, z=matrix(1:7, ncol=1), col=cols7.theme()$superpose.polygon$col,
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="cols7.theme()", cex.main=2)
-#'     image(x=c(1:5), y=1, z=matrix(1:5, ncol=1), col=latticeExtra::theEconomist.theme()$superpose.polygon$col,
+#'     image(x=c(1:5), y=1, z=matrix(1:5, ncol=1),
+#'           col=latticeExtra::theEconomist.theme()$superpose.polygon$col,
 #'           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="theEconomist.theme()", cex.main=2)
 #'
 #'     par(mfrow=c(4, 1),          # following parameters go c(bottom, left, top, right)
@@ -760,59 +761,55 @@ univarModDataCont <- function( d_data, var_dep, var_indep, label_dep, label_inde
 #'  # , plot_dims=c(28, 24))
 #' @export
 univarModDataFact <- function(d_data, var_dep_n, var_indep_f, label_dep_n, label_indep_f
-                            , split = TRUE, split_nr = 4, ylimits = NULL
-                            , plot_dims = c(15, 20), ...)
+                              , split = TRUE, split_nr = 4, ylimits = NULL
+                              , plot_dims = c(15, 20), ...)
 {
-    if (!class(d_data[, var_dep_n]) %in% c("numeric", "integer"))
-        return("Variable 'var_dep_n' is nicht numerisch!")
-    for (ii in 1:length(var_indep_f)) {
-        if (class(d_data[, var_indep_f[ii]]) != "factor")
-            return("Variable 'var_indep_f' is kein Faktor!")
-    }
-    if (!is.null(dev.list())) dev.off()
-    lbl_main <- encodeUTF8(paste("Einfl\u00fcsse auf", label_dep_n))
-    lbl_x    <- "Faktoren"
-    lbl_y    <- paste("Durchschnitt", label_dep_n)
-    if (split == TRUE) {
-      if (.Platform$OS.type == "windows") {
-        windows(width = plot_dims[1], height = plot_dims[2])
-      } else {
-        x11(width = plot_dims[1], height = plot_dims[2])
-      }
-        index <- (c(1:length(var_indep_f)) - 1)%/%split_nr + 1
-        # index
-        # max(index)
-        # which(index == 1)
-        par(mfrow = c(max(index), 1))
-        for (i in c(1:max(index))) {
-            plot.design(x = formula(paste(var_dep_n, "~", paste(var_indep_f[which(index == i)], collapse = " + ")))
+  if (!class(d_data[, var_dep_n]) %in% c("numeric", "integer"))
+    return("Variable 'var_dep_n' is nicht numerisch!")
+  for (ii in 1:length(var_indep_f)) {
+    if (class(d_data[, var_indep_f[ii]]) != "factor")
+      return("Variable 'var_indep_f' is kein Faktor!")
+  }
+  if (!is.null(dev.list())) dev.off()
+  lbl_main <- encodeUTF8(paste("Einfl\u00fcsse auf", label_dep_n))
+  lbl_x    <- "Faktoren"
+  lbl_y    <- paste("Durchschnitt", label_dep_n)
+  if (split == TRUE) {
+    dev.new(width = plot_dims[1], height = plot_dims[2], unit = "cm")
+    index <- (c(1:length(var_indep_f)) - 1)%/%split_nr + 1
+    # index
+    # max(index)
+    # which(index == 1)
+    par(mfrow = c(max(index), 1))
+    for (i in c(1:max(index))) {
+      plot.design(x = formula(paste(var_dep_n, "~", paste(var_indep_f[which(index == i)], collapse = " + ")))
                   , data = d_data
                   , ylim = ylimits
                   , main = lbl_main
                   , xlab = lbl_x
                   , ylab = lbl_y
                   , xaxt = "n")
-            axis(1, at = c(1:length(label_indep_f[which(index == i)]))
-                  , labels = label_indep_f[which(index == i)]
-                  , las = 1, cex.axis = 0.7)
-        }
+      axis(1, at = c(1:length(label_indep_f[which(index == i)]))
+           , labels = label_indep_f[which(index == i)]
+           , las = 1, cex.axis = 0.7)
     }
-    else {
-        windows(width = plot_dims[2], height = plot_dims[1])
-        form <- formula(paste(var_dep_n, "~", paste(var_indep_f, collapse = " + ")))
-        # form
-        plot.design(x = form
-                  , data = d_data
-                  , ylim = ylimits
-                  , main = lbl_main
-                  , xlab = lbl_x
-                  , ylab = lbl_y
-                  , xaxt = "n")
-        axis(1, at = c(1:length(label_indep_f))
-              , labels = label_indep_f
-              , las = 1
-              , cex.axis = 0.7)
-    }
+  }
+  else {
+    windows(width = plot_dims[2], height = plot_dims[1])
+    form <- formula(paste(var_dep_n, "~", paste(var_indep_f, collapse = " + ")))
+    # form
+    plot.design(x = form
+                , data = d_data
+                , ylim = ylimits
+                , main = lbl_main
+                , xlab = lbl_x
+                , ylab = lbl_y
+                , xaxt = "n")
+    axis(1, at = c(1:length(label_indep_f))
+         , labels = label_indep_f
+         , las = 1
+         , cex.axis = 0.7)
+  }
 }
 # --------------- univarModDataFact-------------------------------------------------------------- --
 # ENDE DER FUNKTION ----------------------------------------------------------------------------- --

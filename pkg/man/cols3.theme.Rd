@@ -45,7 +45,8 @@ if(!requireNamespace("latticeExtra", quietly = TRUE))
           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="cols4.theme()", cex.main=2)
     image(x=c(1:7), y=1, z=matrix(1:7, ncol=1), col=cols7.theme()$superpose.polygon$col,
           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="cols7.theme()", cex.main=2)
-    image(x=c(1:5), y=1, z=matrix(1:5, ncol=1), col=latticeExtra::theEconomist.theme()$superpose.polygon$col,
+    image(x=c(1:5), y=1, z=matrix(1:5, ncol=1),
+          col=latticeExtra::theEconomist.theme()$superpose.polygon$col,
           xaxt="n", yaxt="n", xlab="", ylab="", bty="n", main="theEconomist.theme()", cex.main=2)
 
     par(mfrow=c(4, 1),          # following parameters go c(bottom, left, top, right)
