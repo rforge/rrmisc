@@ -65,7 +65,7 @@ if (0 == 1) {
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
 if (0 == 1) {
-  rrMiscVers <- "0.4.0"
+  rrMiscVers <- "0.4.2"
   setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
   getwd()
   system(       "R --vanilla CMD build pkg")
@@ -101,7 +101,7 @@ if (0 == 1) {
   remove.packages("rrMisc")
   #
   # install local copy of package
-  rrMiscVers <- "0.38"
+  rrMiscVers <- "0.4.1"
   install.packages(paste0("/home/roland/Desktop/Dokumente_verteilt/Statistik/",
                           "R_rrMisc/rrmisc/rrMisc_", rrMiscVers, ".tar.gz"),
                    repos = NULL)

@@ -59,7 +59,7 @@ countDistinct <- function(x, ...) {
 # END OF FUNCTION  ------------------------------------------------------------------------------ --
 # --------------- countDistinct  ---------------------------------------------------------------- --
 ## }}}
-# --------------- compTwoVects                      Compare two vectors of the same length        ..{{{
+# --------------- compTwoNumVects                   Compare two vectors of the same length        ..{{{
 # RR 20160822     ------------------------------------------------------------------------------- --
 #
 # Manual          ------------------------------------------------------------------------------- --
@@ -90,10 +90,10 @@ countDistinct <- function(x, ...) {
 #'    table(Mroz$wc, useNA="always")
 #'    table(Mroz$wc_new, useNA="always")
 #'    #
-#'    compTwoVects(Mroz$wc, Mroz$wc_new)
+#'    compTwoNumVects(Mroz$wc, Mroz$wc_new)
 #' }
 #' @export
-compTwoVects <- function(x, y, ...)
+compTwoNumVects <- function(x, y, ...)
 {
     #
     # ----------------------------------------------------------------------------------------------
@@ -150,7 +150,79 @@ compTwoVects <- function(x, y, ...)
     #
 }
 #
-# --------------- compTwoVects ------------------------------------------------------------------ --
+# --------------- compTwoNumVects --------------------------------------------------------------- --
 # ENDE DER FUNKTION ----------------------------------------------------------------------------- --
 # # }}}
+# --------------- compTwoCharVects                  Vergleich von zwei Zeichenvektoren            ..{{{
+# xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+# RR 20160822     ------------------------------------------------------------------------------- --
+#
+# Manual          ------------------------------------------------------------------------------- --
+#
+#' @title Compare two string vectors
+#'
+#' @description Compare two string vectors
+#'
+#' @param vec1 vector one
+#' @param vec2 vector two
+#' @param showElements TRUE/FALSE for showing entries
+#' @param \dots arguments passed to further functions
+#' @return comparisons of vector contents with respect to equality and optionally show entries
+#' @note under continuous developement
+#' @author Roland Rapold
+#' @references none
+#' @examples
+#' if(base::require("car")) {
+#'    data(Mroz, package = "carData")
+#'    str(Mroz)
+#'    Mroz$wc <- as.character(Mroz$wc)
+#'    Mroz$hc <- as.character(Mroz$hc)
+#'    compTwoCharVects(Mroz$wc, Mroz$hc)
+#' }
+#' @export
+compTwoCharVects <- function(vec1, vec2, showElements = FALSE, ...)
+{
+  if (!(is.character(vec1) & is.character(vec2))) {
+    print("Bitte zwei Zeichenvektoren \u00fcbergeben")
+    return()
+  }
+  print(paste("L\u00e4nge Vektor 1                            --", formatC(length(vec1), big.mark = "'", width = 8)))
+  print(paste("L\u00e4nge Vektor 2                            --", formatC(length(vec2), big.mark = "'", width = 8)))
+
+  lengU1 <- length(unique(vec1))
+  lengU2 <- length(unique(vec2))
+  print(paste("Anzahl verschiedene Elemente in Vektor 1  --", formatC(lengU1, big.mark = "'", width = 8)))
+  print(paste("Anzahl verschiedene Elemente in Vektor 2  --", formatC(lengU2, big.mark = "'", width = 8)))
+
+  if (max(lengU1, lengU2) <= 20) {
+    unique1 <- unique(vec1)
+    unique2 <- unique(vec2)
+    unique1 <- paste(unique1[order(unique1)], collapse = ", ")
+    unique2 <- paste(unique2[order(unique2)], collapse = ", ")
+    print(paste("verschiedene Elemente in Vektor 1         --", format(unique1, justify = "right", width = 8)))
+    print(paste("verschiedene Elemente in Vektor 2         --", format(unique2, justify = "right", width = 8)))
+  }
+
+  v1_in_v2  <- vec1[ vec1 %in% vec2]
+  v1_Nin_v2 <- vec1[!vec1 %in% vec2]
+  v2_Nin_v1 <- vec2[!vec2 %in% vec1]
+
+  print(paste("Anzahl Elemente Vektor 1 und in Vektor2   --", formatC(length(v1_in_v2),  big.mark = "'", width = 8)))
+  print(paste("Anzahl Elemente Vektor 1 nicht in Vektor2 --", formatC(length(v1_Nin_v2), big.mark = "'", width = 8)))
+  print(paste("Anzahl Elemente Vektor 2 nicht in Vektor1 --", formatC(length(v2_Nin_v1), big.mark = "'", width = 8)))
+
+  if (showElements) {
+    print("Elemente Vektor 1 und in Vektor2          --")
+    print(paste(v1_in_v2, collapse = ", "))
+
+    print("Elemente Vektor 1 nicht in Vektor2        --")
+    print(paste(v1_Nin_v2, collapse = ", "))
+
+    print("Elemente Vektor 2 nicht in Vektor1        --")
+    print(paste(v2_Nin_v1, collapse = ", "))
+  }
+}
+#
+# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
+#}}}
 # ==================================================================================================

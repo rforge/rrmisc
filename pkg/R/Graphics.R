@@ -795,7 +795,7 @@ univarModDataFact <- function(d_data, var_dep_n, var_indep_f, label_dep_n, label
     }
   }
   else {
-    windows(width = plot_dims[2], height = plot_dims[1])
+    dev.new(width = plot_dims[1], height = plot_dims[2], unit = "cm")
     form <- formula(paste(var_dep_n, "~", paste(var_indep_f, collapse = " + ")))
     # form
     plot.design(x = form
