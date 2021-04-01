@@ -1,4 +1,9 @@
 
+# rrMisc 0.4.3 (2020-11-18)
+
+Introduce new function profileData() to launch a shiny app
+Introduce 'verbose' option in testGranularity() and format output
+
 # rrMisc 0.4.2 (2020-09-30)
 
 Rename function compTwoVects() to compTwoNumVects()

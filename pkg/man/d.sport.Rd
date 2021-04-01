@@ -3,7 +3,7 @@
 \docType{data}
 \name{d.sport}
 \alias{d.sport}
-\title{sample data}
+\title{Sample data}
 \format{
 \itemize{
  \item weit

@@ -1,6 +1,7 @@
-#' @title sample data
-#' @description sport measures from 15 athletes
+#' @title Sample data
 #' @name d.sport
+#' @description sport measures from 15 athletes
+
 #' @docType data
 #' @format
 #' \itemize{
@@ -46,7 +47,8 @@ NULL
 # -->> delete help-files so that they can be rebuilt by roxygen2
 if (0 == 1) {
   # set path to Code
-  setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
+  # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
+  setwd("~/R_rrMisc/rrmisc/pkg")
   getwd()
   #
   # delete help-files so that they can be rebuilt by roxygen2
@@ -65,8 +67,9 @@ if (0 == 1) {
 # -- adjust the version number and date in the 'DESCRIPTION' file
 # -- update NEWS file
 if (0 == 1) {
-  rrMiscVers <- "0.4.2"
-  setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
+  rrMiscVers <- "0.4.3"
+  # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
+  setwd("~/R_rrMisc/rrmisc/")
   getwd()
   system(       "R --vanilla CMD build pkg")
   system(paste0("R --vanilla CMD check rrMisc_", rrMiscVers, ".tar.gz"))
@@ -76,20 +79,24 @@ if (0 == 1) {
   # apt install texlive-fonts-extra
 
   list.files("rrMisc.Rcheck")
-  system(paste0("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/",
-                "R_rrMisc/rrmisc/rrMisc.Rcheck/00check.log &"))
-  system(paste0("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/",
-                "R_rrMisc/rrmisc/rrMisc.Rcheck/00install.out &"))
+  # system(paste0("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/",
+  #               "R_rrMisc/rrmisc/rrMisc.Rcheck/00check.log &"))
+  system("gvim ~/R_rrMisc/rrmisc/rrMisc.Rcheck/00check.log &")
+  # system(paste0("gvim /home/roland/Desktop/Dokumente_verteilt/Statistik/",
+  #               "R_rrMisc/rrmisc/rrMisc.Rcheck/00install.out &"))
+  system("gvim ~/R_rrMisc/rrmisc/rrMisc.Rcheck/00install.out &")
 
-  system(paste0("gv /home/roland/Desktop/Dokumente_verteilt/Statistik/",
-                 "R_rrMisc/rrmisc/rrMisc.Rcheck/rrMisc-manual.pdf &"))
+  # system(paste0("gv /home/roland/Desktop/Dokumente_verteilt/Statistik/",
+  #                "R_rrMisc/rrmisc/rrMisc.Rcheck/rrMisc-manual.pdf &"))
+  system("gv ~/R_rrMisc/rrmisc/rrMisc.Rcheck/rrMisc-manual.pdf &")
 }
 #
 # --------------------------------------------------------------------------------------------------
 # Remove old version and install new package .......................................................
 #
 if (0 == 1) {
-  setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
+  # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
+  setwd("~/R_rrMisc/rrmisc/")
   getwd()
   #
   # test if new version is available
@@ -101,15 +108,16 @@ if (0 == 1) {
   remove.packages("rrMisc")
   #
   # install local copy of package
-  rrMiscVers <- "0.4.1"
-  install.packages(paste0("/home/roland/Desktop/Dokumente_verteilt/Statistik/",
-                          "R_rrMisc/rrmisc/rrMisc_", rrMiscVers, ".tar.gz"),
+  rrMiscVers <- "0.4.3"
+  install.packages(paste0("~/R_rrMisc/rrmisc/rrMisc_", rrMiscVers, ".tar.gz"),
                    repos = NULL)
   library(rrMisc)
   example(testGranularity)
   example(getContStat)
   example(encodeUTF8)
   ?encodeUTF8
+
+  profileData()
 
   news(package = "rrMisc")
   # library(commonmark)
@@ -140,10 +148,12 @@ if (0 == 1) {
 #
 # --> bei neuen Funktionen die Hilfe-Datei hinzufügen <--
 # cd /home/roland/Statistik/R_rrMisc/rrmisc/pkg/man   <- Achtung korrektes Verzeichnis
+# cd ~/R_rrMisc/rrmisc/pkg/man                        <- Achtung korrektes Verzeichnis
 # svn add encodeUTF8.Rd
 #
 # --> Änderungen commiten       << pw: 'r-forge'      <--
 # cd /home/roland/Statistik/R_rrMisc/rrmisc           <- Achtung korrektes Verzeichnis
+# cd ~/R_rrMisc/rrmisc                                <- Achtung korrektes Verzeichnis
 # svn commit
 #
 #

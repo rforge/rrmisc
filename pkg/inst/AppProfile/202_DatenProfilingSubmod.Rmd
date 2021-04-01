@@ -1,0 +1,14 @@
+```{r, echo=FALSE, eval=TRUE, fig.align="center", out.width="90%", fig.cap=SubFigCap}
+# ```{r echo = FALSE, result = "asis"}
+# `r SubTitle`
+  filens <- NULL
+  j <- 1
+  for (j in 1:get(SubName))
+  {
+    CurNpartsChar <- ifelse(j < 10, paste0("0", j), j)
+    filens        <- c(filens, file.path(tempDir, paste0(SubFigName, CurNpartsChar, ".png")))
+    # file.exists(filens)
+  }
+  knitr::include_graphics(path = filens)    # Vektor als Attribut für include_graphics()
+```
+

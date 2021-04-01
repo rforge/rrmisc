@@ -4,12 +4,14 @@
 \alias{testGranularity}
 \title{test granularity of attributes in data.frame}
 \usage{
-testGranularity(d.data, var, ...)
+testGranularity(d.data, var, verbose = NULL, ...)
 }
 \arguments{
 \item{d.data, }{data.frame}
 
 \item{var, }{vector of attributes in d.data}
+
+\item{verbose, }{add additional output}
 
 \item{\dots}{arguments passed to further functions}
 }
@@ -29,15 +31,19 @@ d.data <- data.frame(a = 1:20,
                      d = rep(letters[1:10], 2))
 var <- c("a")
 testGranularity(d.data = d.data, var = var)
+testGranularity(d.data = d.data, var = var, verbose = FALSE)
 
 var <- c("b")
 testGranularity(d.data = d.data, var = var)
+testGranularity(d.data = d.data, var = var, verbose = FALSE)
 
 var <- c("a", "b")
 testGranularity(d.data = d.data, var = var)
+testGranularity(d.data = d.data, var = var, verbose = FALSE)
 
 var <- c("a", "b", "c", "d")
 testGranularity(d.data = d.data, var = var)
+testGranularity(d.data = d.data, var = var, verbose = FALSE)
 }
 \references{
 none
