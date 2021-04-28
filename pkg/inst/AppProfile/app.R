@@ -38,9 +38,9 @@ if (FALSE) {
   # Ablage-Verzeichnisse
   # - Zwischendateien:  tempdir()
   # - Berichte:         /home/roland/Schreibtisch/
+  tempdir()
   list.files(tempdir())
   list.files(file.path(tempdir(), "TmpDir_zu_loeschen"))
-  list.files("/home/roland/Schreibtisch")
   list.files("/tmp")
 }
 
@@ -88,10 +88,8 @@ PrettyN                <-  5
 RmdFile               <- "202_DatenProfiling.Rmd"
 # verwendet auch         "202_DatenProfilingSubmod.Rmd"
 RmdPFile              <- RmdFile
-# file.exists(RmdPFile)
 ProfilingFile         <- "200_DatenProfiling.R"
 ProfilingPFile        <- ProfilingFile
-# file.exists(ProfilingPFile)
 source(ProfilingPFile)
 
 if (FALSE) {

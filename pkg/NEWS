@@ -1,4 +1,4 @@
-Changes in version 0.4.4 (2021-04-28)
+Changes in version 0.4.5 (2021-04-28)
   Updated
   * profileData(): shiny app for profiling one or two data sets, intermediate files in tempdir()
 

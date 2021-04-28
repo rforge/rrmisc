@@ -64,7 +64,7 @@ if (0 == 1) {
 # -- 'DESCRIPTION'    Paketversion, Datum
 # -- 'NEWS'           geänderte Bausteine
 if (0 == 1) {
-  rrMiscVers <- "0.4.4"
+  rrMiscVers <- "0.4.5"
   # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
   setwd("~/R_rrMisc/rrmisc/")
   getwd()
@@ -105,7 +105,7 @@ if (0 == 1) {
   remove.packages("rrMisc")
   #
   # Installation der lokalen Paket-Datei
-  rrMiscVers <- "0.4.4"
+  rrMiscVers <- "0.4.5"
   install.packages(paste0("~/R_rrMisc/rrmisc/rrMisc_", rrMiscVers, ".tar.gz"), repos = NULL)
 
   # Installation von R-Forge.R-project.org
@@ -113,6 +113,7 @@ if (0 == 1) {
 
   # neue Installation testen
   library(rrMisc)
+  profileDataShiny()
   news(package = "rrMisc")
   ??rrMisc
   example(testGranularity)
