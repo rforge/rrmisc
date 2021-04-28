@@ -16,35 +16,32 @@ options(shiny.reactlog = TRUE)    # Rective Log anschauen mit Ctrl + F3
 options(shiny.error = browser)    # Startet Debugger bei Fehler
 options(shiny.maxRequestSize = 30*1024^2) # Maximale Filegrösse für upload auf 30MB setzen
 
+# Liste der Berichtformate -- PDF braucht 'pdflatex'
+LaTeXPath <- Sys.which("pdflatex")
+if (nchar(LaTeXPath) > 1) {
+  ReportChoices = list("PDF", "HTML", "Word"),
+} else {
+  ReportChoices = list("HTML", "Word"),
+}
+
 if (FALSE) {
   #
-  # Für Debugging
+  # Gestartet in rrMisc ............................................................................
+  # PathRun <- system.file('AppProfile', package = 'rrMisc')
+  # [1] "/home/roland/R/x86_64-pc-linux-gnu-library/4.0/rrMisc/AppProfile"
   #
-  # Setze das aktuelle Verzeichnis eine Ebene nach oben ............................................{{{
-  #x xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
-  #
-  #if (!exists("PathLoc"))
-  #  (PathLoc <- getwd())
-  ## Aktuelles Verzeichnis
-  #DirLoc <- basename(PathLoc)
-  ## Ein Verzeichnis nach oben wechseln
-  #setwd(dirname(PathLoc))     # implizit wenn aktueller Pfad von Shiny-App
-  #
-  #
-  # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-  #}}}
-  #
-  # Starte diese Shiny-App
-  setwd("/home/roland/Schreibtisch/Dokumente_verteilt/Statistik/z_ReproducibleResearch/Shiny/") # explizit
-  DirLoc <- "AppProfile"
-  setwd(file.path(getwd(), DirLoc))
-  getwd()
-  list.files()
-  shiny::runApp()
-  # shiny::runApp(file.path(getwd(), DirLoc))
-  # runApp(appDir = file.path(getwd(), DirLoc))
-  # shiny::runApp(DirLoc)
+  # Für Entwicklung auf 'backup' ...................................................................
+  PathRun <- "/you_home/roland/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg/inst/AppProfile/"
+  shiny::runApp(appDir = PathRun)
   # runApp(DirLoc, display.mode = "showcase")
+  #
+  # Ablage-Verzeichnisse
+  # - Zwischendateien:  tempdir()
+  # - Berichte:         /home/roland/Schreibtisch/
+  list.files(tempdir())
+  list.files(file.path(tempdir(), "TmpDir_zu_loeschen"))
+  list.files("/home/roland/Schreibtisch")
+  list.files("/tmp")
 }
 
 # ToDo's ...........................................................................................
@@ -70,8 +67,10 @@ if (FALSE) {
 # shinyjs Elemente (für das Schliessen der Web-Page)
 # jscode <- "shinyjs.closeWindow = function() { window.close(); }"
 
-def_fn_ProfileData1    <- "Data1_Profile.RData"
-def_fn_ProfileData2    <- "Data2_Profile.RData"
+# def_fn_ProfileData1    <- "Data1_Profile.RData"
+# def_fn_ProfileData2    <- "Data2_Profile.RData"
+def_fn_ProfileData1    <- tempfile(fileext = ".RData")
+def_fn_ProfileData2    <- tempfile(fileext = ".RData")
 def_BeschreibungDaten1 <- "Daten A"
 def_BeschreibungDaten2 <- "Daten B"
 fn_ProfileData1        <- NA
@@ -86,34 +85,23 @@ MaxN                   <- 42
 WidthNames             <- 35
 PrettyN                <-  5
 
-# RmdPath               <- "G:/Vt/Tm/Allg/RRapold/01_R_Auswertungen"
 RmdFile               <- "202_DatenProfiling.Rmd"
 # verwendet auch         "202_DatenProfilingSubmod.Rmd"
-# RmdPFile              <- file.path(RmdPath, RmdFile)
 RmdPFile              <- RmdFile
 # file.exists(RmdPFile)
 ProfilingFile         <- "200_DatenProfiling.R"
-# ProfilingPFile        <- file.path(RmdPath, ProfilingFile)
 ProfilingPFile        <- ProfilingFile
 # file.exists(ProfilingPFile)
 source(ProfilingPFile)
 
 if (FALSE) {
-  load(file.path(RmdPath, "ABT_kunde_1.RData"))
+  # DataExample <-
   undebug(profileData)
   Data1_Profile <- profileData(fn_Data = NULL,
-                               DataObj = ABT.kunde,
-                               NameOutput = NULL,
-                               PathOutput = NULL)
+                               DataObj = DataExample,
+                               PathOutput = NULL,
+                               overwrite = FALSE)
 }
-#
-# vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
-#}}}
-# Profile - Daten löschen. Diese werden neu erzeugt ................................................{{{
-# xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
-#
-# if (file.exists(def_fn_ProfileData1)) unlink(def_fn_ProfileData1)
-# if (file.exists(def_fn_ProfileData2)) unlink(def_fn_ProfileData2)
 #
 # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
 #}}}
@@ -151,7 +139,7 @@ ui <- fluidPage(
                                  textInput(inputId = "I_Author", "Dein Name wie er im Bericht sein sollte"),
                                  selectInput(inputId = "I_ReportFormat",
                                              label   = "Report - Format",
-                                             choices = list("PDF", "HTML", "Word")),
+                                             choices = ReportChoices),
                                  downloadButton(outputId = "O_erstelleReport", label = "Report erstellen"),
                                  hr(),
                                  # Applikation schliessen ----
@@ -227,8 +215,8 @@ server <- function(input, output, session) {
                  withProgress(message = "Daten 1 werden analysiert", {
                                 Data1_Profile <<- profileData(fn_Data = NULL,
                                                               DataObj = Data1(),
-                                                              NameOutput = NULL,
-                                                              PathOutput = NULL)
+                                                              PathOutput = NULL,
+                                                              overwrite = FALSE)
 
                                 fn_Data1           <<- input$I_FileName1$name
 
@@ -241,8 +229,8 @@ server <- function(input, output, session) {
                  withProgress(message = "Daten 2 werden analysiert", {
                                 Data2_Profile <<- profileData(fn_Data = NULL,
                                                               DataObj = Data2(),
-                                                              NameOutput = NULL,
-                                                              PathOutput = NULL)
+                                                              PathOutput = NULL,
+                                                              overwrite = FALSE)
 
                                 fn_Data2           <<- input$I_FileName2$name
 
@@ -254,17 +242,17 @@ server <- function(input, output, session) {
 
   # Anzeige der Profiling - Daten
   observeEvent(input$I_profileData1, {
-                 if (FALSE) {
-                   load(file = file.path(getwd(), DirLoc, "Data1_Profile.RData"))
-                 }
+                 # if (FALSE) {
+                 #   load(file = file.path(getwd(), DirLoc, "Data1_Profile.RData"))
+                 # }
                  output$O_Data1_Profile <- renderPrint({
                    unique(Data1_Profile[[1]][-1, c(2:3)])
                  })
                  })
   observeEvent(input$I_profileData2, {
-                 if (FALSE) {
-                   load(file = file.path(getwd(), DirLoc, "Data2_Profile.RData"))
-                 }
+                 # if (FALSE) {
+                 #   load(file = file.path(getwd(), DirLoc, "Data2_Profile.RData"))
+                 # }
                  output$O_Data2_Profile <- renderPrint({
                    unique(Data2_Profile[[1]][-1, c(2:3)])
                  })
@@ -308,7 +296,7 @@ server <- function(input, output, session) {
                                                        fn_Data1           = fn_Data1,
                                                        fn_Data2           = fn_Data2,
                                                        OutputFormat       = V_ReportType(),
-                                                       DataPath           = getwd(),
+                                                       # DataPath           = getwd(),
                                                        fn_ProfileData1    = fn_ProfileData1,
                                                        fn_ProfileData2    = fn_ProfileData2,
                                                        BeschreibungDaten1 = BeschreibungDaten1,

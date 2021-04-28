@@ -15,7 +15,8 @@
 #' @references none
 #' @export
   profileData <- function(...) {
-    shiny::runApp(appDir = system.file('AppProfile', package = 'rrMisc'))
+    PathRun <- system.file('AppProfile', package = 'rrMisc')
+    shiny::runApp(appDir = PathRun)
   }
 #
 # --------------- profileData ------------------------------------------------------------------- --

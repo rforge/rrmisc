@@ -26,7 +26,6 @@ params:
   fn_Data1: NA
   fn_Data2: NA
   OutputFormat: NA
-  DataPath: NA
   fn_ProfileData1: NA
   fn_ProfileData2: NA
   BeschreibungDaten1: NA
@@ -98,7 +97,7 @@ params:
   fn_Data1: NA
   fn_Data2: NA
   OutputFormat: NA
-  DataPath: NA
+  # DataPath: NA
   fn_ProfileData1: NA
   fn_ProfileData2: NA
   BeschreibungDaten1: NA
@@ -116,7 +115,7 @@ params:
   OutputFormat: "html"
   OutputFormat: "word"
   # DataPath: "G:/Vt/Tm/Allg/RRapold/01_R_Auswertungen"
-  DataPath: "G:/Vt/Tm/Allg/RRapold/03_R_Shiny/AppProfile"
+  # DataPath: "G:/Vt/Tm/Allg/RRapold/03_R_Shiny/AppProfile"
   fn_ProfileData1: "Data1_Profile.RData"
   fn_ProfileData2: NA
   fn_ProfileData2: "Data2_Profile.RData"
@@ -133,7 +132,7 @@ params:
                  fn_Data2 = "Test-File2.RData",
                  OutputFormat = "pdf",
                  # DataPath = "G:/Vt/Tm/Allg/RRapold/01_R_Auswertungen",
-                 DataPath = "G:/Vt/Tm/Allg/RRapold/03_R_Shiny/AppProfile",
+                 # DataPath = "G:/Vt/Tm/Allg/RRapold/03_R_Shiny/AppProfile",
                  fn_ProfileData1 = "Data1_Profile.RData",
                  fn_ProfileData2 = "Data2_Profile.RData",
                  # fn_ProfileData2 = NA,
@@ -154,7 +153,7 @@ Title              <- params$Title
 Author             <- params$Author
 fn_Data1           <- params$fn_Data1
 fn_Data2           <- params$fn_Data2
-DataPath           <- params$DataPath
+# DataPath           <- params$DataPath
 fn_ProfileData1    <- params$fn_ProfileData1
 fn_ProfileData2    <- params$fn_ProfileData2
 BeschreibungDaten1 <- params$BeschreibungDaten1
@@ -175,17 +174,17 @@ if (is.na(Author) | Author == "") {
 # Kontrolle Input-Daten vorhanden ..................................................................{{{
 # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
 #
-pfn_ProfileData1 <- file.path(DataPath, fn_ProfileData1)
-if (!file.exists(pfn_ProfileData1)) {
-  stop(paste("keine Datei 1 gefunden als:", pfn_ProfileData1))
+# pfn_ProfileData1 <- file.path(DataPath, fn_ProfileData1)
+if (!file.exists(fn_ProfileData1)) {
+  stop(paste("keine Datei 1 gefunden als:", fn_ProfileData1))
 }
-pfn_ProfileData2 <- file.path(DataPath, fn_ProfileData2)
+# pfn_ProfileData2 <- file.path(DataPath, fn_ProfileData2)
 if (is.na(fn_ProfileData2) | fn_ProfileData2 == "NA") {
   i_ProfileData2 <- FALSE
 } else {
   i_ProfileData2 <- TRUE
-  if (!file.exists(pfn_ProfileData2)) {
-    stop(paste("keine Datei 2 gefunden als:", pfn_ProfileData2))
+  if (!file.exists(fn_ProfileData2)) {
+    stop(paste("keine Datei 2 gefunden als:", fn_ProfileData2))
   }
 }
 #
@@ -322,7 +321,7 @@ cat("-- D --\n")
 # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
 #
 # Datei 1 --
-load(pfn_ProfileData1)
+load(fn_ProfileData1)
 if ("Profile_List" %in% ls()) {
   Data1_Profile <- Profile_List
   rm(Profile_List)
@@ -346,7 +345,7 @@ rm(Data1_Profile)
 #
 # Datei 2 -- optional
 if (i_ProfileData2) {
-  load(pfn_ProfileData2)
+  load(fn_ProfileData2)
   if ("Profile_List" %in% ls()) {
     Data2_Profile <- Profile_List
     rm(Profile_List)
@@ -649,6 +648,14 @@ cat("-- G --\n")
 if (i_ProfileData2) {
 # lattice - theme                                                                                 ..{{{
 # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
+#
+SwicaColsRGB <- list(c( 23, 159, 150),
+                     c( 31, 195, 187),
+                     c(  6,  73,  74),
+                     c(129, 129, 129),
+                     c(173, 173, 173),
+                     c(255,   0,  68))
+SwicaCols <- sapply(SwicaColsRGB, function(x) rgb(x[1], x[2], x[3], maxColorValue = 255))
 #
 my.settings=latticeExtra::theEconomist.theme()
 my.settings$clip$panel         <- "off"
@@ -1550,18 +1557,18 @@ title    <- paste("Veränderung Datenobjekt", BeschreibungDaten1, "a)",
                   "relativ zu Lauf", BeschreibungDaten2, "b)")
 subtitle <- paste("Zeilen von a) oben, und b) unten")
 #
-# Temporären Ordner erstellen 'tempDir' resp. Inhalt löschen                                      ..{{{
+# Temporären Ordner erstellen 'tempDirFigures' resp. Inhalt löschen                                      ..{{{
 # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
 #
-tempDir <- "TmpDir_zu_loeschen"
-if (dir.exists(tempDir)) {
-  unlink(file.path(tempDir, "*"))
+tempDirFigures <- file.path(tempdir(), "TmpDir_zu_loeschen")
+if (dir.exists(tempDirFigures)) {
+  unlink(file.path(tempDirFigures, "*"))
 } else {
-  dir.create(tempDir)
+  dir.create(tempDirFigures)
 }
-# while ( tempDir %in% dirs )
+# while ( tempDirFigures %in% dirs )
 # {
-#   tempDir <- paste0(tempDir, "A")
+#   tempDirFigures <- paste0(tempDirFigures, "A")
 # }
 #
 # vvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvvv
@@ -1583,7 +1590,7 @@ if (LenCurAttr > 0) {
     AttrCol    <- rep(1, nrow(CurProfileUebersicht))
     GPars      <- getGraphParam(nrow(CurProfileUebersicht))
     PlotUebers <- getPlotUebers(CurProfileUebersicht, shiftTitle, title, subtitle)
-    pfilen     <- file.path(tempDir, paste0("PlotUebers", CurNpartsUebers, ".png"))
+    pfilen     <- file.path(tempDirFigures, paste0("PlotUebers", CurNpartsUebers, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -1618,7 +1625,7 @@ if (LenCurAttr > 0) {
     #
     GPars    <- getGraphParam(nrow(ProfileCharX))
     PlotChar <- getPlotChar(ProfileCharX, shiftTitle, title, subtitle)
-    pfilen   <- file.path(tempDir, paste0("PlotChar", CurNpartsChar, ".png"))
+    pfilen   <- file.path(tempDirFigures, paste0("PlotChar", CurNpartsChar, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -1654,7 +1661,7 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileNumX))
     PlotNum <- getPlotNum(ProfileNumX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDir, paste0("PlotNum", CurNpartsNum, ".png"))
+    pfilen  <- file.path(tempDirFigures, paste0("PlotNum", CurNpartsNum, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -1690,7 +1697,7 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileNumX))
     PlotNum <- getPlotNum2(ProfileNumX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDir, paste0("PlotWerteBerNum", CurNpartsNum, ".png"))
+    pfilen  <- file.path(tempDirFigures, paste0("PlotWerteBerNum", CurNpartsNum, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -1726,7 +1733,7 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileIntX))
     PlotInt <- getPlotNum(ProfileIntX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDir, paste0("PlotInt", CurNpartsInt, ".png"))
+    pfilen  <- file.path(tempDirFigures, paste0("PlotInt", CurNpartsInt, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -1762,7 +1769,7 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileIntX))
     PlotInt <- getPlotNum2(ProfileIntX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDir, paste0("PlotWerteBerInt", CurNpartsInt, ".png"))
+    pfilen  <- file.path(tempDirFigures, paste0("PlotWerteBerInt", CurNpartsInt, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -1788,7 +1795,7 @@ if (length(CurAttr0) > 0) {
 #if (nrow(ProfileInt) > 0) {
 #  GPars   <- getGraphParam(nrow(ProfileInt))
 #  PlotWerteBerInt <- getPlotNum2(ProfileInt, shiftTitle, title, subtitle)
-#  pfilen  <- file.path(tempDir, "PlotWerteBerInt.png")
+#  pfilen  <- file.path(tempDirFigures, "PlotWerteBerInt.png")
 #  png(filename = pfilen
 #      , width = 9, height = GPars[1], units = "in"
 #      , res = 300)
@@ -1822,7 +1829,7 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileCharLikeNumX))
     PlotCharLikeNum <- getPlotNum(ProfileCharLikeNumX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDir, paste0("PlotCharLikeNum", CurNpartsCharLikeNum, ".png"))
+    pfilen  <- file.path(tempDirFigures, paste0("PlotCharLikeNum", CurNpartsCharLikeNum, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -1849,7 +1856,7 @@ if (length(CurAttr0) > 0) {
 #  GPars   <- getGraphParam(nrow(ProfileCharLikeNum))
 #  # PlotCharLikeNum <- getPlotNum(ProfileCharLikeNum, GPars[2])
 #  PlotCharLikeNum <- getPlotNum(ProfileCharLikeNum, shiftTitle, title, subtitle)
-#  pfilen  <- file.path(tempDir, "PlotCharLikeNum.png")
+#  pfilen  <- file.path(tempDirFigures, "PlotCharLikeNum.png")
 #  png(filename = pfilen
 #      , width = 9, height = GPars[1], units = "in"
 #      # , quality = 100
@@ -1884,7 +1891,7 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileCharLikeNumX))
     PlotCharLikeNum <- getPlotNum2(ProfileCharLikeNumX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDir, paste0("PlotWerteBerCharLikeNum", CurNpartsCharLikeNum, ".png"))
+    pfilen  <- file.path(tempDirFigures, paste0("PlotWerteBerCharLikeNum", CurNpartsCharLikeNum, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -1910,7 +1917,7 @@ if (length(CurAttr0) > 0) {
 #if (nrow(ProfileCharLikeNum) > 0) {
 #  GPars           <- getGraphParam(nrow(ProfileCharLikeNum))
 #  PlotCharLikeNum <- getPlotNum2(ProfileCharLikeNum, shiftTitle, title, subtitle)
-#  pfilen          <- file.path(tempDir, "PlotWerteBerCharLikeNum.png")
+#  pfilen          <- file.path(tempDirFigures, "PlotWerteBerCharLikeNum.png")
 #  png(filename = pfilen
 #      , width = 9, height = GPars[1], units = "in"
 #      , res = 300)
@@ -1944,7 +1951,7 @@ if (length(CurAttr0) > 0) {
     #
     GPars      <- getGraphParam(nrow(ProfileFactorX))
     PlotFactor <- getPlotFactor(ProfileFactorX, shiftTitle, title, subtitle)
-    pfilen     <- file.path(tempDir, paste0("PlotFactor", CurNpartsFactor, ".png"))
+    pfilen     <- file.path(tempDirFigures, paste0("PlotFactor", CurNpartsFactor, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -1970,7 +1977,7 @@ if (length(CurAttr0) > 0) {
 #if (nrow(ProfileFactor) > 0) {
 #  GPars      <- getGraphParam(nrow(ProfileFactor))
 #  PlotFactor <- getPlotFactor(ProfileFactor, shiftTitle, title, subtitle)
-#  pfilen     <- file.path(tempDir, "PlotFactor.png")
+#  pfilen     <- file.path(tempDirFigures, "PlotFactor.png")
 #  png(filename = pfilen
 #      , width = 9, height = GPars[1], units = "in"
 #      , res = 300)
@@ -2004,7 +2011,7 @@ if (length(CurAttr0) > 0) {
     #
     GPars    <- getGraphParam(nrow(ProfileDateX))
     PlotDate <- getPlotNum(ProfileDateX, shiftTitle, title, subtitle)
-    pfilen   <- file.path(tempDir, paste0("PlotDate", CurNpartsDate, ".png"))
+    pfilen   <- file.path(tempDirFigures, paste0("PlotDate", CurNpartsDate, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -2030,7 +2037,7 @@ if (length(CurAttr0) > 0) {
 #if (nrow(ProfileDate) > 0) {
 #  GPars   <- getGraphParam(nrow(ProfileDate))
 #  PlotDate <- getPlotNum(ProfileDate, shiftTitle, title, subtitle)
-#  pfilen   <- file.path(tempDir, "PlotDate.png")
+#  pfilen   <- file.path(tempDirFigures, "PlotDate.png")
 #  png(filename = pfilen
 #      , width = 9, height = GPars[1], units = "in"
 #      , res = 300)
@@ -2064,7 +2071,7 @@ if (length(CurAttr0) > 0) {
     #
     GPars    <- getGraphParam(nrow(ProfileDateX))
     PlotDate <- getPlotNum2(ProfileDateX, shiftTitle, title, subtitle)
-    pfilen   <- file.path(tempDir, paste0("PlotWerteBerDate", CurNpartsDate, ".png"))
+    pfilen   <- file.path(tempDirFigures, paste0("PlotWerteBerDate", CurNpartsDate, ".png"))
     png(filename = pfilen
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
@@ -2090,7 +2097,7 @@ if (length(CurAttr0) > 0) {
 #if (nrow(ProfileDate) > 0) {
 #  GPars   <- getGraphParam(nrow(ProfileDate))
 #  PlotDate <- getPlotNum2(ProfileDate, shiftTitle, title, subtitle, iDatum = 1)
-#  pfilen   <- file.path(tempDir, "PlotWerteBerDate.png")
+#  pfilen   <- file.path(tempDirFigures, "PlotWerteBerDate.png")
 #  png(filename = pfilen
 #      , width = 9, height = GPars[1], units = "in"
 #      , res = 300)

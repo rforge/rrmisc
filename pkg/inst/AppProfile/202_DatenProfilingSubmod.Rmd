@@ -6,7 +6,7 @@
   for (j in 1:get(SubName))
   {
     CurNpartsChar <- ifelse(j < 10, paste0("0", j), j)
-    filens        <- c(filens, file.path(tempDir, paste0(SubFigName, CurNpartsChar, ".png")))
+    filens        <- c(filens, file.path(tempDirFigures, paste0(SubFigName, CurNpartsChar, ".png")))
     # file.exists(filens)
   }
   knitr::include_graphics(path = filens)    # Vektor als Attribut für include_graphics()

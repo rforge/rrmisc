@@ -39,35 +39,32 @@ NULL
 
 
 # --------------------------------------------------------------------------------------------------
-# Administrative tasks for creating the package
-#
+# Administrative Schritte zur Erstellung des Paketes
+# ===>                                                                        <===
+# ===> Achtung -- Verwendung von Computer mit aktueller R-Version -- 'backup' <===
+# ===>                                                                        <===
 # --------------------------------------------------------------------------------------------------
-# Use Roxygen to create/update the documentation files .............................................
+# Verwendung von Roxygen zur automatischen Erstellung der Hilfe-Dateien ............................
 #
-# -->> delete help-files so that they can be rebuilt by roxygen2
+# -->> Löschen der Hilfe-Dateien bevor sie neu erzeugt werden durch roxygen2
 if (0 == 1) {
-  # set path to Code
   # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
   setwd("~/R_rrMisc/rrmisc/pkg")
   getwd()
-  #
-  # delete help-files so that they can be rebuilt by roxygen2
   unlink("./man/*.Rd")
-  # .libPaths()
-  # getOption("repos")
-  # install.packages("roxygen2", dependencies = TRUE)
   #
   library(roxygen2)
   roxygen2::roxygenise()
 }
 #
 # --------------------------------------------------------------------------------------------------
-# Compile package ..................................................................................
+# Paket kompilieren ................................................................................
 #
-# -- adjust the version number and date in the 'DESCRIPTION' file
-# -- update NEWS file
+# System-Dateien aktualisieren
+# -- 'DESCRIPTION'    Paketversion, Datum
+# -- 'NEWS'           geänderte Bausteine
 if (0 == 1) {
-  rrMiscVers <- "0.4.3"
+  rrMiscVers <- "0.4.4"
   # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
   setwd("~/R_rrMisc/rrmisc/")
   getwd()
@@ -92,26 +89,32 @@ if (0 == 1) {
 }
 #
 # --------------------------------------------------------------------------------------------------
-# Remove old version and install new package .......................................................
+# Entfernen der alten Version und installieren der neuen Paket-Version .............................
 #
 if (0 == 1) {
   # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
   setwd("~/R_rrMisc/rrmisc/")
   getwd()
   #
-  # test if new version is available
+  # ist neue Version vorhanden?
   list.files()
   #
-  # remove old version
+  # alte, installierte Version entfernen
   detach("package:rrMisc", character.only = TRUE)
   unloadNamespace("rrMisc")
   remove.packages("rrMisc")
   #
-  # install local copy of package
-  rrMiscVers <- "0.4.3"
-  install.packages(paste0("~/R_rrMisc/rrmisc/rrMisc_", rrMiscVers, ".tar.gz"),
-                   repos = NULL)
+  # Installation der lokalen Paket-Datei
+  rrMiscVers <- "0.4.4"
+  install.packages(paste0("~/R_rrMisc/rrmisc/rrMisc_", rrMiscVers, ".tar.gz"), repos = NULL)
+
+  # Installation von R-Forge.R-project.org
+  install.packages("rrMisc", repos = "http://R-Forge.R-project.org")
+
+  # neue Installation testen
   library(rrMisc)
+  news(package = "rrMisc")
+  ??rrMisc
   example(testGranularity)
   example(getContStat)
   example(encodeUTF8)
@@ -120,25 +123,8 @@ if (0 == 1) {
   profileData()
 
   news(package = "rrMisc")
-  # library(commonmark)
-  # library(xml2)
-
   # news(package = "callr")
   # news(package = "Hmisc")
-}
-#
-if (0 == 1) {
-  # -- install copy from r-forge
-  install.packages("rrMisc", repos = "http://R-Forge.R-project.org")
-
-  # -- test installation
-  library(rrMisc)
-  ??rrMisc
-  example(getContStat)
-  example(encodeUTF8)
-  ?cols7.theme
-  ?div01.theme
-  news(package = "rrMisc")
 }
 #
 # --------------------------------------------------------------------------------------------------

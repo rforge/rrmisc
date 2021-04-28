@@ -1,7 +1,14 @@
+Changes in version 0.4.4 (2021-04-28)
+  Updated
+  * profileData(): shiny app for profiling one or two data sets, intermediate files in tempdir()
+
 Changes in version 0.4.3 (2021-04-01)
-  * NEWS file format changed
-  * New function profileData() to launch a shiny app for profiling one or two data sets
-  * Introduce 'verbose' option in testGranularity() and format output
+  New
+  * profileData(): shiny app for profiling one or two data sets
+
+  Updated
+  * NEWS: format changed
+  * testGranularity(): Introduce 'verbose' option and format output
 
 Changes in version 0.4.2 (2020-09-30)
   * Rename function compTwoVects() to compTwoNumVects()

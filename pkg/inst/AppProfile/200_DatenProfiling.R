@@ -12,16 +12,14 @@
 # Funktion profileData()                                                                          ..{{{
 # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
 #
-profileData <- function(fn_Data = NULL,       # Daten-Filename
-                        DataObj = NULL,       # Datenobjekt
-                        NameOutput = NULL,    # Resultat-Datei
-                        PathOutput = NULL,    # Resultat-Verzeichnis
-                        overwrite = FALSE) {
+profileData <- function(fn_Data = NULL,       # Daten-Filename - für Übergabe von Datenpfad
+                        DataObj = NULL,       # Datenobjekt    - für Übergabe von Datenobjekt
+                        PathOutput = NULL,    # Verzeichnis falls Resultat gesichert werden soll
+                        overwrite = FALSE) {  # Option falls Resultat gesichert werden soll
 
   print("Start profileData()")
   # print(paste("fn_Data =", fn_Data))
-  # print(paste("NameOutput =", NameOutput))
-  print(paste("PathOutput =", PathOutput))
+  # print(paste("PathOutput =", PathOutput))
 
   library(data.table)
 
@@ -34,8 +32,11 @@ profileData <- function(fn_Data = NULL,       # Daten-Filename
     return(CurrList)
   }
 
-  # Daten laden ....................................................................................
+  # Daten laden wenn ein Filename mitgegeben, sonst wird übergebenes Objekt 'DataObj' verwendet ....
   if (!is.null(fn_Data)) {
+    # Filename der Input-Datei
+    NameInput <- basename(fn_Data)
+    # Daten werden geladen gemäss Filename
     print(paste(".. Datei wird geladen .."))
     File <- load(fn_Data)
     assign(x="Data", get(File))
@@ -43,6 +44,9 @@ profileData <- function(fn_Data = NULL,       # Daten-Filename
     rm(File)
     rm(fn_Data)
   } else {
+    # Filename der Input-Datei
+    NameInput <- "Resultat"
+    # Mitgegebene Daten in 'DataObj' werden verwendet
     Data <- DataObj
     rm(DataObj)
   }
@@ -57,7 +61,7 @@ profileData <- function(fn_Data = NULL,       # Daten-Filename
   ProfileSup  <- "-"
   Profile     <- data.table(ID  = 1,
                             Descriptions = "Daten Objekt",
-                            Obs = ifelse(is.null(NameOutput), "Resultat", NameOutput),
+                            Obs = NameInput,
                             Ant = ProfileSup,
                             SupA = ProfileSup)
   RowNum      <- nrow(Data)
@@ -500,14 +504,14 @@ profileData <- function(fn_Data = NULL,       # Daten-Filename
   # Spezielle Auswertung für INT_raw und MONEY_raw .................................................{{{
   #x xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
   #
-  # if (NameOutput %in% c("INT_raw", "MONEY_raw")) {
-  #   if (NameOutput == "INT_raw") {
+  # if (NameInput %in% c("INT_raw", "MONEY_raw")) {
+  #   if (NameInput == "INT_raw") {
   #     setnames(Data, "EI_PARTNERNR", "PARTNERNR")
   #     setnames(Data, "EI_TYPE_CD"  , "TYPE_CD")
   #     setnames(Data, "EI_YEAR"     , "YEAR")
   #     setnames(Data, "EI_VALUE"    , "VALUE")
   #   }
-  #   if (NameOutput == "MONEY_raw") {
+  #   if (NameInput == "MONEY_raw") {
   #     setnames(Data, "EM_PARTNERNR", "PARTNERNR")
   #     setnames(Data, "EM_TYPE_CD"  , "TYPE_CD")
   #     setnames(Data, "EM_YEAR"     , "YEAR")
@@ -557,10 +561,10 @@ profileData <- function(fn_Data = NULL,       # Daten-Filename
                               ProfileCharLikeNum))
   # ProfilePersStat))
 
-  # Resultat-Datei sichern ...........................................................................
+  # Resultat-Datei sichern wenn Verzeichnis angegeben (sonst wird Objekt nur zurückgegeben, s.u.) ..
   if (!is.null(PathOutput)) {
     print("Resultat sichern")
-    pfilen <- file.path(PathOutput, paste0("Profile_", NameOutput, ".RData"))
+    pfilen <- file.path(PathOutput, paste0("Profile_", gsub(".RData", "", NameInput), ".RData"))
 
     if(file.exists(pfilen) & overwrite == FALSE) {
       print(paste("Datei", pfilen, "existiert schon und wird nicht neu geschrieben"))
@@ -570,6 +574,7 @@ profileData <- function(fn_Data = NULL,       # Daten-Filename
   }
   #
   print("Ende profileData()")
+  # Profiling-Resultat wird zurückgegeben
   return(Profile_List)
 }
 #
@@ -580,22 +585,36 @@ profileData <- function(fn_Data = NULL,       # Daten-Filename
 # -- Beispiel --
 if (FALSE) {
   getwd()
-  list.files()
-  DataPath   <- "G:/Vt/Tm/Allg/RRapold/01_R_Tools_Auswertungen"
-  DataPath   <- getwd()
-  fn_Data    <- file.path(DataPath, "ABT_kunde_1.RData"); file.exists(fn_Data)
-  fn_Data    <- file.path(DataPath, "ABT_kunde_2.RData"); file.exists(fn_Data)
-  NameOutput <- gsub(".RData", "", basename(fn_Data))
-  PathOutput <- dirname(fn_Data)
+
+  # Aufruf profileData mit Übergabe von Dateiname - ohne Sichern des Profile-Outputs
+  DataPath   <- "/home/roland/R_rrMisc/rrmisc/pkg/inst/AppProfile/"
+  list.files(DataPath)
+  fn_Data    <- file.path(DataPath, "iris.RData")
+  file.exists(fn_Data)
+
+  profileData(fn_Data = fn_Data,        # Daten-Filename          NULL -> DataObj wird verwendet
+              DataObj = NULL,           # Datenobjekt
+              PathOutput = NULL,        # Resultat-Verzeichnis    NULL -> kein Speichern nur Rückgabe
+              overwrite = FALSE)        # Option wenn PathOutput nicht NULL
+  list.files(tempdir())
   #
+  # Aufruf profileData mit Übergabe von Datenobjekt - ohne Sichern des Profile-Outputs
   load(fn_Data)
-  str(ABT.kunde)
+  str(iris)
+
+  profileData(fn_Data = NULL,           # Daten-Filename          NULL -> DataObj wird verwendet
+              DataObj = iris,           # Datenobjekt
+              PathOutput = NULL,        # Resultat-Verzeichnis    NULL -> kein Speichern nur Rückgabe
+              overwrite = FALSE)        # Option wenn PathOutput nicht NULL
+  list.files(tempdir())
   #
-  profileData(fn_Data = NULL,           # Daten-Filename
-              DataObj = ABT.kunde,      # Datenobjekt
-              NameOutput = NameOutput,  # Resultat-Datei
-              PathOutput = NULL,        # Resultat-Verzeichnis
-              overwrite = FALSE)
+  # Aufruf profileData mit Übergabe von Datenobjekt - mit Sichern des Profile-Outputs
+  profileData(fn_Data = NULL,           # Daten-Filename          NULL -> DataObj wird verwendet
+              DataObj = iris,           # Datenobjekt
+              PathOutput = tempdir(),   # Resultat-Verzeichnis    NULL -> kein Speichern nur Rückgabe
+              overwrite = FALSE)        # Option wenn PathOutput nicht NULL
+  list.files(tempdir())
+
 }
 #
 #
