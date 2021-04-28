@@ -19,9 +19,9 @@ options(shiny.maxRequestSize = 30*1024^2) # Maximale Filegrösse für upload auf
 # Liste der Berichtformate -- PDF braucht 'pdflatex'
 LaTeXPath <- Sys.which("pdflatex")
 if (nchar(LaTeXPath) > 1) {
-  ReportChoices = list("PDF", "HTML", "Word"),
+  ReportChoices <- list("PDF", "HTML", "Word")
 } else {
-  ReportChoices = list("HTML", "Word"),
+  ReportChoices <- list("HTML", "Word")
 }
 
 if (FALSE) {
