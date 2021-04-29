@@ -83,29 +83,29 @@ profileData <- function(fn_Data = NULL,       # Daten-Filename - für Übergabe 
                                          nList = ProfileWd, entry = ProfileSup))
   Profile     <- rbind(Profile, fillList(CurrList = list(3, "Kollektivgr\u00f6sse (Nrow)", RowNum),
                                          nList = ProfileWd, entry = ProfileSup))
-  Profile     <- rbind(Profile, fillList(CurrList = list(4, "Anzahl Attribute (Ncol)",  AttrNum),
+  Profile     <- rbind(Profile, fillList(CurrList = list(4, "Attribute Total (Ncol)",  AttrNum),
                                          nList = ProfileWd, entry = ProfileSup))
-  Profile     <- rbind(Profile, fillList(CurrList = list(5, "Anzahl numerische Attribute",
+  Profile     <- rbind(Profile, fillList(CurrList = list(5, "Numerische Attribute",
                                                          sum(AttrClass == "numeric"),
                                                          sum(AttrClass == "numeric") / AttrNum),
                                          nList = ProfileWd, entry = ProfileSup))
-  Profile     <- rbind(Profile, fillList(CurrList = list(6, "Anzahl Integer-Attribute",
+  Profile     <- rbind(Profile, fillList(CurrList = list(6, "Integer-Attribute",
                                                          sum(AttrClass == "integer"),
                                                          sum(AttrClass == "integer") / AttrNum),
                                          nList = ProfileWd, entry = ProfileSup))
-  Profile     <- rbind(Profile, fillList(CurrList = list(7, "Anzahl Faktor-Attribute",
+  Profile     <- rbind(Profile, fillList(CurrList = list(7, "Faktor-Attribute",
                                                          sum(AttrClass == "factor"),
                                                          sum(AttrClass == "factor") / AttrNum),
                                          nList = ProfileWd, entry = ProfileSup))
-  Profile     <- rbind(Profile, fillList(CurrList = list(8, "Anzahl Text-Attribute",
+  Profile     <- rbind(Profile, fillList(CurrList = list(8, "Text-Attribute",
                                                          sum(AttrClass == "character"),
                                                          sum(AttrClass == "character") / AttrNum),
                                          nList = ProfileWd, entry = ProfileSup))
-  Profile     <- rbind(Profile, fillList(CurrList = list(9, "Anzahl bin\u00e4re Attribute",
+  Profile     <- rbind(Profile, fillList(CurrList = list(9, "Bin\u00e4re Attribute",
                                                          sum(AttrClass == "logical"),
                                                          sum(AttrClass == "logical") / AttrNum),
                                          nList = ProfileWd, entry = ProfileSup))
-  Profile     <- rbind(Profile, fillList(CurrList = list(10, "Anzahl Datum-Attribute",
+  Profile     <- rbind(Profile, fillList(CurrList = list(10, "Datum-Attribute",
                                                          length(AttrClass[grep("[POSIX]|Date", AttrClass)]) ,
                                                          length(AttrClass[grep("[POSIX]|Date", AttrClass)]) / AttrNum),
                                          nList = ProfileWd, entry = ProfileSup))
@@ -132,7 +132,7 @@ profileData <- function(fn_Data = NULL,       # Daten-Filename - für Übergabe 
   }
   if (ZeroVarN > 0) {
     Profile <- rbind(Profile, fillList(CurrList = list(rep(11, ZeroVarN),
-                                                       rep("Anzahl 0-Varianz Attribute (uniform)", ZeroVarN),
+                                                       rep("0-Varianz Attribute (uniform)", ZeroVarN),
                                                        rep(ZeroVarN, ZeroVarN),
                                                        ZeroVarA,
                                                        ZeroVarV),
@@ -201,25 +201,25 @@ profileData <- function(fn_Data = NULL,       # Daten-Filename - für Übergabe 
     rm(NaCl)
   }
   Profile <- rbind(Profile, fillList(CurrList = list(rep(12, max(1, NaVarN)),
-                                                     rep("Anzahl Attribute mit NAs", max(1, NaVarN)),
+                                                     rep("Attribute mit NAs", max(1, NaVarN)),
                                                      rep(NaVarN, max(1, NaVarN)),
                                                      ifelse(is.na(AttrNa), ProfileSup, AttrNa),
                                                      ifelse(is.na(AntNa), ProfileSup, AntNa)),
                                      nList = ProfileWd, entry = ProfileSup))
   Profile <- rbind(Profile, fillList(CurrList = list(rep(13, max(1, NaVarN1)),
-                                                     rep("Anzahl Attribute mit <= 50% NAs", max(1, NaVarN1)),
+                                                     rep("Attribute mit <= 50% NAs", max(1, NaVarN1)),
                                                      rep(NaVarN1, max(1, NaVarN1)),
                                                      ifelse(is.na(AttrNa1), ProfileSup, AttrNa1),
                                                      ifelse(is.na(AntNa1), ProfileSup, AntNa1)),
                                      nList = ProfileWd, entry = ProfileSup))
   Profile <- rbind(Profile, fillList(CurrList = list(rep(14, max(1, NaVarN2)),
-                                                     rep("Anzahl Attribute mit  > 50% NAs", max(1, NaVarN2)),
+                                                     rep("Attribute mit  > 50% NAs", max(1, NaVarN2)),
                                                      rep(NaVarN2, max(1, NaVarN2)),
                                                      ifelse(is.na(AttrNa2), ProfileSup, AttrNa2),
                                                      ifelse(is.na(AntNa2), ProfileSup, AntNa2)),
                                      nList = ProfileWd, entry = ProfileSup))
   Profile <- rbind(Profile, fillList(CurrList = list(rep(15, max(1, NaVarN3)),
-                                                     rep("Anzahl Attribute mit  > 90% NAs", max(1, NaVarN3)),
+                                                     rep("Attribute mit  > 90% NAs", max(1, NaVarN3)),
                                                      rep(NaVarN3, max(1, NaVarN3)),
                                                      ifelse(is.na(AttrNa3), ProfileSup, AttrNa3),
                                                      ifelse(is.na(AntNa3), ProfileSup, AntNa3)),

@@ -6,11 +6,11 @@ output:
     toc: true
     toc_depth: 3
     latex_engine: pdflatex
-    keep_tex: false
+    keep_tex: true
     template: default.latex
     fig_caption: true
   html_document:
-    self_contained: false
+    self_contained: true
     number_sections: true
     toc: true
     toc_depth: 3
@@ -1560,12 +1560,12 @@ subtitle <- paste("Zeilen von a) oben, und b) unten")
 # Temporären Ordner erstellen 'tempDirFigures' resp. Inhalt löschen                                      ..{{{
 # xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx xx
 #
-tempDirFigures <- file.path(tempdir(), "TmpDir_zu_loeschen")
-if (dir.exists(tempDirFigures)) {
-  unlink(file.path(tempDirFigures, "*"))
-} else {
-  dir.create(tempDirFigures)
-}
+# tempDirFigures <- file.path(gsub("\\\\", "/", tempdir()), "Figures")
+# if (dir.exists(tempDirFigures)) {
+#   unlink(file.path(tempDirFigures, "*"))
+# } else {
+#   dir.create(tempDirFigures)
+# }
 # while ( tempDirFigures %in% dirs )
 # {
 #   tempDirFigures <- paste0(tempDirFigures, "A")
@@ -1590,8 +1590,10 @@ if (LenCurAttr > 0) {
     AttrCol    <- rep(1, nrow(CurProfileUebersicht))
     GPars      <- getGraphParam(nrow(CurProfileUebersicht))
     PlotUebers <- getPlotUebers(CurProfileUebersicht, shiftTitle, title, subtitle)
-    pfilen     <- file.path(tempDirFigures, paste0("PlotUebers", CurNpartsUebers, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotUebers", CurNpartsUebers), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotUebers", CurNpartsUebers))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotUebers)
@@ -1625,8 +1627,10 @@ if (LenCurAttr > 0) {
     #
     GPars    <- getGraphParam(nrow(ProfileCharX))
     PlotChar <- getPlotChar(ProfileCharX, shiftTitle, title, subtitle)
-    pfilen   <- file.path(tempDirFigures, paste0("PlotChar", CurNpartsChar, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotChar", CurNpartsChar), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotChar", CurNpartsChar))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotChar)
@@ -1661,8 +1665,10 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileNumX))
     PlotNum <- getPlotNum(ProfileNumX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDirFigures, paste0("PlotNum", CurNpartsNum, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotNum", CurNpartsNum), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotNum", CurNpartsNum))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotNum)
@@ -1697,8 +1703,10 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileNumX))
     PlotNum <- getPlotNum2(ProfileNumX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDirFigures, paste0("PlotWerteBerNum", CurNpartsNum, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotWerteBerNum", CurNpartsNum), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotWerteBerNum", CurNpartsNum))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotNum)
@@ -1733,8 +1741,10 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileIntX))
     PlotInt <- getPlotNum(ProfileIntX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDirFigures, paste0("PlotInt", CurNpartsInt, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotInt", CurNpartsInt), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotInt", CurNpartsInt))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotInt)
@@ -1769,8 +1779,10 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileIntX))
     PlotInt <- getPlotNum2(ProfileIntX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDirFigures, paste0("PlotWerteBerInt", CurNpartsInt, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotWerteBerInt", CurNpartsInt), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotWerteBerInt", CurNpartsInt))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotInt)
@@ -1829,8 +1841,10 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileCharLikeNumX))
     PlotCharLikeNum <- getPlotNum(ProfileCharLikeNumX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDirFigures, paste0("PlotCharLikeNum", CurNpartsCharLikeNum, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotCharLikeNum", CurNpartsCharLikeNum), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotCharLikeNum", CurNpartsCharLikeNum))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotCharLikeNum)
@@ -1891,8 +1905,10 @@ if (length(CurAttr0) > 0) {
     #
     GPars   <- getGraphParam(nrow(ProfileCharLikeNumX))
     PlotCharLikeNum <- getPlotNum2(ProfileCharLikeNumX, shiftTitle, title, subtitle)
-    pfilen  <- file.path(tempDirFigures, paste0("PlotWerteBerCharLikeNum", CurNpartsCharLikeNum, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotWerteBerCharLikeNum", CurNpartsCharLikeNum), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotWerteBerCharLikeNum", CurNpartsCharLikeNum))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotCharLikeNum)
@@ -1951,8 +1967,10 @@ if (length(CurAttr0) > 0) {
     #
     GPars      <- getGraphParam(nrow(ProfileFactorX))
     PlotFactor <- getPlotFactor(ProfileFactorX, shiftTitle, title, subtitle)
-    pfilen     <- file.path(tempDirFigures, paste0("PlotFactor", CurNpartsFactor, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotFactor", CurNpartsFactor), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotFactor", CurNpartsFactor))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotFactor)
@@ -2011,8 +2029,10 @@ if (length(CurAttr0) > 0) {
     #
     GPars    <- getGraphParam(nrow(ProfileDateX))
     PlotDate <- getPlotNum(ProfileDateX, shiftTitle, title, subtitle)
-    pfilen   <- file.path(tempDirFigures, paste0("PlotDate", CurNpartsDate, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotDate", CurNpartsDate), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotDate", CurNpartsDate))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotDate)
@@ -2071,8 +2091,10 @@ if (length(CurAttr0) > 0) {
     #
     GPars    <- getGraphParam(nrow(ProfileDateX))
     PlotDate <- getPlotNum2(ProfileDateX, shiftTitle, title, subtitle)
-    pfilen   <- file.path(tempDirFigures, paste0("PlotWerteBerDate", CurNpartsDate, ".png"))
-    png(filename = pfilen
+
+    # Dateiname aus tempfile() -- zugewiesen einer Variablen nach Inhalt der Grafik
+    assign(paste0("PlotWerteBerDate", CurNpartsDate), gsub("\\\\", "/", tempfile(fileext = ".png")))
+    png(filename = get(paste0("PlotWerteBerDate", CurNpartsDate))
         , width = 9, height = GPars[1], units = "in"
         , res = 300)
     print(PlotDate)
