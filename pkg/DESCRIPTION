@@ -1,11 +1,11 @@
 Package: rrMisc
-Version: 0.4.6
-Date: 2021-04-29
+Version: 0.4.7
+Date: 2021-05-22
 Title: Little Helpers
 Author: Roland Rapold
 Maintainer: Roland Rapold <roland.rapold@alumni.ethz.ch>
 Depends:
-    R (>= 4.0),
+    R (>= 3.5),
     stats, graphics, grDevices,
     lattice
 Suggests:
@@ -15,7 +15,6 @@ Suggests:
     MASS,
     car,
     carData,
-    shiny,
     knitr,
     kableExtra,
     data.table,

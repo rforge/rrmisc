@@ -4,18 +4,9 @@
 \alias{univarModDataFact}
 \title{Graph influence of factors on numeric variable}
 \usage{
-univarModDataFact(
-  d_data,
-  var_dep_n,
-  var_indep_f,
-  label_dep_n,
-  label_indep_f,
-  split = TRUE,
-  split_nr = 4,
-  ylimits = NULL,
-  plot_dims = c(15, 20),
-  ...
-)
+univarModDataFact(d_data, var_dep_n, var_indep_f, label_dep_n,
+  label_indep_f, split = TRUE, split_nr = 4, ylimits = NULL,
+  plot_dims = c(15, 20), ...)
 }
 \arguments{
 \item{d_data}{data.frame}

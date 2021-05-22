@@ -4,8 +4,7 @@
 \name{d.sport}
 \alias{d.sport}
 \title{Sample data}
-\format{
-\itemize{
+\format{\itemize{
  \item weit
  \item kugel
  \item hoch
@@ -13,8 +12,7 @@
  \item stab
  \item speer
  \item punkte
-}
-}
+}}
 \description{
 sport measures from 15 athletes
 }

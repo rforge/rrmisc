@@ -4,13 +4,8 @@
 \alias{classifyByBreaks}
 \title{Group numerical vector (enhanced cut())}
 \usage{
-classifyByBreaks(
-  x,
-  breaks,
-  i.class.zero = FALSE,
-  format.level = FALSE,
-  ordered.factor = FALSE
-)
+classifyByBreaks(x, breaks, i.class.zero = FALSE, format.level = FALSE,
+  ordered.factor = FALSE)
 }
 \arguments{
 \item{x}{numieric vector}

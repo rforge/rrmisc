@@ -4,14 +4,8 @@
 \alias{classifyByQuantiles}
 \title{Group numerical vector (enhanced cut())}
 \usage{
-classifyByQuantiles(
-  x,
-  n.main = 10,
-  n.supp = 4,
-  i.class.zero = FALSE,
-  format.level = FALSE,
-  ordered.factor = FALSE
-)
+classifyByQuantiles(x, n.main = 10, n.supp = 4, i.class.zero = FALSE,
+  format.level = FALSE, ordered.factor = FALSE)
 }
 \arguments{
 \item{x}{numieric vector}

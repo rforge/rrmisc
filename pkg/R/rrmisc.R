@@ -50,6 +50,7 @@ NULL
 if (0 == 1) {
   # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
   setwd("~/R_rrMisc/rrmisc/pkg")
+  setwd("~/tt/rrmisc/pkg")
   getwd()
   unlink("./man/*.Rd")
   #
@@ -64,9 +65,10 @@ if (0 == 1) {
 # -- 'DESCRIPTION'    Paketversion, Datum
 # -- 'NEWS'           geänderte Bausteine
 if (0 == 1) {
-  rrMiscVers <- "0.4.6"
+  rrMiscVers <- "0.4.7"
   # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
   setwd("~/R_rrMisc/rrmisc/")
+  setwd("~/tt/rrmisc/")
   getwd()
   system(       "R --vanilla CMD build pkg")
   system(paste0("R --vanilla CMD check rrMisc_", rrMiscVers, ".tar.gz"))

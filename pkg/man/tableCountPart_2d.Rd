@@ -4,17 +4,8 @@
 \alias{tableCountPart_2d}
 \title{Generate table with counts an parts in various different representations.}
 \usage{
-tableCountPart_2d(
-  x = 1,
-  y = 1,
-  z = 1,
-  precDigit = 1,
-  x_prefix = "",
-  y_prefix = "",
-  debug = 0,
-  big.mark = FALSE,
-  ...
-)
+tableCountPart_2d(x = 1, y = 1, z = 1, precDigit = 1,
+  x_prefix = "", y_prefix = "", debug = 0, big.mark = FALSE, ...)
 }
 \arguments{
 \item{x}{data vector together with y as alternative to z}

@@ -4,17 +4,9 @@
 \alias{tableCountPart}
 \title{Generate table with counts, parts and cumulative parts}
 \usage{
-tableCountPart(
-  x,
-  varName = "var",
-  anzName = "anz",
-  antName = "ant",
-  csumName = FALSE,
-  ordCol = 1,
-  ordDir = "asc",
-  rowLimit = FALSE,
-  ...
-)
+tableCountPart(x, varName = "var", anzName = "anz", antName = "ant",
+  csumName = FALSE, ordCol = 1, ordDir = "asc", rowLimit = FALSE,
+  ...)
 }
 \arguments{
 \item{x}{data.frame}
