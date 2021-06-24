@@ -215,82 +215,93 @@ getContStat <- function(d.crosstab, switchPosNeg = FALSE, ...) {
 #' @author Roland Rapold
 #' @references none
 #' @examples
+#' cat("\nBeispieldaten\n")
 #' d.data <- data.frame(a = 1:20,
 #'                      b = rep(1:10, 2),
 #'                      c = letters[1:20],
 #'                      d = rep(letters[1:10], 2))
+#'
+#' cat("\nBetrachtung eines Attributes\n")
 #' var <- c("a")
 #' testGranularity(d.data = d.data, var = var)
 #' testGranularity(d.data = d.data, var = var, verbose = FALSE)
 #'
+#' cat("\nBetrachtung eines Attributes\n")
 #' var <- c("b")
 #' testGranularity(d.data = d.data, var = var)
-#' testGranularity(d.data = d.data, var = var, verbose = FALSE)
 #'
+#' cat("\nBetrachtung von zwei Attributen\n")
 #' var <- c("a", "b")
 #' testGranularity(d.data = d.data, var = var)
-#' testGranularity(d.data = d.data, var = var, verbose = FALSE)
 #'
+#' cat("\nBetrachtung von drei Attributen\n")
 #' var <- c("a", "b", "c", "d")
 #' testGranularity(d.data = d.data, var = var)
-#' testGranularity(d.data = d.data, var = var, verbose = FALSE)
+#'
+#' cat("\nBetrachtung mit einem Wert NA\n")
+#' d.data[16, 3] <- NA
+#' var <- c("a", "b", "c", "d")
+#' testGranularity(d.data = d.data, var = var)
+#'
+#' cat("\nBeispiel ChickWeight mit einem Attribut\n")
+#' var <- c("Chick")
+#' testGranularity(d.data = ChickWeight, var = var)
+#'
+#' cat("\nBeispiel ChickWeight mit zwei Attributen\n")
+#' var <- c("Chick", "Diet")
+#' testGranularity(d.data = ChickWeight, var = var)
+#'
+#' cat("\nBeispiel ChickWeight mit drei Attributen\n")
+#' var <- c("Chick", "Diet", "Time")
+#' testGranularity(d.data = ChickWeight, var = var)
 #' @export
 testGranularity <- function(d.data, var, verbose = NULL, ...)
 {
   #
-  # ----------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------
   # method
   # - test granularity of attributes in data.frame
   #
   # input
-  # - d.data    = data.frame
+  # - d.data    = data.frame / data.table
   # - var       = vector of attributes to test
   # - verbose   = verbose status TRUE/FALSE/NULL(default)
   #
   # output
   # - description of granularity of attributes in data.frame
-  # ----------------------------------------------------------------------------------------------
+  # ------------------------------------------------------------------------------------------------
   #
   # detailThreshold -- Schwelle in Anzahl Zeilen wenn bei verbose = NULL von verbose = TRUE auf
   # verbose = FALSE umgeschaltet wird
   detailThreshold <- 100000
   #
-  # data.frame Syntax wird angewandt, so muss ein data.frame Obejkt erstellt werden
-  if ("data.table" %in% class(d.data)) {
-    class(d.data) <- "data.frame"
+  # data.table Syntax wird angewandt, so muss ein data.table Obejkt erstellt werden
+  setDT(d.data)
+  #
+  # Faktoren in Zeichenattribute umwandeln .........................................................
+  FactAttr <- names(d.data)[grep("factor", sapply(d.data, class))]
+  if (length(FactAttr) > 0) {
+    d.data[, (FactAttr) := lapply(.SD, as.character), .SDcols = FactAttr]
   }
   #
-  # Faktoren in Zeichenattribute umwandeln
-  for (attr in names(d.data))
-  {
-    if (is.factor(d.data[, attr])) {
-      d.data[, attr] <- as.character(d.data[, attr])
-    }
-  }
+  # Eindeutigkeit ermitteln (inkl. NAs und fehlende Werte) .........................................
+  t1 <- nrow(d.data)                                        # Dimension Datensatz
+  t2 <- uniqueN(d.data[, var, with = FALSE], na.rm = FALSE) # Kombinationen alle Attribute
   #
-  # Eindeutigkeit ueberpruefen
-  # t1 <- length(unique(d.data[, var[1]])) # erstes Attribut
-  t1 <- nrow(d.data) # Dimension Datensatz
-  t2 <- unique(d.data[, var]) # Kombinationen alle Attribute
-  # unique(c(2, 3, 4, NA, 2, 3, 4, NA, NA)) # NA als ein Wert
-  # [1] 2 3 4 NA
-  if (is.null(dim(t2))) {
-    t2 <- length(t2)
-  } else {
-    t2 <- nrow(t2)
-  }
+  # Ausgabe overall - Eindeutigkeit ................................................................
   if (t1 == t2) {
-    print(paste(sprintf("%-40s", "eindeutig in den Attributen"), "--", paste(var, collapse = ", ")))
+    print(paste(sprintf("%-40s", "EINDEUTIG in den Attributen"), paste(var, collapse = ", ")))
   } else {
-    print(paste(sprintf("%-40s", "nicht eindeutig in den Attributen"), "--", paste(var, collapse = ", ")))
+    print(paste(sprintf("%-40s", "NICHT eindeutig in den Attributen"), paste(var, collapse = ", ")))
   }
-
+  #
+  # Ausgabe Details Kombinationen ..................................................................
   if ((is.null(verbose) && t1 < detailThreshold) | (!is.null(verbose) && verbose == TRUE)) {
     print(paste(sprintf("%-40s", "Dimension Datensatz"), "--", formatC(t1, big.mark = "'", width = 10, format = "d")))
     #
     # NAs weggelassen
     print(paste(sprintf("%-40s", "Kombinationen Attribute ohne NAs"), "--",
-                formatC(as.numeric(countDistinct(d.data[, var])[1]),
+                formatC(uniqueN(d.data[, var, with = FALSE], na.rm = TRUE),
                         big.mark = "'", width = 10, format = "d")))
     #
     # NAs als ein Wert mitgezaehlt
@@ -299,27 +310,26 @@ testGranularity <- function(d.data, var, verbose = NULL, ...)
     #
     # NAs weggelassen wenn ein anderer Wert vorhanden, NAs als Wert mitgezaehlt wenn kein anderer
     # Wert vorhanden
-    if (length(var) == 2) {
-      v1All <- unique(d.data[, var])
-      v1 <- unique(d.data[, var[1]])
-      # zweite Spalte hat nicht nur NAs
-      # - NAs in zweiter Spalte weglassen und Kombinationen zaehlen
-      v1NotOnlyNA <- unique(v1All[!is.na(v1All[, 2]), ][, 1])
-      c1NotOnlyNA <- as.numeric(countDistinct(d.data[d.data[, var[1]] %in% v1NotOnlyNA, var])[1])
-      # zweite Spalte hat nur NAs
-      # - das sind schon alle Kombinationen
-      v1OnlyNA <- v1[!v1 %in% v1NotOnlyNA]
-      c1OnlyNA <- length(v1OnlyNA)
-      print(paste(sprintf("%-40s", "Kombinationen Attribute NAs selektiv"), "--",
-                  formatC(c1NotOnlyNA + c1OnlyNA, big.mark = "'", width = 10, format = "d")))
-    }
-
+    # if (length(var) == 2) {
+    #   v1All <- unique(d.data[, var,    with = FALSE])
+    #   v1    <- unique(d.data[, var[1], with = FALSE])
+    #   # zweite Spalte hat nicht nur NAs
+    #   # - NAs in zweiter Spalte weglassen und Kombinationen zaehlen
+    #   v1NotOnlyNA <- unique(v1All[!is.na(v1All[, 2]), ][, 1])
+    #   c1NotOnlyNA <- as.numeric(countDistinct(d.data[d.data[, var[1]] %in% v1NotOnlyNA, var])[1])
+    #   # zweite Spalte hat nur NAs
+    #   # - das sind schon alle Kombinationen
+    #   v1OnlyNA <- v1[!v1 %in% v1NotOnlyNA]
+    #   c1OnlyNA <- length(v1OnlyNA)
+    #   print(paste(sprintf("%-40s", "Kombinationen Attribute NAs selektiv"), "--",
+    #               formatC(c1NotOnlyNA + c1OnlyNA, big.mark = "'", width = 10, format = "d")))
+    # }
+    #
+    # Ausgabe Details Attribute ....................................................................
+    v <- var[1]
     for (v in var)
     {
-      # countDistinct(c(2, 3, 4, NA, 2, 3, 4, NA, NA)) # NA _nicht_ als ein Wert
-      # count NAs
-      # "3" "yes"
-      cD <- countDistinct(d.data[, v])
+      cD <- countDistinct(d.data[, v, with = FALSE])
       if (cD[2] == "yes") {
         cD[2] <- "ja"
       } else {
@@ -330,11 +340,7 @@ testGranularity <- function(d.data, var, verbose = NULL, ...)
                   "-- NAs vorhanden:", cD[2]))
     }
   }
-  # print(res)
-  # return(res)
 }
-
-
 #
 # --------------- testGranularity --------------------------------------------------------------- --
 # ENDE DER FUNKTION ----------------------------------------------------------------------------- --

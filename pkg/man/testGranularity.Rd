@@ -25,25 +25,45 @@ Compare granularity of whole data.frame and of provided attributes
 under continuous developement
 }
 \examples{
+cat("\\nBeispieldaten\\n")
 d.data <- data.frame(a = 1:20,
                      b = rep(1:10, 2),
                      c = letters[1:20],
                      d = rep(letters[1:10], 2))
+
+cat("\\nBetrachtung eines Attributes\\n")
 var <- c("a")
 testGranularity(d.data = d.data, var = var)
 testGranularity(d.data = d.data, var = var, verbose = FALSE)
 
+cat("\\nBetrachtung eines Attributes\\n")
 var <- c("b")
 testGranularity(d.data = d.data, var = var)
-testGranularity(d.data = d.data, var = var, verbose = FALSE)
 
+cat("\\nBetrachtung von zwei Attributen\\n")
 var <- c("a", "b")
 testGranularity(d.data = d.data, var = var)
-testGranularity(d.data = d.data, var = var, verbose = FALSE)
 
+cat("\\nBetrachtung von drei Attributen\\n")
 var <- c("a", "b", "c", "d")
 testGranularity(d.data = d.data, var = var)
-testGranularity(d.data = d.data, var = var, verbose = FALSE)
+
+cat("\\nBetrachtung mit einem Wert NA\\n")
+d.data[16, 3] <- NA
+var <- c("a", "b", "c", "d")
+testGranularity(d.data = d.data, var = var)
+
+cat("\\nBeispiel ChickWeight mit einem Attribut\\n")
+var <- c("Chick")
+testGranularity(d.data = ChickWeight, var = var)
+
+cat("\\nBeispiel ChickWeight mit zwei Attributen\\n")
+var <- c("Chick", "Diet")
+testGranularity(d.data = ChickWeight, var = var)
+
+cat("\\nBeispiel ChickWeight mit drei Attributen\\n")
+var <- c("Chick", "Diet", "Time")
+testGranularity(d.data = ChickWeight, var = var)
 }
 \references{
 none

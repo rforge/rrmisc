@@ -1,3 +1,8 @@
+Changes in version 0.4.8 (2021-06-24)
+  Updated
+  * testGranularity() working internally with data.table instead of data.frame
+
+
 Changes in version 0.4.7 (2021-05-22)
   Updated
   * remove profileData()

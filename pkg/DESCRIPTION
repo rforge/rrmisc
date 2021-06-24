@@ -1,12 +1,13 @@
 Package: rrMisc
-Version: 0.4.7
-Date: 2021-05-22
+Version: 0.48
+Date: 2021-06-24
 Title: Little Helpers
 Author: Roland Rapold
 Maintainer: Roland Rapold <roland.rapold@alumni.ethz.ch>
 Depends:
     R (>= 3.5),
     stats, graphics, grDevices,
+    data.table,
     lattice
 Suggests:
     latticeExtra,
@@ -17,8 +18,6 @@ Suggests:
     carData,
     knitr,
     kableExtra,
-    data.table,
-    lubridate,
     rmarkdown
 Description: Little helpers for the daily work with R.
 License: GPL (>=2)

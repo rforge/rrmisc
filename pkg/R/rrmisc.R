@@ -28,6 +28,7 @@ NULL
 #' @import graphics
 #' @import grDevices
 #' @import lattice
+#' @import data.table
 #' @name rrMisc-package
 # #' @aliases rrMisc-package rrMisc
 # #' @docType package
@@ -48,10 +49,14 @@ NULL
 #
 # -->> Löschen der Hilfe-Dateien bevor sie neu erzeugt werden durch roxygen2
 if (0 == 1) {
-  # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
+  # Laptop lokal
+  setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/pkg")
+  # Zentral You
   setwd("~/R_rrMisc/rrmisc/pkg")
   setwd("~/tt/rrmisc/pkg")
+  #
   getwd()
+  list.files()
   unlink("./man/*.Rd")
   #
   library(roxygen2)
@@ -65,10 +70,13 @@ if (0 == 1) {
 # -- 'DESCRIPTION'    Paketversion, Datum
 # -- 'NEWS'           geänderte Bausteine
 if (0 == 1) {
-  rrMiscVers <- "0.4.7"
-  # setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
+  rrMiscVers <- "0.48"
+  # Laptop lokal
+  setwd("/home/roland/Desktop/Dokumente_verteilt/Statistik/R_rrMisc/rrmisc/")
+  # Zentral You
   setwd("~/R_rrMisc/rrmisc/")
   setwd("~/tt/rrmisc/")
+  #
   getwd()
   system(       "R --vanilla CMD build pkg")
   system(paste0("R --vanilla CMD check rrMisc_", rrMiscVers, ".tar.gz"))
@@ -143,6 +151,7 @@ if (0 == 1) {
 # --> Änderungen commiten       << pw: 'r-forge'      <--
 # cd /home/roland/Statistik/R_rrMisc/rrmisc           <- Achtung korrektes Verzeichnis
 # cd ~/R_rrMisc/rrmisc                                <- Achtung korrektes Verzeichnis
+# svn status
 # svn commit
 #
 #
